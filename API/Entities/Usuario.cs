@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace API.Entities;
 
@@ -10,6 +11,7 @@ public class Usuario
   public string Correo { get; set; }
   public byte[] ContraseniaHash { get; set; }
   public byte[] ContraseniaSalt { get; set; }
-  public int IDPerfilPuesto { get; set; }
   public bool Activo { get; set; }
+
+  public PerfilPuesto PerfilPuesto { get; set; }
 }
