@@ -4,15 +4,14 @@ using System.Text.Json.Serialization;
 
 namespace API.Entities;
 
-public class PerfilPuesto
+public class Unidad
 {
   [Key]
-  public int IDPerfilPuesto { get; set; }
+  public int IDUnidad { get; set; }
   public required string Descripcion { get; set; }
+  public required string Abreviacion { get; set; }
   public bool Activo { get; set; }
 
   [JsonIgnore]
-  public Collection<Usuario> Usuarios { get; set; }
-  [JsonIgnore]
-  public Collection<ModulosAcceso> ModulosAcceso { get; set; }
+  public Collection<Inventario> Productos { get; set; }
 }

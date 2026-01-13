@@ -4,12 +4,13 @@ using System.Text.Json.Serialization;
 
 namespace API.Entities;
 
-public class NivelesAcceso
+public class TiposMovimientosInventario
 {
   [Key]
-  public int NivelAcceso { get; set; }
+  public int IDTipoMovimientoInventario { get; set; }
   public required string Descripcion { get; set; }
+  public bool EntradaSalida { get; set; }
 
   [JsonIgnore]
-  public Collection<ModulosAcceso> ModulosAcceso { get; set; }
+  public Collection<LogInventario> LogInventario { get; set; }
 }
