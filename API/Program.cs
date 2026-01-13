@@ -1,6 +1,8 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Text.Json.Serialization;
+using API.Interfaces;
+using API.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace API;
@@ -11,16 +13,25 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        // Documentación del API
         builder.Services.AddOpenApi();
         builder.Services.AddSwaggerGen();
+
+        // Agregar controladores
         builder.Services.AddControllers();
+        
+        // Agregar DB Context
         builder.Services.AddDbContext<AppDbContext>(opt =>
         {
             opt.UseSqlite(builder.Configuration.GetConnectionString("SqliteConnection"));
         });
 
+        // Inyección de repositorios
+        builder.Services.AddScoped<IUsuariosRepository, UsuariosRepository>();
+
         var app = builder.Build();
 
+        // Hacer una migración de DB
         using var scope = app.Services.CreateScope();
         var services = scope.ServiceProvider;
         try
@@ -34,6 +45,7 @@ public class Program
             logger.LogError(ex, "Migration process failed!");
         }
 
+        // Si el entorno es de desarrollo empezamos Swagger
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
