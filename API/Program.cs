@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using API.Interfaces;
 using API.Repositories;
+using API.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace API;
@@ -27,7 +28,10 @@ public class Program
         });
 
         // Inyección de repositorios
-        builder.Services.AddScoped<IUsuariosRepository, UsuariosRepository>();
+        InyectarRepositorios(builder);
+        
+        // Injección de los servicios
+        InyectarServicios(builder);
 
         var app = builder.Build();
 
@@ -41,7 +45,7 @@ public class Program
         }
         catch (Exception ex)
         {
-            var logger = services.GetRequiredService<ILogger>();
+            var logger = services.GetRequiredService<ILogger<Program>>();
             logger.LogError(ex, "Migration process failed!");
         }
 
@@ -58,6 +62,16 @@ public class Program
 
         app.Run();
 
+    }
+
+    public static void InyectarRepositorios(WebApplicationBuilder builder)
+    {
+        builder.Services.AddScoped<IUsuariosRepository, UsuariosRepository>();
+    }
+    
+    public static void InyectarServicios(WebApplicationBuilder builder)
+    {
+        builder.Services.AddScoped<IUsuariosService, UsuarioService>();
     }
 }
 
