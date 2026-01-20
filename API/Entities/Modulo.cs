@@ -11,8 +11,9 @@ public class Modulo
   public required string Nombre { get; set; }
   public required string Icono { get; set; }
   public bool Activo { get; set; }
+  public int IDModuloCategoria { get; set; }
 
-  public required ModulosCategoria ModuloCategoria { get; set; }
+  public ModulosCategoria ModuloCategoria { get; set; }
   [JsonIgnore]
   public Collection<ModulosAcceso> ModulosAcceso { get; set; }
 }

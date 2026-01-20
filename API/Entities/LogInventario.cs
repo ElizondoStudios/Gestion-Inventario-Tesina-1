@@ -10,9 +10,13 @@ public class LogInventario
   public int IDLogInventario { get; set; }
   public DateTime Fecha { get; set; }
   public decimal Cantidad { get; set; }
+  public int IDUsuario { get; set; }
+  public required string NoParte { get; set; }
+  public int IDSucursal { get; set; }
+  public int IDTipoMovimiento { get; set; }
 
-  public required Usuario QuienRealiza {get; set;}
-  public required Inventario Producto {get; set;}
-  public required Sucursal Sucursal { get; set; }
-  public required TiposMovimientosInventario TipoMovimiento { get; set; }
+  public Usuario QuienRealiza {get; set;}
+  public Inventario Producto {get; set;}
+  public Sucursal Sucursal { get; set; }
+  public TiposMovimientosInventario TipoMovimiento { get; set; }
 }
