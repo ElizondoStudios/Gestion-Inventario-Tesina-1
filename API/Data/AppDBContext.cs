@@ -15,4 +15,15 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
     public DbSet<Unidad> Unidades { get; set; }
     public DbSet<LogInventario> LogInventario { get; set; }
     public DbSet<UsuarioSucursal> UsuariosSucursales { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        // Configurar la relación Usuario -> PerfilPuesto
+        modelBuilder.Entity<Usuario>()
+            .HasOne(u => u.PerfilPuesto)
+            .WithMany(p => p.Usuarios)
+            .HasForeignKey(u => u.IDPerfilPuesto);
+    }
 }

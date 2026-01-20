@@ -42,7 +42,7 @@ namespace API.Migrations
 
                     b.HasIndex("UnidadIDUnidad");
 
-                    b.ToTable("Inventario");
+                    b.ToTable("Inventario", (string)null);
                 });
 
             modelBuilder.Entity("API.Entities.LogInventario", b =>
@@ -79,7 +79,7 @@ namespace API.Migrations
 
                     b.HasIndex("TipoMovimientoIDTipoMovimientoInventario");
 
-                    b.ToTable("LogInventario");
+                    b.ToTable("LogInventario", (string)null);
                 });
 
             modelBuilder.Entity("API.Entities.Modulo", b =>
@@ -106,7 +106,7 @@ namespace API.Migrations
 
                     b.HasIndex("ModuloCategoriaIDModuloCategoria");
 
-                    b.ToTable("Modulos");
+                    b.ToTable("Modulos", (string)null);
                 });
 
             modelBuilder.Entity("API.Entities.ModulosAcceso", b =>
@@ -132,7 +132,7 @@ namespace API.Migrations
 
                     b.HasIndex("PerfilPuestoIDPerfilPuesto");
 
-                    b.ToTable("ModulosAcceso");
+                    b.ToTable("ModulosAcceso", (string)null);
                 });
 
             modelBuilder.Entity("API.Entities.ModulosCategoria", b =>
@@ -154,7 +154,7 @@ namespace API.Migrations
 
                     b.HasKey("IDModuloCategoria");
 
-                    b.ToTable("ModulosCategorias");
+                    b.ToTable("ModulosCategorias", (string)null);
                 });
 
             modelBuilder.Entity("API.Entities.NivelesAcceso", b =>
@@ -169,7 +169,7 @@ namespace API.Migrations
 
                     b.HasKey("NivelAcceso");
 
-                    b.ToTable("NivelesAcceso");
+                    b.ToTable("NivelesAcceso", (string)null);
                 });
 
             modelBuilder.Entity("API.Entities.PerfilPuesto", b =>
@@ -187,7 +187,7 @@ namespace API.Migrations
 
                     b.HasKey("IDPerfilPuesto");
 
-                    b.ToTable("PerfilesPuesto");
+                    b.ToTable("PerfilesPuesto", (string)null);
                 });
 
             modelBuilder.Entity("API.Entities.Sucursal", b =>
@@ -209,7 +209,7 @@ namespace API.Migrations
 
                     b.HasKey("IDSucursal");
 
-                    b.ToTable("Sucursales");
+                    b.ToTable("Sucursales", (string)null);
                 });
 
             modelBuilder.Entity("API.Entities.SucursalesInventario", b =>
@@ -236,7 +236,7 @@ namespace API.Migrations
 
                     b.HasIndex("SucursalIDSucursal");
 
-                    b.ToTable("SucursalesInventario");
+                    b.ToTable("SucursalesInventario", (string)null);
                 });
 
             modelBuilder.Entity("API.Entities.TiposMovimientosInventario", b =>
@@ -254,7 +254,7 @@ namespace API.Migrations
 
                     b.HasKey("IDTipoMovimientoInventario");
 
-                    b.ToTable("TiposMovimientosInventario");
+                    b.ToTable("TiposMovimientosInventario", (string)null);
                 });
 
             modelBuilder.Entity("API.Entities.Unidad", b =>
@@ -276,7 +276,7 @@ namespace API.Migrations
 
                     b.HasKey("IDUnidad");
 
-                    b.ToTable("Unidades");
+                    b.ToTable("Unidades", (string)null);
                 });
 
             modelBuilder.Entity("API.Entities.Usuario", b =>
@@ -311,7 +311,7 @@ namespace API.Migrations
 
                     b.HasIndex("PerfilPuestoIDPerfilPuesto");
 
-                    b.ToTable("Usuarios");
+                    b.ToTable("Usuarios", (string)null);
                 });
 
             modelBuilder.Entity("API.Entities.UsuarioSucursal", b =>
@@ -335,7 +335,7 @@ namespace API.Migrations
 
                     b.HasIndex("UsuarioIDUsuario");
 
-                    b.ToTable("UsuariosSucursales");
+                    b.ToTable("UsuariosSucursales", (string)null);
                 });
 
             modelBuilder.Entity("API.Entities.Inventario", b =>

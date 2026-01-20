@@ -22,11 +22,7 @@ public class UsuarioService(IUsuariosRepository usuariosRepository): IUsuariosSe
       ContraseniaHash = contraseniaHash,
       ContraseniaSalt = contraseniaSalt,
       Activo = true,
-      PerfilPuesto = new PerfilPuesto
-        {
-          IDPerfilPuesto = dto.IDPerfilPuesto,
-          Descripcion = string.Empty
-        }
+      IDPerfilPuesto = dto.IDPerfilPuesto
     };
 
     return usuariosRepository.CrearUsuario(usuario);
