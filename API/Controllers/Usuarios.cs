@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http.HttpResults;
 using API.Interfaces;
 using API.Services;
+using API.Data.DTOs;
 namespace API.Controllers
 {
     [Route("api/[controller]")]
@@ -36,6 +37,17 @@ namespace API.Controllers
                 return Ok();
             }
             throw new Exception("Error al crear el registro");
+        }
+        
+        [HttpPut("[action]")]
+        public async Task<ActionResult<Usuario>> ActualizarUsuario([FromBody] DTOActualizarUsuario dto)
+        {
+            bool res= await usuariosService.ActualizarUsuario(dto);
+            if (res)
+            {
+                return Ok();
+            }
+            throw new Exception("Error al actualizar el registro");
         }
     }
 }

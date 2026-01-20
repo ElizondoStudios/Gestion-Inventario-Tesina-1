@@ -55,4 +55,13 @@ public class UsuariosRepository(AppDbContext context): IUsuariosRepository
 
     return filas > 0;
   }
+
+  public async Task<bool> ExisteCorreo(string Correo, int IDUsuario)
+  {
+    var filas = context.Usuarios
+      .Where(u => u.IDUsuario != IDUsuario)
+      .Where(u => u.Correo == Correo);
+
+    return filas.Any();
+  }
 }
