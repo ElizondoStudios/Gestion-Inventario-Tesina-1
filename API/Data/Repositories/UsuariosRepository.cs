@@ -28,7 +28,7 @@ public class UsuariosRepository(AppDbContext context): IUsuariosRepository
     .ExecuteUpdateAsync(setters => setters
       .SetProperty(u => u.Nombre, usuario.Nombre)
       .SetProperty(u => u.Correo, usuario.Correo)
-      .SetProperty(u => u.PerfilPuesto, usuario.PerfilPuesto)
+      .SetProperty(u => u.IDPerfilPuesto, usuario.IDPerfilPuesto)
     );
 
     return filas > 0;

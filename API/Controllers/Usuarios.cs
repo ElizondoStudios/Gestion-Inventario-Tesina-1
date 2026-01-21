@@ -49,5 +49,27 @@ namespace API.Controllers
             }
             throw new Exception("Error al actualizar el registro");
         }
+        
+        [HttpPut("[action]")]
+        public async Task<ActionResult<Usuario>> InhabilitarUsuario(int IDUsuario)
+        {
+            bool res= await usuariosRepository.InhabilitarUsuario(IDUsuario);
+            if (res)
+            {
+                return Ok();
+            }
+            throw new Exception("Error al inhabilitar el registro");
+        }
+        
+        [HttpPut("[action]")]
+        public async Task<ActionResult<Usuario>> HabilitarUsuario(int IDUsuario)
+        {
+            bool res= await usuariosRepository.HabilitarUsuario(IDUsuario);
+            if (res)
+            {
+                return Ok();
+            }
+            throw new Exception("Error al habilitar el registro");
+        }
     }
 }
