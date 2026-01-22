@@ -35,7 +35,7 @@ public class PerfilesPuestoRepository(AppDbContext context): IPerfilesPuestoRepo
   public async Task<bool> InhabilitarPerfilPuesto(int IDPerfilPuesto)
   {
     var filas = await context.PerfilesPuesto
-    .Where(u => u.IDPerfilPuesto == IDPerfilPuesto && u.Activo)
+    .Where(u => u.IDPerfilPuesto == IDPerfilPuesto)
     .ExecuteUpdateAsync(setters => setters
       .SetProperty(u => u.Activo, false)
     );
@@ -46,7 +46,7 @@ public class PerfilesPuestoRepository(AppDbContext context): IPerfilesPuestoRepo
   public async Task<bool> HabilitarPerfilPuesto(int IDPerfilPuesto)
   {
     var filas = await context.PerfilesPuesto
-    .Where(u => u.IDPerfilPuesto == IDPerfilPuesto && u.Activo)
+    .Where(u => u.IDPerfilPuesto == IDPerfilPuesto)
     .ExecuteUpdateAsync(setters => setters
       .SetProperty(u => u.Activo, true)
     );

@@ -67,11 +67,13 @@ public class Program
     public static void InyectarRepositorios(WebApplicationBuilder builder)
     {
         builder.Services.AddScoped<IUsuariosRepository, UsuariosRepository>();
+        builder.Services.AddScoped<IPerfilesPuestoRepository, PerfilesPuestoRepository>();
     }
     
     public static void InyectarServicios(WebApplicationBuilder builder)
     {
         builder.Services.AddScoped<IUsuariosService, UsuarioService>();
+        builder.Services.AddScoped<IPerfilesPuestoService, PerfilesPuestoService>();
     }
 }
 
