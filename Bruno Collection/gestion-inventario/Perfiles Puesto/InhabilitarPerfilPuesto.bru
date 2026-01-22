@@ -1,0 +1,20 @@
+meta {
+  name: InhabilitarPerfilPuesto
+  type: http
+  seq: 2
+}
+
+put {
+  url: http://localhost:5092/api/PerfilesPuesto/InhabilitarPerfilPuesto?IDPerfilPuesto=2
+  body: none
+  auth: inherit
+}
+
+params:query {
+  IDPerfilPuesto: 2
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

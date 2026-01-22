@@ -1,0 +1,20 @@
+meta {
+  name: GetPerfilPuesto
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://localhost:5092/api/PerfilesPuesto/GetPerfilPuesto?IDPerfilPuesto=1
+  body: none
+  auth: inherit
+}
+
+params:query {
+  IDPerfilPuesto: 1
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

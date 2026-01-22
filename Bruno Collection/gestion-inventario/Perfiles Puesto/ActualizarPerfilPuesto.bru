@@ -1,0 +1,18 @@
+meta {
+  name: ActualizarPerfilPuesto
+  type: http
+  seq: 1
+}
+
+put {
+  url: http://localhost:5092/api/PerfilesPuesto/ActualizarPerfilPuesto
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "IDPerfilPuesto": 2, 
+    "Descripcion": "Prueba Actualizar"
+  }
+}
