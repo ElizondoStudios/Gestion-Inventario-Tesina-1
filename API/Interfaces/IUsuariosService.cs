@@ -5,6 +5,10 @@ namespace API.Interfaces;
 
 public interface IUsuariosService
 {
-  Task<bool> CrearUsuario(DTOCrearUsuario dto);
-  Task<bool> ActualizarUsuario(DTOActualizarUsuario dto);
+  Task<IReadOnlyList<DTOUsuario>> ObtenerUsuarios();
+  Task<DTOUsuario> ObtenerUsuario(int IDUsuario);
+  Task<DTOUsuario> CrearUsuario(DTOCrearUsuario dto);
+  Task<DTOUsuario> ActualizarUsuario(DTOActualizarUsuario dto);
+  Task InhabilitarUsuario(int IDUsuario);
+  Task HabilitarUsuario(int IDUsuario);
 }

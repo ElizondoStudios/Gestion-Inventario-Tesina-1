@@ -13,64 +13,48 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class Usuarios(IUsuariosRepository usuariosRepository, IUsuariosService usuariosService) : ControllerBase
+    public class Usuarios(IUsuariosService usuariosService) : ControllerBase
     {   
         [HttpGet("[action]")]
-        public async Task<ActionResult<IReadOnlyList<Usuario>>> GetUsuarios()
+        public async Task<ActionResult<IReadOnlyList<DTOUsuario>>> GetUsuarios()
         {
-            var usuarios = await usuariosRepository.ObtenerUsuarios();
-            return Ok(usuarios);
+            var res = await usuariosService.ObtenerUsuarios();
+            return Ok(res);
         }
         
         [HttpGet("[action]")]
-        public async Task<ActionResult<Usuario>> GetUsuario([Required] int IDUsuario)
+        public async Task<ActionResult<DTOUsuario>> GetUsuario([Required] int IDUsuario)
         {
-            var usuario = await usuariosRepository.ObtenerUsuario(IDUsuario);
-            return Ok(usuario);
+            var res = await usuariosService.ObtenerUsuario(IDUsuario);
+            return Ok(res);
         }
         
         [HttpPost("[action]")]
-        public async Task<ActionResult<Usuario>> CrearUsuario([FromBody] DTOCrearUsuario dto)
+        public async Task<ActionResult<DTOUsuario>> CrearUsuario([FromBody] DTOCrearUsuario dto)
         {
-            bool res= await usuariosService.CrearUsuario(dto);
-            if (res)
-            {
-                return Ok();
-            }
-            throw new Exception("Error al crear el registro");
+            var res= await usuariosService.CrearUsuario(dto);
+            return Ok(res);
         }
         
         [HttpPut("[action]")]
-        public async Task<ActionResult<Usuario>> ActualizarUsuario([FromBody] DTOActualizarUsuario dto)
+        public async Task<ActionResult<DTOUsuario>> ActualizarUsuario([FromBody] DTOActualizarUsuario dto)
         {
-            bool res= await usuariosService.ActualizarUsuario(dto);
-            if (res)
-            {
-                return Ok();
-            }
-            throw new Exception("Error al actualizar el registro");
+            var res= await usuariosService.ActualizarUsuario(dto);
+            return Ok(res);
         }
         
         [HttpPut("[action]")]
-        public async Task<ActionResult<Usuario>> InhabilitarUsuario([Required] int IDUsuario)
+        public async Task<ActionResult> InhabilitarUsuario([Required] int IDUsuario)
         {
-            bool res= await usuariosRepository.InhabilitarUsuario(IDUsuario);
-            if (res)
-            {
-                return Ok();
-            }
-            throw new Exception("Error al inhabilitar el registro");
+            await usuariosService.InhabilitarUsuario(IDUsuario);
+            return Ok();
         }
         
         [HttpPut("[action]")]
-        public async Task<ActionResult<Usuario>> HabilitarUsuario([Required] int IDUsuario)
+        public async Task<ActionResult> HabilitarUsuario([Required] int IDUsuario)
         {
-            bool res= await usuariosRepository.HabilitarUsuario(IDUsuario);
-            if (res)
-            {
-                return Ok();
-            }
-            throw new Exception("Error al habilitar el registro");
+            await usuariosService.HabilitarUsuario(IDUsuario);
+            return Ok();
         }
     }
 }
