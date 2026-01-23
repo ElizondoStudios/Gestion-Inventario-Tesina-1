@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using API.Entities;
 using API.Data.DTOs;
+using System.ComponentModel.DataAnnotations;
 
 namespace API.Controllers
 {
@@ -18,7 +19,7 @@ namespace API.Controllers
         }
         
         [HttpGet("[action]")]
-        public async Task<ActionResult<PerfilPuesto>> GetPerfilPuesto(int IDPerfilPuesto)
+        public async Task<ActionResult<PerfilPuesto>> GetPerfilPuesto([Required] int IDPerfilPuesto)
         {
             var usuario = await perfilesPuestoRepository.ObtenerPerfilPuesto(IDPerfilPuesto);
             return Ok(usuario);
@@ -47,7 +48,7 @@ namespace API.Controllers
         }
         
         [HttpPut("[action]")]
-        public async Task<ActionResult<PerfilPuesto>> InhabilitarPerfilPuesto(int IDPerfilPuesto)
+        public async Task<ActionResult<PerfilPuesto>> InhabilitarPerfilPuesto([Required] int IDPerfilPuesto)
         {
             bool res= await perfilesPuestoRepository.InhabilitarPerfilPuesto(IDPerfilPuesto);
             if (res)
@@ -58,7 +59,7 @@ namespace API.Controllers
         }
         
         [HttpPut("[action]")]
-        public async Task<ActionResult<PerfilPuesto>> HabilitarPerfilPuesto(int IDPerfilPuesto)
+        public async Task<ActionResult<PerfilPuesto>> HabilitarPerfilPuesto([Required] int IDPerfilPuesto)
         {
             bool res= await perfilesPuestoRepository.HabilitarPerfilPuesto(IDPerfilPuesto);
             if (res)

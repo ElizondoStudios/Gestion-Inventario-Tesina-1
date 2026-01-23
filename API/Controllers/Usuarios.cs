@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using API.Interfaces;
 using API.Services;
 using API.Data.DTOs;
+using System.ComponentModel.DataAnnotations;
 namespace API.Controllers
 {
     [Route("api/[controller]")]
@@ -22,7 +23,7 @@ namespace API.Controllers
         }
         
         [HttpGet("[action]")]
-        public async Task<ActionResult<Usuario>> GetUsuario(int IDUsuario)
+        public async Task<ActionResult<Usuario>> GetUsuario([Required] int IDUsuario)
         {
             var usuario = await usuariosRepository.ObtenerUsuario(IDUsuario);
             return Ok(usuario);
@@ -51,7 +52,7 @@ namespace API.Controllers
         }
         
         [HttpPut("[action]")]
-        public async Task<ActionResult<Usuario>> InhabilitarUsuario(int IDUsuario)
+        public async Task<ActionResult<Usuario>> InhabilitarUsuario([Required] int IDUsuario)
         {
             bool res= await usuariosRepository.InhabilitarUsuario(IDUsuario);
             if (res)
@@ -62,7 +63,7 @@ namespace API.Controllers
         }
         
         [HttpPut("[action]")]
-        public async Task<ActionResult<Usuario>> HabilitarUsuario(int IDUsuario)
+        public async Task<ActionResult<Usuario>> HabilitarUsuario([Required] int IDUsuario)
         {
             bool res= await usuariosRepository.HabilitarUsuario(IDUsuario);
             if (res)
