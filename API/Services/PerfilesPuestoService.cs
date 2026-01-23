@@ -7,30 +7,93 @@ namespace API.Services;
 
 public class PerfilesPuestoService(IPerfilesPuestoRepository perfilesPuestoRepository): IPerfilesPuestoService
 {
-  public async Task<bool> CrearPerfilPuesto(DTOCrearPerfilPuesto dto)
+  public async Task<IReadOnlyList<DTOPerfilPuesto>> ObtenerPerfilesPuesto()
   {
-    var perfilpuesto = new PerfilPuesto
+    var registros = await perfilesPuestoRepository.ObtenerPerfilesPuesto();
+    return [.. registros.Select(r => new DTOPerfilPuesto
+    {
+      IDPerfilPuesto = r.IDPerfilPuesto,
+      Descripcion = r.Descripcion,
+      Activo = r.Activo
+    })]; 
+  }
+
+  public async Task<DTOPerfilPuesto> ObtenerPerfilPuesto(int IDPerfilPuesto)
+  {
+    var registro = await perfilesPuestoRepository.ObtenerPerfilPuesto(IDPerfilPuesto) ?? throw new Exception("No se encontró el registro");
+    return new DTOPerfilPuesto
+    {
+      IDPerfilPuesto = registro.IDPerfilPuesto,
+      Descripcion = registro.Descripcion,
+      Activo = registro.Activo
+    };
+  }
+
+  public async Task<DTOPerfilPuesto> CrearPerfilPuesto(DTOCrearPerfilPuesto dto)
+  {
+    // Crear nuevo registro
+    var registro = new PerfilPuesto
     {
       Descripcion = dto.Descripcion,
-      Activo = true,
+      Activo = true
     };
 
     // Persistir
-    return await perfilesPuestoRepository.CrearPerfilPuesto(perfilpuesto);
+    if(!await perfilesPuestoRepository.CrearPerfilPuesto(registro))
+    {
+      throw new Exception("Ocurrió un error al crear el registro");
+    }
+
+    return new DTOPerfilPuesto
+    {
+      IDPerfilPuesto = registro.IDPerfilPuesto,
+      Descripcion = registro.Descripcion,
+      Activo = registro.Activo,
+    };
   }
   
-  public async Task<bool> ActualizarPerfilPuesto(DTOActualizarPerfilPuesto dto)
+  public async Task<DTOPerfilPuesto> ActualizarPerfilPuesto(DTOActualizarPerfilPuesto dto)
   {
-    var perfilpuesto = await perfilesPuestoRepository.ObtenerPerfilPuesto(dto.IDPerfilPuesto) ?? throw new Exception("Usuario no encontrado");
+    var registro = await perfilesPuestoRepository.ObtenerPerfilPuesto(dto.IDPerfilPuesto) ?? throw new Exception("Usuario no encontrado");
     
     // Validar activo
-    if (!perfilpuesto.Activo)
+    if (!registro.Activo)
       throw new Exception("No se puede modificar un perfilpuesto inactivo");
 
     // Aplicar cambios
-    perfilpuesto.Descripcion = dto.Descripcion;
+    registro.Descripcion = dto.Descripcion;
 
     // Persistir
-    return await perfilesPuestoRepository.ActualizarPerfilPuesto(perfilpuesto);
+    if(!await perfilesPuestoRepository.ActualizarPerfilPuesto(registro))
+    {
+      throw new Exception("Ocurrió un error al actualizar el registro");
+    }
+
+    return new DTOPerfilPuesto
+    {
+      IDPerfilPuesto = registro.IDPerfilPuesto,
+      Descripcion = registro.Descripcion,
+      Activo = registro.Activo,
+    };
+  }
+
+  public async Task InhabilitarPerfilPuesto(int IDPerfilPuesto)
+  {
+    var success= await perfilesPuestoRepository.InhabilitarPerfilPuesto(IDPerfilPuesto);
+    if (!success)
+    {
+      throw new Exception("Hubo un error al inhabiltiar el registro");
+    }
+    return;
+  }
+ 
+  public async Task HabilitarPerfilPuesto(int IDPerfilPuesto)
+  {
+    var success= await perfilesPuestoRepository.HabilitarPerfilPuesto(IDPerfilPuesto);
+    if (!success)
+    {
+      throw new Exception("Hubo un error al inhabiltiar el registro");
+    }
+    return;
   }
 }

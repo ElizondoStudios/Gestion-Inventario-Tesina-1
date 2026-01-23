@@ -9,64 +9,48 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PerfilesPuesto(IPerfilesPuestoRepository perfilesPuestoRepository, IPerfilesPuestoService perfilesPuestoService) : ControllerBase
+    public class PerfilesPuesto(IPerfilesPuestoService perfilesPuestoService) : ControllerBase
     {
         [HttpGet("[action]")]
-        public async Task<ActionResult<IReadOnlyList<PerfilPuesto>>> GetPerfilesPuesto()
+        public async Task<ActionResult<IReadOnlyList<DTOPerfilPuesto>>> GetPerfilesPuesto()
         {
-            var usuarios = await perfilesPuestoRepository.ObtenerPerfilesPuesto();
-            return Ok(usuarios);
+            var res = await perfilesPuestoService.ObtenerPerfilesPuesto();
+            return Ok(res);
         }
         
         [HttpGet("[action]")]
-        public async Task<ActionResult<PerfilPuesto>> GetPerfilPuesto([Required] int IDPerfilPuesto)
+        public async Task<ActionResult<DTOPerfilPuesto>> GetPerfilPuesto([Required] int IDPerfilPuesto)
         {
-            var usuario = await perfilesPuestoRepository.ObtenerPerfilPuesto(IDPerfilPuesto);
-            return Ok(usuario);
+            var res = await perfilesPuestoService.ObtenerPerfilPuesto(IDPerfilPuesto);
+            return Ok(res);
         }
         
         [HttpPost("[action]")]
-        public async Task<ActionResult<PerfilPuesto>> CrearPerfilPuesto([FromBody] DTOCrearPerfilPuesto dto)
+        public async Task<ActionResult<DTOPerfilPuesto>> CrearPerfilPuesto([FromBody] DTOCrearPerfilPuesto dto)
         {
-            bool res= await perfilesPuestoService.CrearPerfilPuesto(dto);
-            if (res)
-            {
-                return Ok();
-            }
-            throw new Exception("Error al crear el registro");
+            var res= await perfilesPuestoService.CrearPerfilPuesto(dto);
+            return Ok(res);
         }
         
         [HttpPut("[action]")]
-        public async Task<ActionResult<PerfilPuesto>> ActualizarPerfilPuesto([FromBody] DTOActualizarPerfilPuesto dto)
+        public async Task<ActionResult<DTOPerfilPuesto>> ActualizarPerfilPuesto([FromBody] DTOActualizarPerfilPuesto dto)
         {
-            bool res= await perfilesPuestoService.ActualizarPerfilPuesto(dto);
-            if (res)
-            {
-                return Ok();
-            }
-            throw new Exception("Error al actualizar el registro");
+            var res= await perfilesPuestoService.ActualizarPerfilPuesto(dto);
+            return Ok(res);
         }
         
         [HttpPut("[action]")]
-        public async Task<ActionResult<PerfilPuesto>> InhabilitarPerfilPuesto([Required] int IDPerfilPuesto)
+        public async Task<ActionResult<DTOPerfilPuesto>> InhabilitarPerfilPuesto([Required] int IDPerfilPuesto)
         {
-            bool res= await perfilesPuestoRepository.InhabilitarPerfilPuesto(IDPerfilPuesto);
-            if (res)
-            {
-                return Ok();
-            }
-            throw new Exception("Error al inhabilitar el registro");
+            await perfilesPuestoService.InhabilitarPerfilPuesto(IDPerfilPuesto);
+            return Ok();
         }
         
         [HttpPut("[action]")]
-        public async Task<ActionResult<PerfilPuesto>> HabilitarPerfilPuesto([Required] int IDPerfilPuesto)
+        public async Task<ActionResult<DTOPerfilPuesto>> HabilitarPerfilPuesto([Required] int IDPerfilPuesto)
         {
-            bool res= await perfilesPuestoRepository.HabilitarPerfilPuesto(IDPerfilPuesto);
-            if (res)
-            {
-                return Ok();
-            }
-            throw new Exception("Error al habilitar el registro");
+            await perfilesPuestoService.HabilitarPerfilPuesto(IDPerfilPuesto);
+            return Ok();
         }
     }
 }

@@ -5,6 +5,10 @@ namespace API.Interfaces;
 
 public interface IPerfilesPuestoService
 {
-    Task<bool> CrearPerfilPuesto(DTOCrearPerfilPuesto dto);
-    Task<bool> ActualizarPerfilPuesto(DTOActualizarPerfilPuesto dto);
+    Task<IReadOnlyList<DTOPerfilPuesto>> ObtenerPerfilesPuesto();
+    Task<DTOPerfilPuesto> ObtenerPerfilPuesto(int IDPerfilPuesto);
+    Task<DTOPerfilPuesto> CrearPerfilPuesto(DTOCrearPerfilPuesto dto);
+    Task<DTOPerfilPuesto> ActualizarPerfilPuesto(DTOActualizarPerfilPuesto dto);
+    Task InhabilitarPerfilPuesto(int IDPerfilPuesto);
+    Task HabilitarPerfilPuesto(int IDPerfilPuesto);
 }
