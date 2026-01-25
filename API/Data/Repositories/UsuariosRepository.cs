@@ -7,12 +7,18 @@ public class UsuariosRepository(AppDbContext context): IUsuariosRepository
 {
   public async Task<IReadOnlyList<Usuario>> ObtenerUsuarios()
   {
-    return await context.Usuarios.ToListAsync();
+    return await context.Usuarios
+      .Include(u => u.PerfilPuesto)
+      .Where(u => u.PerfilPuesto.Activo)
+      .ToListAsync();
   }
 
   public async Task<Usuario?> ObtenerUsuario(int IDUsuario)
   {
-    return await context.Usuarios.FindAsync(IDUsuario);
+    return await context.Usuarios
+      .Include(u => u.PerfilPuesto)
+      .Where(u => u.PerfilPuesto.Activo)
+      .FirstOrDefaultAsync(u => u.IDUsuario == IDUsuario);
   }
 
   public async Task<bool> CrearUsuario(Usuario usuario)
