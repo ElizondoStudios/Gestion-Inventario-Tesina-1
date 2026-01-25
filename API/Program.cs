@@ -70,6 +70,8 @@ public class Program
         builder.Services.AddScoped<IPerfilesPuestoRepository, PerfilesPuestoRepository>();
         builder.Services.AddScoped<IModulosAccesoRepository, ModulosAccesoRepository>();
         builder.Services.AddScoped<ISucursalRepository, SucursalRepository>();
+        builder.Services.AddScoped<IUnidadRepository, UnidadRepository>();
+        builder.Services.AddScoped<IInventarioRepository, InventarioRepository>();
     }
     
     public static void InyectarServicios(WebApplicationBuilder builder)
@@ -77,6 +79,8 @@ public class Program
         builder.Services.AddScoped<IUsuariosService, UsuarioService>();
         builder.Services.AddScoped<IPerfilesPuestoService, PerfilesPuestoService>();
         builder.Services.AddScoped<ISucursalesService, SucursalesService>();
+        builder.Services.AddScoped<IUnidadesService, UnidadesService>();
+        builder.Services.AddScoped<IInventarioService, InventarioService>();
     }
 }
 

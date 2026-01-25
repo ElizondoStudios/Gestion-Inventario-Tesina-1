@@ -9,14 +9,14 @@ namespace API.Controllers
     [ApiController]
     public class ModulosAcceso(IModulosAccesoService modulosAccesoService) : ControllerBase
     {
-        [HttpGet]
+        [HttpGet("[action]")]
         public async Task<ActionResult<IReadOnlyList<DTOModulosAcceso>>> ObtenerModulosAcceso()
         {
             var res = await modulosAccesoService.ObtenerModulosAcceso();
             return Ok(res);
         }
 
-        [HttpGet("validar/{IDUsuario}/{IDModulo}")]
+        [HttpGet("[action]")]
         public async Task<ActionResult<DTOModulosAcceso>> ValidarAccesoModulo(int IDUsuario, int IDModulo)
         {
             var res = await modulosAccesoService.ValidarAccesoModulo(IDUsuario, IDModulo);
@@ -29,7 +29,7 @@ namespace API.Controllers
             return Ok(res);
         }
 
-        [HttpPost]
+        [HttpPost("[action]")]
         public async Task<ActionResult<DTOModulosAcceso>> RegistrarAccesoModulo([FromBody] DTORegistrarAccesoModulo dto)
         {
             var res = await modulosAccesoService.RegistrarAccesoModulo(dto);
@@ -42,7 +42,7 @@ namespace API.Controllers
             return CreatedAtAction(nameof(ObtenerModulosAcceso), new { id = res.IDModuloAcceso }, res);
         }
 
-        [HttpDelete("{IDModuloAcceso}")]
+        [HttpDelete("[action]")]
         public async Task<ActionResult<DTOModulosAcceso>> EliminarAccesoModulo(int IDModuloAcceso)
         {
             var res = await modulosAccesoService.EliminarAccesoModulo(IDModuloAcceso);
