@@ -10,6 +10,7 @@ public class InventarioRepository(AppDbContext context) : IInventarioRepository
   {
     return await context.Inventario
       .Include(i => i.Unidad)
+      .Where(i => i.Unidad.Activo)
       .ToListAsync();
   }
 
@@ -17,6 +18,7 @@ public class InventarioRepository(AppDbContext context) : IInventarioRepository
   {
     return await context.Inventario
       .Include(i => i.Unidad)
+      .Where(i => i.Unidad.Activo)
       .FirstOrDefaultAsync(i => i.NoParte == NoParte);
   }
 
