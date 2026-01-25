@@ -41,7 +41,7 @@ public class ModulosCategoriaRepository(AppDbContext context) : IModulosCategori
   public async Task<bool> InhabilitarModuloCategoria(int IDModuloCategoria)
   {
     var filas = await context.ModulosCategorias
-      .Where(mc => mc.IDModuloCategoria == IDModuloCategoria && mc.Activo)
+      .Where(mc => mc.IDModuloCategoria == IDModuloCategoria)
       .ExecuteUpdateAsync(setters => setters
         .SetProperty(mc => mc.Activo, false)
       );
@@ -52,7 +52,7 @@ public class ModulosCategoriaRepository(AppDbContext context) : IModulosCategori
   public async Task<bool> HabilitarModuloCategoria(int IDModuloCategoria)
   {
     var filas = await context.ModulosCategorias
-      .Where(mc => mc.IDModuloCategoria == IDModuloCategoria && !mc.Activo)
+      .Where(mc => mc.IDModuloCategoria == IDModuloCategoria)
       .ExecuteUpdateAsync(setters => setters
         .SetProperty(mc => mc.Activo, true)
       );

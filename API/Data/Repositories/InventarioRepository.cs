@@ -42,7 +42,7 @@ public class InventarioRepository(AppDbContext context) : IInventarioRepository
   public async Task<bool> InhabilitarProducto(string NoParte)
   {
     var filas = await context.Inventario
-      .Where(i => i.NoParte == NoParte && i.Activo)
+      .Where(i => i.NoParte == NoParte)
       .ExecuteUpdateAsync(setters => setters
         .SetProperty(i => i.Activo, false)
       );
@@ -53,7 +53,7 @@ public class InventarioRepository(AppDbContext context) : IInventarioRepository
   public async Task<bool> HabilitarProducto(string NoParte)
   {
     var filas = await context.Inventario
-      .Where(i => i.NoParte == NoParte && !i.Activo)
+      .Where(i => i.NoParte == NoParte)
       .ExecuteUpdateAsync(setters => setters
         .SetProperty(i => i.Activo, true)
       );

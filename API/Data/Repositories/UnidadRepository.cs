@@ -37,7 +37,7 @@ public class UnidadRepository(AppDbContext context) : IUnidadRepository
   public async Task<bool> InhabilitarUnidad(int IDUnidad)
   {
     var filas = await context.Unidades
-      .Where(u => u.IDUnidad == IDUnidad && u.Activo)
+      .Where(u => u.IDUnidad == IDUnidad)
       .ExecuteUpdateAsync(setters => setters
         .SetProperty(u => u.Activo, false)
       );
@@ -48,7 +48,7 @@ public class UnidadRepository(AppDbContext context) : IUnidadRepository
   public async Task<bool> HabilitarUnidad(int IDUnidad)
   {
     var filas = await context.Unidades
-      .Where(u => u.IDUnidad == IDUnidad && !u.Activo)
+      .Where(u => u.IDUnidad == IDUnidad)
       .ExecuteUpdateAsync(setters => setters
         .SetProperty(u => u.Activo, true)
       );

@@ -53,7 +53,7 @@ public class UsuarioSucursalRepository(AppDbContext context) : IUsuarioSucursalR
   public async Task<bool> InhabilitarUsuarioSucursal(int IDSucursalUsuario)
   {
     var filas = await context.UsuariosSucursales
-      .Where(us => us.IDSucursalUsuario == IDSucursalUsuario && us.Activo)
+      .Where(us => us.IDSucursalUsuario == IDSucursalUsuario)
       .ExecuteUpdateAsync(setters => setters
         .SetProperty(us => us.Activo, false)
       );
@@ -64,7 +64,7 @@ public class UsuarioSucursalRepository(AppDbContext context) : IUsuarioSucursalR
   public async Task<bool> HabilitarUsuarioSucursal(int IDSucursalUsuario)
   {
     var filas = await context.UsuariosSucursales
-      .Where(us => us.IDSucursalUsuario == IDSucursalUsuario && !us.Activo)
+      .Where(us => us.IDSucursalUsuario == IDSucursalUsuario)
       .ExecuteUpdateAsync(setters => setters
         .SetProperty(us => us.Activo, true)
       );
