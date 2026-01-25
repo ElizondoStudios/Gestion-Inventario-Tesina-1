@@ -5,8 +5,8 @@ namespace API.Interfaces;
 public interface IModulosAccesoRepository
 {
   Task<IReadOnlyList<ModulosAcceso>> ObtenerModulosAcceso();
-  Task<IReadOnlyList<ModulosAcceso>> ObtenerModulosAccesoPorPerfilPuesto(int IDPerfilPuesto);
   Task<ModulosAcceso?> ObtenerModuloAcceso(int IDModuloAcceso);
-  Task<bool> CrearModuloAcceso(ModulosAcceso moduloAcceso);
-  Task<bool> EliminarModuloAcceso(int IDModuloAcceso);
+  Task<ModulosAcceso?> ValidarAccesoModulo(int IDUsuario, int IDModulo);
+  Task<ModulosAcceso?> RegistrarAccesoModulo(ModulosAcceso modulosAcceso);
+  Task<ModulosAcceso?> EliminarAccesoModulo(int IDModuloAcceso);
 }
