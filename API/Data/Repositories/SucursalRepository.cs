@@ -37,7 +37,7 @@ public class SucursalRepository(AppDbContext context) : ISucursalRepository
   public async Task<bool> InhabilitarSucursal(int IDSucursal)
   {
     var filas = await context.Sucursales
-      .Where(s => s.IDSucursal == IDSucursal && s.Activo)
+      .Where(s => s.IDSucursal == IDSucursal)
       .ExecuteUpdateAsync(setters => setters
         .SetProperty(s => s.Activo, false)
       );
@@ -48,7 +48,7 @@ public class SucursalRepository(AppDbContext context) : ISucursalRepository
   public async Task<bool> HabilitarSucursal(int IDSucursal)
   {
     var filas = await context.Sucursales
-      .Where(s => s.IDSucursal == IDSucursal && !s.Activo)
+      .Where(s => s.IDSucursal == IDSucursal)
       .ExecuteUpdateAsync(setters => setters
         .SetProperty(s => s.Activo, true)
       );

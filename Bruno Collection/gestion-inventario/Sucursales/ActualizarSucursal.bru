@@ -1,0 +1,23 @@
+meta {
+  name: ActualizarSucursal
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{baseUrl}}/api/Sucursales/ActualizarSucursal
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "idSucursal": 1,
+    "nombre": "Sucursal Central Actualizada",
+    "direccion": "Av. Principal 456, Ciudad"
+  }
+}
+
+vars:pre-request {
+  baseUrl: http://localhost:5092
+}

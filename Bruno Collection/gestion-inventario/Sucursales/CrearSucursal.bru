@@ -1,0 +1,22 @@
+meta {
+  name: CrearSucursal
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/api/Sucursales/CrearSucursal
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nombre": "Sucursal Central",
+    "direccion": "Av. Principal 123, Ciudad"
+  }
+}
+
+vars:pre-request {
+  baseUrl: http://localhost:5092
+}
