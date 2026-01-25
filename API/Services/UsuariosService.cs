@@ -9,23 +9,11 @@ namespace API.Services;
 
 public class UsuarioService(IUsuariosRepository usuariosRepository): IUsuariosService
 {
-  public async Task<IReadOnlyList<DTOUsuario>> ObtenerUsuarios()
+  private static DTOUsuario? ConvertirDTO(Usuario? registro)
   {
-    var registros = await usuariosRepository.ObtenerUsuarios();
-    return [.. registros.Select(r => new DTOUsuario
-    {
-      IDUsuario = r.IDUsuario,
-      Nombre = r.Nombre,
-      Correo = r.Correo,
-      IDPerfilPuesto = r.IDPerfilPuesto,
-      Activo = r.Activo
-    })]; 
-  }
-
-  public async Task<DTOUsuario> ObtenerUsuario(int IDUsuario)
-  {
-    var registro = await usuariosRepository.ObtenerUsuario(IDUsuario) ?? throw new Exception("No se encontró el registro");
-    return new DTOUsuario
+    return registro == null ?
+    null :
+    new DTOUsuario
     {
       IDUsuario = registro.IDUsuario,
       Nombre = registro.Nombre,
@@ -33,6 +21,18 @@ public class UsuarioService(IUsuariosRepository usuariosRepository): IUsuariosSe
       IDPerfilPuesto = registro.IDPerfilPuesto,
       Activo = registro.Activo
     };
+  }
+
+  public async Task<IReadOnlyList<DTOUsuario>> ObtenerUsuarios()
+  {
+    var registros = await usuariosRepository.ObtenerUsuarios();
+    return [.. registros.Select(r => ConvertirDTO(r)!)]; 
+  }
+
+  public async Task<DTOUsuario> ObtenerUsuario(int IDUsuario)
+  {
+    var registro = await usuariosRepository.ObtenerUsuario(IDUsuario) ?? throw new Exception("No se encontró el registro");
+    return ConvertirDTO(registro)!;
   }
 
   public async Task<DTOUsuario> CrearUsuario(DTOCrearUsuario dto)
@@ -63,14 +63,7 @@ public class UsuarioService(IUsuariosRepository usuariosRepository): IUsuariosSe
       throw new Exception("Ocurrió un error al crear el registro");
     }
 
-    return new DTOUsuario
-    {
-      IDUsuario = registro.IDUsuario,
-      Nombre = registro.Nombre,
-      Correo = registro.Correo,
-      Activo = registro.Activo,
-      IDPerfilPuesto = registro.IDPerfilPuesto
-    };
+    return ConvertirDTO(registro)!;
   }
   
   public async Task<DTOUsuario> ActualizarUsuario(DTOActualizarUsuario dto)
@@ -96,14 +89,7 @@ public class UsuarioService(IUsuariosRepository usuariosRepository): IUsuariosSe
       throw new Exception("Ocurrió un error al actualizar el registro");
     }
 
-    return new DTOUsuario
-    {
-      IDUsuario = registro.IDUsuario,
-      Nombre = registro.Nombre,
-      Correo = registro.Correo,
-      Activo = registro.Activo,
-      IDPerfilPuesto = registro.IDPerfilPuesto
-    };
+    return ConvertirDTO(registro)!;
   }
 
   public async Task InhabilitarUsuario(int IDUsuario)

@@ -7,26 +7,28 @@ namespace API.Services;
 
 public class PerfilesPuestoService(IPerfilesPuestoRepository perfilesPuestoRepository): IPerfilesPuestoService
 {
-  public async Task<IReadOnlyList<DTOPerfilPuesto>> ObtenerPerfilesPuesto()
+  private static DTOPerfilPuesto? ConvertirDTO(PerfilPuesto? registro)
   {
-    var registros = await perfilesPuestoRepository.ObtenerPerfilesPuesto();
-    return [.. registros.Select(r => new DTOPerfilPuesto
-    {
-      IDPerfilPuesto = r.IDPerfilPuesto,
-      Descripcion = r.Descripcion,
-      Activo = r.Activo
-    })]; 
-  }
-
-  public async Task<DTOPerfilPuesto> ObtenerPerfilPuesto(int IDPerfilPuesto)
-  {
-    var registro = await perfilesPuestoRepository.ObtenerPerfilPuesto(IDPerfilPuesto) ?? throw new Exception("No se encontró el registro");
-    return new DTOPerfilPuesto
+    return registro == null ?
+    null :
+    new DTOPerfilPuesto
     {
       IDPerfilPuesto = registro.IDPerfilPuesto,
       Descripcion = registro.Descripcion,
       Activo = registro.Activo
     };
+  }
+
+  public async Task<IReadOnlyList<DTOPerfilPuesto>> ObtenerPerfilesPuesto()
+  {
+    var registros = await perfilesPuestoRepository.ObtenerPerfilesPuesto();
+    return [.. registros.Select(r => ConvertirDTO(r)!)]; 
+  }
+
+  public async Task<DTOPerfilPuesto> ObtenerPerfilPuesto(int IDPerfilPuesto)
+  {
+    var registro = await perfilesPuestoRepository.ObtenerPerfilPuesto(IDPerfilPuesto) ?? throw new Exception("No se encontró el registro");
+    return ConvertirDTO(registro)!;
   }
 
   public async Task<DTOPerfilPuesto> CrearPerfilPuesto(DTOCrearPerfilPuesto dto)
@@ -44,12 +46,7 @@ public class PerfilesPuestoService(IPerfilesPuestoRepository perfilesPuestoRepos
       throw new Exception("Ocurrió un error al crear el registro");
     }
 
-    return new DTOPerfilPuesto
-    {
-      IDPerfilPuesto = registro.IDPerfilPuesto,
-      Descripcion = registro.Descripcion,
-      Activo = registro.Activo,
-    };
+    return ConvertirDTO(registro)!;
   }
   
   public async Task<DTOPerfilPuesto> ActualizarPerfilPuesto(DTOActualizarPerfilPuesto dto)
@@ -69,12 +66,7 @@ public class PerfilesPuestoService(IPerfilesPuestoRepository perfilesPuestoRepos
       throw new Exception("Ocurrió un error al actualizar el registro");
     }
 
-    return new DTOPerfilPuesto
-    {
-      IDPerfilPuesto = registro.IDPerfilPuesto,
-      Descripcion = registro.Descripcion,
-      Activo = registro.Activo,
-    };
+    return ConvertirDTO(registro)!;
   }
 
   public async Task InhabilitarPerfilPuesto(int IDPerfilPuesto)
