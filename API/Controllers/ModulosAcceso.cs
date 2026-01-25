@@ -12,47 +12,47 @@ namespace API.Controllers
         [HttpGet]
         public async Task<ActionResult<IReadOnlyList<DTOModulosAcceso>>> ObtenerModulosAcceso()
         {
-            var registros = await modulosAccesoService.ObtenerModulosAcceso();
-            return Ok(registros);
+            var res = await modulosAccesoService.ObtenerModulosAcceso();
+            return Ok(res);
         }
 
         [HttpGet("validar/{IDUsuario}/{IDModulo}")]
         public async Task<ActionResult<DTOModulosAcceso>> ValidarAccesoModulo(int IDUsuario, int IDModulo)
         {
-            var registro = await modulosAccesoService.ValidarAccesoModulo(IDUsuario, IDModulo);
+            var res = await modulosAccesoService.ValidarAccesoModulo(IDUsuario, IDModulo);
             
-            if (registro == null)
+            if (res == null)
             {
                 return NotFound(new { mensaje = "No se encontró acceso para el usuario en el módulo especificado" });
             }
             
-            return Ok(registro);
+            return Ok(res);
         }
 
         [HttpPost]
         public async Task<ActionResult<DTOModulosAcceso>> RegistrarAccesoModulo([FromBody] DTORegistrarAccesoModulo dto)
         {
-            var registro = await modulosAccesoService.RegistrarAccesoModulo(dto);
+            var res = await modulosAccesoService.RegistrarAccesoModulo(dto);
             
-            if (registro == null)
+            if (res == null)
             {
                 return BadRequest(new { mensaje = "No se pudo registrar el acceso al módulo" });
             }
             
-            return CreatedAtAction(nameof(ObtenerModulosAcceso), new { id = registro.IDModuloAcceso }, registro);
+            return CreatedAtAction(nameof(ObtenerModulosAcceso), new { id = res.IDModuloAcceso }, res);
         }
 
         [HttpDelete("{IDModuloAcceso}")]
         public async Task<ActionResult<DTOModulosAcceso>> EliminarAccesoModulo(int IDModuloAcceso)
         {
-            var registro = await modulosAccesoService.EliminarAccesoModulo(IDModuloAcceso);
+            var res = await modulosAccesoService.EliminarAccesoModulo(IDModuloAcceso);
             
-            if (registro == null)
+            if (res == null)
             {
                 return NotFound(new { mensaje = "No se encontró el acceso al módulo especificado" });
             }
             
-            return Ok(registro);
+            return Ok(res);
         }
     }
 }
