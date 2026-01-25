@@ -1,0 +1,21 @@
+meta {
+  name: CrearProducto
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/api/Inventario/CrearProducto
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "noParte": "PROD-001",
+    "nombreProducto": "Producto de Ejemplo",
+    "descripcionProducto": "Descripción detallada del producto",
+    "precio": 99.99,
+    "idUnidad": 1
+  }
+}
