@@ -72,6 +72,8 @@ public class Program
         builder.Services.AddScoped<ISucursalRepository, SucursalRepository>();
         builder.Services.AddScoped<IUnidadRepository, UnidadRepository>();
         builder.Services.AddScoped<IInventarioRepository, InventarioRepository>();
+        builder.Services.AddScoped<ILogInventarioRepository, LogInventarioRepository>();
+        builder.Services.AddScoped<IUsuarioSucursalRepository, UsuarioSucursalRepository>();
     }
     
     public static void InyectarServicios(WebApplicationBuilder builder)
@@ -81,6 +83,8 @@ public class Program
         builder.Services.AddScoped<ISucursalesService, SucursalesService>();
         builder.Services.AddScoped<IUnidadesService, UnidadesService>();
         builder.Services.AddScoped<IInventarioService, InventarioService>();
+        builder.Services.AddScoped<ILogInventarioService, LogInventarioService>();
+        builder.Services.AddScoped<IUsuarioSucursalService, UsuarioSucursalService>();
     }
 }
 

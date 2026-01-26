@@ -55,16 +55,16 @@ public class LogInventarioService(ILogInventarioRepository registroInventarioRep
     return ConvertirDTO(registro);
   }
 
-  public async Task<DTOLogInventario> CrearLogInventario(DTOCrearLogInventario registroInventario)
+  public async Task<DTOLogInventario> CrearLogInventario(DTOCrearLogInventario dto)
   {
     var nuevoLog = new LogInventario
     {
       Fecha = DateTime.Now,
-      Cantidad = registroInventario.Cantidad,
-      IDUsuario = registroInventario.IDUsuario,
-      NoParte = registroInventario.NoParte,
-      IDSucursal = registroInventario.IDSucursal,
-      IDTipoMovimiento = registroInventario.IDTipoMovimiento
+      Cantidad = dto.Cantidad,
+      IDUsuario = dto.IDUsuario,
+      NoParte = dto.NoParte,
+      IDSucursal = dto.IDSucursal,
+      IDTipoMovimiento = dto.IDTipoMovimiento
     };
 
     var resultado = await registroInventarioRepository.CrearLogInventario(nuevoLog);
