@@ -1,0 +1,18 @@
+meta {
+  name: CrearUsuarioSucursal
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}/api/UsuarioSucursal/CrearUsuarioSucursal
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "idUsuario": 1,
+    "idSucursal": 1
+  }
+}
