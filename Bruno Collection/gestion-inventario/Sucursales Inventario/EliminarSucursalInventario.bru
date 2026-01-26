@@ -1,0 +1,15 @@
+meta {
+  name: EliminarSucursalInventario
+  type: http
+  seq: 6
+}
+
+delete {
+  url: {{baseUrl}}/api/SucursalesInventario/EliminarSucursalInventario?IDSucursalInventario=1
+  body: none
+  auth: none
+}
+
+params:query {
+  IDSucursalInventario: 1
+}
