@@ -1,0 +1,15 @@
+meta {
+  name: EliminarAccesoModulo
+  type: http
+  seq: 4
+}
+
+delete {
+  url: {{baseUrl}}/api/ModulosAcceso/EliminarAccesoModulo?IDModuloAcceso=1
+  body: none
+  auth: none
+}
+
+params:query {
+  IDModuloAcceso: 1
+}
