@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using API.Entities;
 using API.Data.DTOs;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class PerfilesPuesto(IPerfilesPuestoService perfilesPuestoService) : ControllerBase

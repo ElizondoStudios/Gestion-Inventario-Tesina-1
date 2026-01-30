@@ -5,6 +5,8 @@ using API.Interfaces;
 using API.Repositories;
 using API.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 namespace API;
 
@@ -25,6 +27,21 @@ public class Program
         builder.Services.AddDbContext<AppDbContext>(opt =>
         {
             opt.UseSqlite(builder.Configuration.GetConnectionString("SqliteConnection"));
+        });
+
+        // Agregar auth
+        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddJwtBearer(options =>
+        {
+            var tokenKey = builder.Configuration["TokenKey"]
+                ?? throw new ArgumentNullException("Cannot get the token key - Program.cs");
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenKey)),
+                ValidateIssuer = false,
+                ValidateAudience = false
+            };
         });
 
         // Inyección de repositorios
@@ -58,6 +75,10 @@ public class Program
 
         app.UseHttpsRedirection();
 
+        
+        app.UseAuthentication();
+        app.UseAuthorization();
+
         app.MapControllers();
 
         app.Run();
@@ -87,6 +108,8 @@ public class Program
         builder.Services.AddScoped<ILogInventarioService, LogInventarioService>();
         builder.Services.AddScoped<IUsuarioSucursalService, UsuarioSucursalService>();
         builder.Services.AddScoped<ISucursalesInventarioService, SucursalesInventarioService>();
+        builder.Services.AddScoped<ITokenService, TokenService>();
+        builder.Services.AddScoped<ILoginService, LoginService>();
     }
 }
 

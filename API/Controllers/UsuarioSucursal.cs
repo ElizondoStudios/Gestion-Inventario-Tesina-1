@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using API.Interfaces;
 using API.Data.DTOs;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UsuarioSucursal(IUsuarioSucursalService usuarioSucursalService) : ControllerBase

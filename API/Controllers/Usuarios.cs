@@ -9,8 +9,10 @@ using API.Interfaces;
 using API.Services;
 using API.Data.DTOs;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authorization;
 namespace API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class Usuarios(IUsuariosService usuariosService) : ControllerBase

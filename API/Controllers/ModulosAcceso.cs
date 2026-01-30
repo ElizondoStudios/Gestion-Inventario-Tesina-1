@@ -2,9 +2,11 @@ using API.Data.DTOs;
 using API.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ModulosAcceso(IModulosAccesoService modulosAccesoService) : ControllerBase

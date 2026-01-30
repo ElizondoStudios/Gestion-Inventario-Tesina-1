@@ -1,5 +1,6 @@
 using API.Entities;
 using API.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 namespace API.Repositories;
 
@@ -69,5 +70,14 @@ public class UsuariosRepository(AppDbContext context): IUsuariosRepository
       .Where(u => u.Correo == Correo);
 
     return filas.Any();
+  }
+  
+  public async Task<Usuario?> ObtenerUsuarioPorCorreo(string Correo)
+  {
+    var filas = await context.Usuarios
+      .Where(u => u.Correo == Correo)
+      .FirstOrDefaultAsync();
+
+    return filas;
   }
 }

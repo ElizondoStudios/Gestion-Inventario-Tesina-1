@@ -11,4 +11,5 @@ public interface IUsuariosRepository
   Task<bool> InhabilitarUsuario(int IDUsuario);
   Task<bool> HabilitarUsuario(int IDUsuario);
   Task<bool> ExisteCorreo(string Correo, int IDUsuario);
+  Task<Usuario?> ObtenerUsuarioPorCorreo(string Correo);
 }
