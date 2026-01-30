@@ -1,0 +1,18 @@
+meta {
+  name: CrearUnidad
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/api/Unidades/CrearUnidad
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "descripcion": "Kilogramo",
+    "abreviacion": "kg"
+  }
+}

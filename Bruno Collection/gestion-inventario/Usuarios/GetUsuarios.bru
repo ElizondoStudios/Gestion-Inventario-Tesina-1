@@ -1,0 +1,20 @@
+meta {
+  name: GetUsuarios
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/api/Usuarios/GetUsuarios
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imd1c3RoZWtpbmdAZ21haWwuY29tIiwibmFtZWlkIjoiMSIsIm5iZiI6MTc2OTgxNDU1OCwiZXhwIjoxNzY5ODMyNTU4LCJpYXQiOjE3Njk4MTQ1NTh9.323uAZVenWzxdIGxjx2JqxPZblNL2QDhW05eudNVPuVTDAIgfDSxSgARqnnQYNwf9l5LQBruTsI5YORblVxm1g
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

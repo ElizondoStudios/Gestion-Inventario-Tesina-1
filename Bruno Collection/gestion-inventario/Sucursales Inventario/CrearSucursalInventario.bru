@@ -1,0 +1,20 @@
+meta {
+  name: CrearSucursalInventario
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/api/SucursalesInventario/CrearSucursalInventario
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "noParte": "PROD001",
+    "idSucursal": 1,
+    "existencia": 100,
+    "umbralExistencia": 10
+  }
+}

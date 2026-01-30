@@ -1,0 +1,20 @@
+meta {
+  name: CrearUsuario
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/Usuarios/CrearUsuario
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nombre": "Gustavo",
+    "correo": "gustheking@gmail.com",
+    "contrasenia": "Zawardo1234",
+    "idPerfilPuesto": 1
+  }
+}

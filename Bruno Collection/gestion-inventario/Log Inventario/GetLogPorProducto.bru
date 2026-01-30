@@ -1,0 +1,15 @@
+meta {
+  name: GetLogPorProducto
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/api/LogInventario/GetLogPorProducto?NoParte=PROD001
+  body: none
+  auth: none
+}
+
+params:query {
+  NoParte: PROD001
+}

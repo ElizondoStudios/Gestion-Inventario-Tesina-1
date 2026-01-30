@@ -1,0 +1,17 @@
+meta {
+  name: CrearPerfilPuesto
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/PerfilesPuesto/CrearPerfilPuesto
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "Descripcion": "Prueba"
+  }
+}

@@ -1,0 +1,20 @@
+meta {
+  name: HabilitarUsuario
+  type: http
+  seq: 2
+}
+
+put {
+  url: {{baseUrl}}/api/Usuarios/HabilitarUsuario?IDUsuario=1
+  body: none
+  auth: inherit
+}
+
+params:query {
+  IDUsuario: 1
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

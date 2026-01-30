@@ -13,8 +13,9 @@ public class Inventario
   public required string DescripcionProducto { get; set; }
   public decimal Precio { get; set; }
   public bool Activo { get; set; }
+  public int IDUnidad { get; set; }
 
-  public required Unidad Unidad { get; set; }
+  public Unidad Unidad { get; set; }
   [JsonIgnore]
   public Collection<SucursalesInventario> SucursalesInventario { get; set; }
   [JsonIgnore]

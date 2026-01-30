@@ -9,7 +9,9 @@ public class UsuarioSucursal
   [Key]
   public int IDSucursalUsuario { get; set; }
   public bool Activo { get; set; }
+  public int IDUsuario { get; set; }
+  public int IDSucursal { get; set; }
 
-  public required Usuario Usuario { get; set; }
-  public required Sucursal Sucursal { get; set; }
+  public Usuario Usuario { get; set; }
+  public Sucursal Sucursal { get; set; }
 }

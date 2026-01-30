@@ -1,0 +1,15 @@
+meta {
+  name: HabilitarProducto
+  type: http
+  seq: 6
+}
+
+put {
+  url: {{baseUrl}}/api/Inventario/HabilitarProducto?NoParte=PROD-001
+  body: none
+  auth: none
+}
+
+params:query {
+  NoParte: PROD-001
+}

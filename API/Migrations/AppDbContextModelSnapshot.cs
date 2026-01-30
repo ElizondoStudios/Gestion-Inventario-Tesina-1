@@ -28,6 +28,9 @@ namespace API.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("IDUnidad")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("NombreProducto")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -35,12 +38,9 @@ namespace API.Migrations
                     b.Property<decimal>("Precio")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("UnidadIDUnidad")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("NoParte");
 
-                    b.HasIndex("UnidadIDUnidad");
+                    b.HasIndex("IDUnidad");
 
                     b.ToTable("Inventario");
                 });
@@ -57,28 +57,28 @@ namespace API.Migrations
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("ProductoNoParte")
+                    b.Property<int>("IDSucursal")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("IDTipoMovimiento")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("IDUsuario")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("NoParte")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("QuienRealizaIDUsuario")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("SucursalIDSucursal")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("TipoMovimientoIDTipoMovimientoInventario")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("IDLogInventario");
 
-                    b.HasIndex("ProductoNoParte");
+                    b.HasIndex("IDSucursal");
 
-                    b.HasIndex("QuienRealizaIDUsuario");
+                    b.HasIndex("IDTipoMovimiento");
 
-                    b.HasIndex("SucursalIDSucursal");
+                    b.HasIndex("IDUsuario");
 
-                    b.HasIndex("TipoMovimientoIDTipoMovimientoInventario");
+                    b.HasIndex("NoParte");
 
                     b.ToTable("LogInventario");
                 });
@@ -92,12 +92,12 @@ namespace API.Migrations
                     b.Property<bool>("Activo")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("IDModuloCategoria")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Icono")
                         .IsRequired()
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("ModuloCategoriaIDModuloCategoria")
-                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
@@ -105,9 +105,9 @@ namespace API.Migrations
 
                     b.HasKey("IDModulo");
 
-                    b.HasIndex("ModuloCategoriaIDModuloCategoria");
+                    b.HasIndex("IDModuloCategoria");
 
-                    b.ToTable("Modulo");
+                    b.ToTable("Modulos");
                 });
 
             modelBuilder.Entity("API.Entities.ModulosAcceso", b =>
@@ -116,22 +116,22 @@ namespace API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("ModuloIDModulo")
+                    b.Property<int>("IDModulo")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("NivelAcceso1")
+                    b.Property<int>("IDNivelAcceso")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("PerfilPuestoIDPerfilPuesto")
+                    b.Property<int>("IDPerfilPuesto")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("IDModuloAcceso");
 
-                    b.HasIndex("ModuloIDModulo");
+                    b.HasIndex("IDModulo");
 
-                    b.HasIndex("NivelAcceso1");
+                    b.HasIndex("IDNivelAcceso");
 
-                    b.HasIndex("PerfilPuestoIDPerfilPuesto");
+                    b.HasIndex("IDPerfilPuesto");
 
                     b.ToTable("ModulosAcceso");
                 });
@@ -155,7 +155,7 @@ namespace API.Migrations
 
                     b.HasKey("IDModuloCategoria");
 
-                    b.ToTable("ModulosCategoria");
+                    b.ToTable("ModulosCategorias");
                 });
 
             modelBuilder.Entity("API.Entities.NivelesAcceso", b =>
@@ -188,7 +188,7 @@ namespace API.Migrations
 
                     b.HasKey("IDPerfilPuesto");
 
-                    b.ToTable("PerfilPuesto");
+                    b.ToTable("PerfilesPuesto");
                 });
 
             modelBuilder.Entity("API.Entities.Sucursal", b =>
@@ -210,7 +210,7 @@ namespace API.Migrations
 
                     b.HasKey("IDSucursal");
 
-                    b.ToTable("Sucursal");
+                    b.ToTable("Sucursales");
                 });
 
             modelBuilder.Entity("API.Entities.SucursalesInventario", b =>
@@ -222,20 +222,21 @@ namespace API.Migrations
                     b.Property<decimal>("Existencia")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("ProductoNoParte")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("SucursalIDSucursal")
+                    b.Property<int>("IDSucursal")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("NoParte")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<decimal>("UmbralExistencia")
                         .HasColumnType("TEXT");
 
                     b.HasKey("IDSucursalInventario");
 
-                    b.HasIndex("ProductoNoParte");
+                    b.HasIndex("IDSucursal");
 
-                    b.HasIndex("SucursalIDSucursal");
+                    b.HasIndex("NoParte");
 
                     b.ToTable("SucursalesInventario");
                 });
@@ -277,7 +278,7 @@ namespace API.Migrations
 
                     b.HasKey("IDUnidad");
 
-                    b.ToTable("Unidad");
+                    b.ToTable("Unidades");
                 });
 
             modelBuilder.Entity("API.Entities.Usuario", b =>
@@ -301,16 +302,16 @@ namespace API.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("IDPerfilPuesto")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Nombre")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("PerfilPuestoIDPerfilPuesto")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("IDUsuario");
 
-                    b.HasIndex("PerfilPuestoIDPerfilPuesto");
+                    b.HasIndex("IDPerfilPuesto");
 
                     b.ToTable("Usuarios");
                 });
@@ -324,26 +325,26 @@ namespace API.Migrations
                     b.Property<bool>("Activo")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("SucursalIDSucursal")
+                    b.Property<int>("IDSucursal")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("UsuarioIDUsuario")
+                    b.Property<int>("IDUsuario")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("IDSucursalUsuario");
 
-                    b.HasIndex("SucursalIDSucursal");
+                    b.HasIndex("IDSucursal");
 
-                    b.HasIndex("UsuarioIDUsuario");
+                    b.HasIndex("IDUsuario");
 
-                    b.ToTable("UsuarioSucursal");
+                    b.ToTable("UsuariosSucursales");
                 });
 
             modelBuilder.Entity("API.Entities.Inventario", b =>
                 {
                     b.HasOne("API.Entities.Unidad", "Unidad")
                         .WithMany("Productos")
-                        .HasForeignKey("UnidadIDUnidad")
+                        .HasForeignKey("IDUnidad")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -352,27 +353,27 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Entities.LogInventario", b =>
                 {
-                    b.HasOne("API.Entities.Inventario", "Producto")
-                        .WithMany("LogInventario")
-                        .HasForeignKey("ProductoNoParte")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("API.Entities.Usuario", "QuienRealiza")
-                        .WithMany("LogInventario")
-                        .HasForeignKey("QuienRealizaIDUsuario")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("API.Entities.Sucursal", "Sucursal")
                         .WithMany("LogInventario")
-                        .HasForeignKey("SucursalIDSucursal")
+                        .HasForeignKey("IDSucursal")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("API.Entities.TiposMovimientosInventario", "TipoMovimiento")
                         .WithMany("LogInventario")
-                        .HasForeignKey("TipoMovimientoIDTipoMovimientoInventario")
+                        .HasForeignKey("IDTipoMovimiento")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.Entities.Usuario", "QuienRealiza")
+                        .WithMany("LogInventario")
+                        .HasForeignKey("IDUsuario")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.Entities.Inventario", "Producto")
+                        .WithMany("LogInventario")
+                        .HasForeignKey("NoParte")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -389,7 +390,7 @@ namespace API.Migrations
                 {
                     b.HasOne("API.Entities.ModulosCategoria", "ModuloCategoria")
                         .WithMany("Modulos")
-                        .HasForeignKey("ModuloCategoriaIDModuloCategoria")
+                        .HasForeignKey("IDModuloCategoria")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -400,19 +401,19 @@ namespace API.Migrations
                 {
                     b.HasOne("API.Entities.Modulo", "Modulo")
                         .WithMany("ModulosAcceso")
-                        .HasForeignKey("ModuloIDModulo")
+                        .HasForeignKey("IDModulo")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("API.Entities.NivelesAcceso", "NivelAcceso")
                         .WithMany("ModulosAcceso")
-                        .HasForeignKey("NivelAcceso1")
+                        .HasForeignKey("IDNivelAcceso")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("API.Entities.PerfilPuesto", "PerfilPuesto")
                         .WithMany("ModulosAcceso")
-                        .HasForeignKey("PerfilPuestoIDPerfilPuesto")
+                        .HasForeignKey("IDPerfilPuesto")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -425,13 +426,15 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Entities.SucursalesInventario", b =>
                 {
-                    b.HasOne("API.Entities.Inventario", "Producto")
-                        .WithMany("SucursalesInventario")
-                        .HasForeignKey("ProductoNoParte");
-
                     b.HasOne("API.Entities.Sucursal", "Sucursal")
                         .WithMany("SucursalesInventario")
-                        .HasForeignKey("SucursalIDSucursal")
+                        .HasForeignKey("IDSucursal")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.Entities.Inventario", "Producto")
+                        .WithMany("SucursalesInventario")
+                        .HasForeignKey("NoParte")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -444,7 +447,7 @@ namespace API.Migrations
                 {
                     b.HasOne("API.Entities.PerfilPuesto", "PerfilPuesto")
                         .WithMany("Usuarios")
-                        .HasForeignKey("PerfilPuestoIDPerfilPuesto")
+                        .HasForeignKey("IDPerfilPuesto")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -455,13 +458,13 @@ namespace API.Migrations
                 {
                     b.HasOne("API.Entities.Sucursal", "Sucursal")
                         .WithMany("UsuarioSucursales")
-                        .HasForeignKey("SucursalIDSucursal")
+                        .HasForeignKey("IDSucursal")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("API.Entities.Usuario", "Usuario")
                         .WithMany("UsuarioSucursales")
-                        .HasForeignKey("UsuarioIDUsuario")
+                        .HasForeignKey("IDUsuario")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

@@ -1,0 +1,22 @@
+meta {
+  name: CrearLogInventario
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{baseUrl}}/api/LogInventario/CrearLogInventario
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "noParte": "PROD001",
+    "idSucursal": 1,
+    "idUsuario": 1,
+    "idTipoMovimiento": 1,
+    "cantidadMovimiento": 10,
+    "observaciones": "Entrada inicial de inventario"
+  }
+}

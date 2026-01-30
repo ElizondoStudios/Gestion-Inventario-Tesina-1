@@ -1,0 +1,15 @@
+meta {
+  name: GetProducto
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/api/Inventario/GetProducto?NoParte=PROD-001
+  body: none
+  auth: none
+}
+
+params:query {
+  NoParte: PROD-001
+}

@@ -1,0 +1,21 @@
+meta {
+  name: ActualizarProducto
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{baseUrl}}/api/Inventario/ActualizarProducto
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "noParte": "PROD-001",
+    "nombreProducto": "Producto de Ejemplo Actualizado",
+    "descripcionProducto": "Descripción actualizada del producto",
+    "precio": 129.99,
+    "idUnidad": 1
+  }
+}

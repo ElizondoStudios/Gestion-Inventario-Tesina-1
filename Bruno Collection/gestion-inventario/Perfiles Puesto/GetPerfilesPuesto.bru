@@ -1,0 +1,16 @@
+meta {
+  name: GetPerfilesPuesto
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/api/PerfilesPuesto/GetPerfilesPuesto
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

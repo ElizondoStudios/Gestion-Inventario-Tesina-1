@@ -14,8 +14,9 @@ public class Usuario
   public required byte[] ContraseniaHash { get; set; }
   public required byte[] ContraseniaSalt { get; set; }
   public bool Activo { get; set; }
+  public int IDPerfilPuesto { get; set; }
 
-  public required PerfilPuesto PerfilPuesto { get; set; }
+  public PerfilPuesto PerfilPuesto { get; set; }
   [JsonIgnore]
   public Collection<UsuarioSucursal> UsuarioSucursales { get; set; }
   [JsonIgnore]
