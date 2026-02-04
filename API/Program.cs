@@ -110,6 +110,7 @@ public class Program
         builder.Services.AddScoped<ISucursalesInventarioService, SucursalesInventarioService>();
         builder.Services.AddScoped<ITokenService, TokenService>();
         builder.Services.AddScoped<ILoginService, LoginService>();
+        builder.Services.AddScoped<IInicioService, InicioService>();
     }
 }
 

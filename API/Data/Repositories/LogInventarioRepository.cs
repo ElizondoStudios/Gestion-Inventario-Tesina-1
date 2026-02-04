@@ -73,4 +73,34 @@ public class LogInventarioRepository(AppDbContext context) : ILogInventarioRepos
     await context.LogInventario.AddAsync(logInventario);
     return await context.SaveChangesAsync() > 0;
   }
+  
+  public async Task<IQueryable<LogInventario>> ObtenerTotales()
+  {
+    return context.LogInventario
+      .Include(li => li.Producto)
+      .Where(li => li.IDTipoMovimiento == 1 || li.IDTipoMovimiento == 3 || li.IDTipoMovimiento == 4) //Venta, Merma, Compra
+      .Where(li => li.Fecha.Month == DateTime.Now.Month); //Solo del mes corriente
+  }
+
+  public async Task<IReadOnlyList<LogInventario>> ObtenerMovimientosRecientes()
+  {
+    return await context.LogInventario
+      .Include(l => l.QuienRealiza)
+      .Include(l => l.Producto)
+        .ThenInclude(p => p.Unidad)
+      .Include(l => l.Sucursal)
+      .Include(l => l.TipoMovimiento)
+      .OrderByDescending(l => l.Fecha)
+      .Take(5)
+      .ToListAsync();
+  }
+  
+  public async Task<IReadOnlyList<LogInventario>> ObtenerVentasVsCompras()
+  {
+    return await context.LogInventario
+      .Include(li => li.Producto)
+      .Where(li => li.IDTipoMovimiento == 1 || li.IDTipoMovimiento == 4) //Venta, Compra
+      .Where(li => li.Fecha.Year == DateTime.Now.Year) //Solo del año corriente
+      .ToListAsync(); 
+  }
 }

@@ -1,3 +1,4 @@
+using API.Data.DTOs;
 using API.Entities;
 
 namespace API.Interfaces;
@@ -10,4 +11,7 @@ public interface ILogInventarioRepository
   Task<IReadOnlyList<LogInventario>> ObtenerLogPorUsuario(int IDUsuario);
   Task<LogInventario?> ObtenerLog(int IDLogInventario);
   Task<bool> CrearLogInventario(LogInventario logInventario);
+  Task<IQueryable<LogInventario>> ObtenerTotales();
+  Task<IReadOnlyList<LogInventario>> ObtenerMovimientosRecientes();
+  Task<IReadOnlyList<LogInventario>> ObtenerVentasVsCompras();
 }

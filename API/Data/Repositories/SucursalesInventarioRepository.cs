@@ -60,4 +60,14 @@ public class SucursalesInventarioRepository(AppDbContext context) : ISucursalesI
 
     return filas > 0;
   }
+
+  public async Task<IReadOnlyList<SucursalesInventario>> ObtenerAlertasInventario()
+  {
+    return await context.SucursalesInventario
+      .Include(si => si.Producto)
+        .ThenInclude(p => p.Unidad)
+      .Include(si => si.Sucursal)
+      .Where(si => si.Existencia <= si.UmbralExistencia)
+      .ToListAsync();
+  }
 }

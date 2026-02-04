@@ -10,4 +10,5 @@ public interface ISucursalesInventarioRepository
   Task<bool> CrearSucursalInventario(SucursalesInventario sucursalInventario);
   Task<bool> ActualizarSucursalInventario(SucursalesInventario sucursalInventario);
   Task<bool> EliminarSucursalInventario(int IDSucursalInventario);
+  Task<IReadOnlyList<SucursalesInventario>> ObtenerAlertasInventario();
 }
