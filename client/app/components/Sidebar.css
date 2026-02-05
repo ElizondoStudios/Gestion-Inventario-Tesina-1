@@ -1,0 +1,23 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+.sidebar-item{
+  @apply flex items-center gap-4 p-3;
+  .sidebar-item--icon{
+    @apply rounded-xl bg-white dark:bg-black w-8 h-8 text-primary flex justify-center items-center;
+  }
+  .sidebar-item--text{
+    @apply text-gray-600;
+  }
+}
+
+.sidebar-item.active{
+  @apply card flex-row bg-base-100 items-center gap-4 shadow;
+
+  .sidebar-item--icon{
+    @apply bg-primary text-primary-content;
+  }
+  .sidebar-item--text{
+    @apply text-inherit;
+  }
+}
