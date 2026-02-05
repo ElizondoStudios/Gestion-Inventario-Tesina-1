@@ -7,7 +7,7 @@ export default function Sidebar() {
   const APP_NAME = import.meta.env.VITE_APP_NAME;
 
   return (
-    <nav className="w-1/5 h-full flex flex-col p-5 gap-5">
+    <nav className="w-full h-full flex flex-col p-5 gap-5">
       <div className="w-full flex items-center justify-center gap-4 px-4 py-6 border-b font-bold">
         <i className="material-symbols-outlined w-6">dashboard</i>
         <span>{APP_NAME}</span>

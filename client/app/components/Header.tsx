@@ -1,0 +1,25 @@
+import React, { useState } from 'react'
+
+export default function Header() {
+  const [nombreUsuario, setNombreUsuario] = useState("Usuario");
+  const [nombreRuta, setNombreRuta]= useState("Inicio");
+
+  return (
+    <div className='w-full flex justify-between'>
+      <div>
+        <span className="text-gray-400">Páginas</span>
+        <span className='m-2'>/</span>
+        <span>{nombreRuta}</span>
+      </div>
+      <div className="flex gap-4">
+        <div className='flex gap-2 font-bold text-sm'>
+          <i className="material-symbols-outlined">account_circle</i>
+          <span>{nombreUsuario}</span>
+        </div>
+        <button>
+          <i className="material-symbols-outlined">logout</i>
+        </button>
+      </div>
+    </div>
+  )
+}
