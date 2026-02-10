@@ -1,0 +1,13 @@
+.load-indicator{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  backdrop-filter: blur(2px);
+  background-color: #ffffff44;
+  z-index: 100000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
