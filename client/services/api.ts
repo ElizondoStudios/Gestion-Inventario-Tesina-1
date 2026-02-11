@@ -86,8 +86,8 @@ apiClient.interceptors.response.use(
   async (error) => {
     //Verificar si el error es un 401 Unauthorized o si no hay repuesta por la política de CORS sin auth
     if (
-      error.response?.status === 401 ||
-      (!error.response && error.code === "ERR_NETWORK")
+      error.response?.status === 401 
+      && !window.location.href.includes("/login")
     ) {
       // Cerrar la sesión
       window.location.href = "/login";
