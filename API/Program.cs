@@ -50,6 +50,9 @@ public class Program
         // Injección de los servicios
         InyectarServicios(builder);
 
+        // Agregar política Cors
+        AgregarCors(builder);
+
         var app = builder.Build();
 
         // Hacer una migración de DB
@@ -75,7 +78,8 @@ public class Program
 
         app.UseHttpsRedirection();
 
-        
+        app.UseCors("myPolicy");
+
         app.UseAuthentication();
         app.UseAuthorization();
 
@@ -111,6 +115,19 @@ public class Program
         builder.Services.AddScoped<ITokenService, TokenService>();
         builder.Services.AddScoped<ILoginService, LoginService>();
         builder.Services.AddScoped<IInicioService, InicioService>();
+    }
+    public static void AgregarCors(WebApplicationBuilder builder)
+    {
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("myPolicy",
+                policy =>
+                {
+                    policy.WithOrigins("http://localhost:5173")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+        });
     }
 }
 
