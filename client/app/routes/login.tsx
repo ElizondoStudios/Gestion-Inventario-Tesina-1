@@ -25,6 +25,7 @@ export default function login() {
       .then( data => {
         auth.setToken(data.Token)
         auth.setIDUsuario(data.IDUsuario)
+        auth.setNombre(data.Nombre)
         navigate("/dashboard/inicio")
       })
       .catch((error) => {

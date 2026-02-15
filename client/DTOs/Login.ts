@@ -6,4 +6,5 @@ export interface DTOIniciarSesion {
 export interface DTOSesion {
   IDUsuario: number;
   Token: string;
+  Nombre: string;
 }

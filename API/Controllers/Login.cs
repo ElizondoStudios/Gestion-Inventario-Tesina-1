@@ -21,7 +21,8 @@ namespace API.Controllers
             var sesion= new DTOSesion
             {
                 IDUsuario = usuario.IDUsuario,
-                Token= token
+                Token = token,
+                Nombre = usuario.Nombre
             };
             return Ok(sesion);
         }

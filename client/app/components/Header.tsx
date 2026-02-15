@@ -1,9 +1,16 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { NavLink } from "react-router";
+import { auth } from 'services/auth';
 
 export default function Header() {
-  const [nombreUsuario, setNombreUsuario] = useState("Usuario");
+  const [nombreUsuario, setNombreUsuario] = useState("");
   const [nombreRuta, setNombreRuta]= useState("Inicio");
+
+  useEffect(() => {
+    let nombre= auth.getNombre()
+    nombre= nombre!==null? nombre.split(" ")[0]: "Usuario"
+    setNombreUsuario(nombre)
+  }, [])
 
   return (
     <div className='w-full flex justify-between'>

@@ -9,17 +9,27 @@ export const auth = {
     localStorage.removeItem("token");
   },
   setIDUsuario: (idUsuario: number) => {
-    localStorage.setItem("userId", `${idUsuario}`);
+    localStorage.setItem("idUsuario", `${idUsuario}`);
   },
   getUserId: () => {
-    return localStorage.getItem("userId");
+    return localStorage.getItem("idUsuario");
   },
   deleteUserId: () => {
-    localStorage.removeItem("userId");
+    localStorage.removeItem("idUsuario");
+  },
+  setNombre: (nombre: string) => {
+    localStorage.setItem("nombre", nombre);
+  },
+  getNombre: () => {
+    return localStorage.getItem("nombre");
+  },
+  deleteNombre: () => {
+    localStorage.removeItem("nombre");
   },
   // Método para limpiar toda la sesión
   clearSession: () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("userId");
+    localStorage.removeItem("idUsuario");
+    localStorage.removeItem("nombre");
   },
 };
