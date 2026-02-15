@@ -1,12 +1,16 @@
-import React from 'react'
 import logo from "../assets/logo-light.png"
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, type LoginFormData } from "../form schemas/loginSchema"
 import { api } from 'services/api';
 import { toast } from "react-toastify";
+import { auth } from 'services/auth';
+import { useNavigate } from 'react-router';
+import { useEffect } from "react";
 
 export default function login() {
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -15,14 +19,21 @@ export default function login() {
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = (data: LoginFormData) => {
-    api.Login(data).then(
-      res => console.log(res)
-    )
-    .catch((error) => {
-      toast.error("Usuario o contraseña incorrectos");
-    })
+  const onSubmit = (Logindata: LoginFormData) => {
+    api.Login(Logindata)
+      .then( data => {
+        auth.setToken(data.Token)
+        auth.setIDUsuario(data.IDUsuario)
+        navigate("/dashboard")
+      })
+      .catch((error) => {
+        toast.error("Usuario o contraseña incorrectos");
+      })
   };
+
+  useEffect(() => {
+    auth.clearSession();
+  }, [])
 
   return (
     <div className="h-dvh w-dvw flex items-center justify-center">

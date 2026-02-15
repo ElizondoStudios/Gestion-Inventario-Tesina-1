@@ -6,7 +6,7 @@ import {
   decrementCount,
 } from "./slices/loadingSlice";
 import { auth } from "./auth";
-import type { DTOIniciarSesion } from "DTOs/Login";
+import type { DTOIniciarSesion, DTOSesion } from "DTOs/Login";
 const API_URL = import.meta.env.VITE_API_URL;
 import { store } from "./store";
 
@@ -117,13 +117,13 @@ apiClient.interceptors.response.use(
 
 export const api = {
   // Login
-  Login: async (params: DTOIniciarSesion) => {
+  Login: async (params: DTOIniciarSesion): Promise<DTOSesion> => {
     try {
       return apiClient.request({
         url: `${API_URL}/Login/IniciarSesion`,
         method: "post",
         data: params,
-      });
+      }).then(res => res.data)
     } catch (error: any) {
       console.error("Error al iniciar sesión", error.message);
       throw error;

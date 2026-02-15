@@ -8,8 +8,8 @@ export const auth = {
   deleteToken: () => {
     localStorage.removeItem("token");
   },
-  setUserId: (userId: string) => {
-    localStorage.setItem("userId", userId);
+  setIDUsuario: (idUsuario: number) => {
+    localStorage.setItem("userId", `${idUsuario}`);
   },
   getUserId: () => {
     return localStorage.getItem("userId");
