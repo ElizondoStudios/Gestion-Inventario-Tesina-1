@@ -11,6 +11,8 @@ import { Provider } from "react-redux";
 import type { Route } from "./+types/root";
 import "./app.css";
 import { store } from "services/store";
+import { ToastContainer } from "react-toastify";
+import { useEffect } from "react";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -44,10 +46,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
+  useEffect(() => {
+    import('react-toastify/ReactToastify.css');
+  }, [])
+  
   return (
     <Provider store={store}>
       <Loading />
       <Outlet />
+      <ToastContainer />
     </Provider>
   );
 }

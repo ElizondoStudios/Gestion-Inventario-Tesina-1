@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, type LoginFormData } from "../form schemas/loginSchema"
 import { api } from 'services/api';
+import { toast } from "react-toastify";
 
 export default function login() {
   const {
@@ -19,7 +20,7 @@ export default function login() {
       res => console.log(res)
     )
     .catch((error) => {
-      console.error(error)
+      toast.error("Usuario o contraseña incorrectos");
     })
   };
 
