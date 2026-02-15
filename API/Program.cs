@@ -20,8 +20,13 @@ public class Program
         builder.Services.AddOpenApi();
         builder.Services.AddSwaggerGen();
 
-        // Agregar controladores
-        builder.Services.AddControllers();
+        // Agregar controladores (quitar camel case forzado)
+        builder.Services.AddControllers()
+            .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.PropertyNamingPolicy = null;
+            });
+
         
         // Agregar DB Context
         builder.Services.AddDbContext<AppDbContext>(opt =>
