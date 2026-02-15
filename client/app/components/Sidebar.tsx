@@ -1,6 +1,4 @@
-import React from "react";
 import "./Sidebar.css";
-import { Link } from "react-router";
 import { NavLink } from "react-router";
 
 export default function Sidebar() {

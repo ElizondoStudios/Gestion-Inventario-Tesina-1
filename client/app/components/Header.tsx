@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
+import { NavLink } from "react-router";
 
 export default function Header() {
   const [nombreUsuario, setNombreUsuario] = useState("Usuario");
@@ -16,9 +17,9 @@ export default function Header() {
           <i className="material-symbols-outlined">account_circle</i>
           <span>{nombreUsuario}</span>
         </div>
-        <button>
+        <NavLink to="/login">
           <i className="material-symbols-outlined">logout</i>
-        </button>
+        </NavLink>
       </div>
     </div>
   )

@@ -25,7 +25,7 @@ export default function login() {
       .then( data => {
         auth.setToken(data.Token)
         auth.setIDUsuario(data.IDUsuario)
-        navigate("/dashboard")
+        navigate("/dashboard/inicio")
       })
       .catch((error) => {
         toast.error("Usuario o contraseña incorrectos");
