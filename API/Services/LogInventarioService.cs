@@ -5,7 +5,10 @@ using API.Interfaces;
 
 namespace API.Services;
 
-public class LogInventarioService(ILogInventarioRepository registroInventarioRepository): ILogInventarioService
+public class LogInventarioService(
+  ILogInventarioRepository registroInventarioRepository,
+  ISucursalesInventarioRepository sucursalesInventarioRepository
+): ILogInventarioService
 {
   private static DTOLogInventario? ConvertirDTO(LogInventario? registro)
   {
@@ -55,8 +58,39 @@ public class LogInventarioService(ILogInventarioRepository registroInventarioRep
     return ConvertirDTO(registro);
   }
 
+  private async Task ActualizarInventarioSucursal(string NoParte, int IDSucursal, decimal cantidad, int IDTipoMovimiento)
+  {
+    var tipoMovimiento = await registroInventarioRepository.ObtenerTipoMovimiento(IDTipoMovimiento);
+    
+    if (tipoMovimiento == null)
+      throw new Exception($"No se encontró el tipo de movimiento con ID {IDTipoMovimiento}");
+
+    bool esEntrada = tipoMovimiento.EntradaSalida;
+
+    var inventarioSucursal = await sucursalesInventarioRepository.ObtenerInventarioPorProductoYSucursal(NoParte, IDSucursal);
+    
+    if (inventarioSucursal == null)
+      throw new Exception($"No se encontró el inventario del producto {NoParte} en la sucursal {IDSucursal}");
+
+    // Si es entrada, suma; si es salida, resta
+    if (esEntrada)
+      inventarioSucursal.Existencia += cantidad;
+    else
+      inventarioSucursal.Existencia -= cantidad;
+
+    // Validar que no quede en negativo
+    if (inventarioSucursal.Existencia < 0)
+      throw new Exception("No hay suficiente existencia para realizar esta operación");
+
+    var resultado = await sucursalesInventarioRepository.ActualizarSucursalInventario(inventarioSucursal);
+    
+    if (!resultado)
+      throw new Exception("No se pudo actualizar el inventario de la sucursal");
+  }
+
   public async Task<DTOLogInventario> CrearLogInventario(DTOCrearLogInventario dto)
   {
+    await ActualizarInventarioSucursal(dto.NoParte, dto.IDSucursal, dto.Cantidad, dto.IDTipoMovimiento);
     var nuevoLog = new LogInventario
     {
       Fecha = DateTime.Now,

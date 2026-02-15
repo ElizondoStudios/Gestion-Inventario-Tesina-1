@@ -34,6 +34,15 @@ public class SucursalesInventarioRepository(AppDbContext context) : ISucursalesI
       .FirstOrDefaultAsync(si => si.IDSucursalInventario == IDSucursalInventario);
   }
 
+  public async Task<SucursalesInventario?> ObtenerInventarioPorProductoYSucursal(string NoParte, int IDSucursal)
+  {
+    return await context.SucursalesInventario
+      .Include(si => si.Producto)
+        .ThenInclude(p => p.Unidad)
+      .Include(si => si.Sucursal)
+      .FirstOrDefaultAsync(si => si.NoParte == NoParte && si.IDSucursal == IDSucursal);
+  }
+
   public async Task<bool> CrearSucursalInventario(SucursalesInventario sucursalInventario)
   {
     await context.SucursalesInventario.AddAsync(sucursalInventario);

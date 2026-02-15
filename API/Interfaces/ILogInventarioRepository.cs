@@ -11,6 +11,7 @@ public interface ILogInventarioRepository
   Task<IReadOnlyList<LogInventario>> ObtenerLogPorUsuario(int IDUsuario);
   Task<LogInventario?> ObtenerLog(int IDLogInventario);
   Task<bool> CrearLogInventario(LogInventario logInventario);
+  Task<TiposMovimientosInventario?> ObtenerTipoMovimiento(int IDTipoMovimiento);
   Task<IQueryable<LogInventario>> ObtenerTotales();
   Task<IReadOnlyList<LogInventario>> ObtenerMovimientosRecientes();
   Task<IReadOnlyList<LogInventario>> ObtenerVentasVsCompras();

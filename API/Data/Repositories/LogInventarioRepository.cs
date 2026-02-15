@@ -73,6 +73,12 @@ public class LogInventarioRepository(AppDbContext context) : ILogInventarioRepos
     await context.LogInventario.AddAsync(logInventario);
     return await context.SaveChangesAsync() > 0;
   }
+
+  public async Task<TiposMovimientosInventario?> ObtenerTipoMovimiento(int IDTipoMovimiento)
+  {
+    return await context.Set<TiposMovimientosInventario>()
+      .FirstOrDefaultAsync(tm => tm.IDTipoMovimientoInventario == IDTipoMovimiento);
+  }
   
   public async Task<IQueryable<LogInventario>> ObtenerTotales()
   {
