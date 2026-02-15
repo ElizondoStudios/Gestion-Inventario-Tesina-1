@@ -1,4 +1,6 @@
+import { useEffect } from 'react';
 import { Outlet } from 'react-router';
+import { redirect } from 'react-router';
 
 export function meta() {
   return [
@@ -8,6 +10,10 @@ export function meta() {
 }
 
 export default function Home() {
+  useEffect(() => {
+    location.href="/login"
+  }, [])
+
   return (
     <Outlet></Outlet>
   )

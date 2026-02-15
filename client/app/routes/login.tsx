@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { auth } from 'services/auth';
 import { useNavigate } from 'react-router';
 import { useEffect } from "react";
+import banner from "../assets/login-banner.png"
 
 export default function login() {
   const navigate = useNavigate();
@@ -37,6 +38,7 @@ export default function login() {
 
   return (
     <div className="h-dvh w-dvw flex items-center justify-center">
+      <img src={banner} className="absolute top-0 h-1/2 min-w-full" />
       <div className="card bg-base-100 shadow w-1/3 min-w-110">
         <div className="card-body flex-col gap-5 items-center justify-center">
           <img src={logo} alt="Logo" className='w-12 h-12' />
