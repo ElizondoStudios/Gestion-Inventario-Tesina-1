@@ -9,6 +9,12 @@ import { auth } from "./auth";
 import type { DTOIniciarSesion, DTOSesion } from "DTOs/Login";
 const API_URL = import.meta.env.VITE_API_URL;
 import { store } from "./store";
+import type {
+  DTOAlertasInventarioInicio,
+  DTOMovimientosRecientesInicio,
+  DTOTotalesInicio,
+  DTOVentasVsComprasInicio,
+} from "DTOs/Inicio";
 
 const apiClient = axios.create({
   baseURL: API_URL,
@@ -21,7 +27,7 @@ const authExcludedURLs = ["/Login/IniciarSesion"];
 const noLoaderURLs: string[] = [];
 
 // Extender la interfaz de configuración de Axios para incluir la propiedad skipLoader
-declare module 'axios' {
+declare module "axios" {
   export interface AxiosRequestConfig {
     skipLoader?: boolean;
   }
@@ -40,7 +46,6 @@ apiClient.interceptors.request.use(
     // Agregar header de ngrok
     config.headers["ngrok-skip-browser-warning"] = `true`;
 
-
     // Verificar si se debe mostrar el loader
     const shouldSkipLoader =
       config.skipLoader === true ||
@@ -56,7 +61,7 @@ apiClient.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 // Interceptor para manejar la respuesta y actualizar el token renovado
@@ -86,8 +91,8 @@ apiClient.interceptors.response.use(
   async (error) => {
     //Verificar si el error es un 401 Unauthorized o si no hay repuesta por la política de CORS sin auth
     if (
-      error.response?.status === 401 
-      && !window.location.href.includes("/login")
+      error.response?.status === 401 &&
+      !window.location.href.includes("/login")
     ) {
       // Cerrar la sesión
       window.location.href = "/login";
@@ -112,20 +117,79 @@ apiClient.interceptors.response.use(
       }
     }
     return Promise.reject(error);
-  }
+  },
 );
 
 export const api = {
   // Login
   Login: async (params: DTOIniciarSesion): Promise<DTOSesion> => {
     try {
-      return apiClient.request({
-        url: `${API_URL}/Login/IniciarSesion`,
-        method: "post",
-        data: params,
-      }).then(res => res.data)
+      return apiClient
+        .request({
+          url: `${API_URL}/Login/IniciarSesion`,
+          method: "post",
+          data: params,
+        })
+        .then((res) => res.data);
     } catch (error: any) {
-      console.error("Error al iniciar sesión", error.message);
+      console.error(error.message);
+      throw error;
+    }
+  },
+  // Inicio
+  InicioGetAlertasInventario: async (): Promise<
+    DTOAlertasInventarioInicio[]
+  > => {
+    try {
+      return apiClient
+        .request({
+          url: `${API_URL}/Inicio/GetAlertasInventario`,
+          method: "get",
+        })
+        .then((res) => res.data);
+    } catch (error: any) {
+      console.error(error.message);
+      throw error;
+    }
+  },
+  InicioGetTotales: async (): Promise<DTOTotalesInicio> => {
+    try {
+      return apiClient
+        .request({
+          url: `${API_URL}/Inicio/GetTotales`,
+          method: "get",
+        })
+        .then((res) => res.data);
+    } catch (error: any) {
+      console.error(error.message);
+      throw error;
+    }
+  },
+  InicioGetMovimientosRecientes: async (): Promise<
+    DTOMovimientosRecientesInicio[]
+  > => {
+    try {
+      return apiClient
+        .request({
+          url: `${API_URL}/Inicio/GetMovimientosRecientes`,
+          method: "get",
+        })
+        .then((res) => res.data);
+    } catch (error: any) {
+      console.error(error.message);
+      throw error;
+    }
+  },
+  InicioGetVentasVsCompras: async (): Promise<DTOVentasVsComprasInicio> => {
+    try {
+      return apiClient
+        .request({
+          url: `${API_URL}/Inicio/GetVentasVsCompras`,
+          method: "get",
+        })
+        .then((res) => res.data);
+    } catch (error: any) {
+      console.error(error.message);
       throw error;
     }
   },
