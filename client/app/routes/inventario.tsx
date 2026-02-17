@@ -138,7 +138,7 @@ export default function inventario() {
     {
       field: "acciones",
       headerName: "Acciones",
-      width: 100,
+      width: 110,
       renderCell: (cell) => (
         <ActionButton
           icon="edit"

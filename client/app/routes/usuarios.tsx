@@ -131,7 +131,7 @@ export default function usuarios() {
     {
       field: "acciones",
       headerName: "Acciones",
-      width: 100,
+      width: 110,
       renderCell: (cell) => (
         <ActionButton icon="edit" text="Editar" action={() => {abrirModalEditar(cell.row)}} disabled={!cell.row.Activo} />
       ),
