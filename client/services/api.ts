@@ -15,7 +15,7 @@ import type {
   DTOTotalesInicio,
   DTOVentasVsComprasInicio,
 } from "DTOs/Inicio";
-import type { DTOPerfilPuesto } from "DTOs/PerfilesPuesto";
+import type { DTOActualizarPerfilPuesto, DTOCrearPerfilPuesto, DTOPerfilPuesto } from "DTOs/PerfilesPuesto";
 
 const API_URL = import.meta.env.VITE_API_URL;
 const apiClient = axios.create({
@@ -280,12 +280,95 @@ export const api = {
     }
   },
   // Perfiles Puesto
+  PerfilesPuestoGetPerfilesPuestoActivos: async (): Promise<DTOPerfilPuesto[]> => {
+    try {
+      return apiClient
+        .request({
+          url: `${API_URL}/PerfilesPuesto/GetPerfilesPuestoActivos`,
+          method: "get",
+        })
+        .then((res) => res.data);
+    } catch (error: any) {
+      console.error(error.message);
+      throw error;
+    }
+  },
   PerfilesPuestoGetPerfilesPuesto: async (): Promise<DTOPerfilPuesto[]> => {
     try {
       return apiClient
         .request({
           url: `${API_URL}/PerfilesPuesto/GetPerfilesPuesto`,
           method: "get",
+        })
+        .then((res) => res.data);
+    } catch (error: any) {
+      console.error(error.message);
+      throw error;
+    }
+  },
+  PerfilesPuestoGetPerfilPuesto: async (IDPerfilPuesto: number): Promise<DTOPerfilPuesto> => {
+    try {
+      return apiClient
+        .request({
+          url: `${API_URL}/PerfilesPuesto/GetPerfilPuesto`,
+          method: "get",
+          params: { IDPerfilPuesto },
+        })
+        .then((res) => res.data);
+    } catch (error: any) {
+      console.error(error.message);
+      throw error;
+    }
+  },
+  PerfilesPuestoCrearPerfilPuesto: async (params: DTOCrearPerfilPuesto): Promise<DTOPerfilPuesto> => {
+    try {
+      return apiClient
+        .request({
+          url: `${API_URL}/PerfilesPuesto/CrearPerfilPuesto`,
+          method: "post",
+          data: params,
+        })
+        .then((res) => res.data);
+    } catch (error: any) {
+      console.error(error.message);
+      throw error;
+    }
+  },
+  PerfilesPuestoActualizarPerfilPuesto: async (params: DTOActualizarPerfilPuesto): Promise<DTOPerfilPuesto> => {
+    try {
+      return apiClient
+        .request({
+          url: `${API_URL}/PerfilesPuesto/ActualizarPerfilPuesto`,
+          method: "put",
+          data: params,
+        })
+        .then((res) => res.data);
+    } catch (error: any) {
+      console.error(error.message);
+      throw error;
+    }
+  },
+  PerfilesPuestoInhabilitarPerfilPuesto: async (IDPerfilPuesto: number): Promise<void> => {
+    try {
+      return apiClient
+        .request({
+          url: `${API_URL}/PerfilesPuesto/InhabilitarPerfilPuesto`,
+          method: "put",
+          params: { IDPerfilPuesto },
+        })
+        .then((res) => res.data);
+    } catch (error: any) {
+      console.error(error.message);
+      throw error;
+    }
+  },
+  PerfilesPuestoHabilitarPerfilPuesto: async (IDPerfilPuesto: number): Promise<void> => {
+    try {
+      return apiClient
+        .request({
+          url: `${API_URL}/PerfilesPuesto/HabilitarPerfilPuesto`,
+          method: "put",
+          params: { IDPerfilPuesto },
         })
         .then((res) => res.data);
     } catch (error: any) {

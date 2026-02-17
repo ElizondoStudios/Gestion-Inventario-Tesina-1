@@ -31,7 +31,7 @@ export default function usuarios() {
     dispatch(changeCurrentPage("Usuarios"))
     setIdUsuario(parseInt(auth.getUserId() ?? "0"));
     GetUsuarios();
-    GetPerfilesPuesto();
+    GetPerfilesPuestoActivos();
   }, []);
 
   // API Calls
@@ -46,9 +46,9 @@ export default function usuarios() {
       });
   };
   
-  const GetPerfilesPuesto = () => {
+  const GetPerfilesPuestoActivos = () => {
     api
-      .PerfilesPuestoGetPerfilesPuesto()
+      .PerfilesPuestoGetPerfilesPuestoActivos()
       .then((data) => {
         setPerfilesPuesto(data);
       })
