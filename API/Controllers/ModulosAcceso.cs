@@ -12,21 +12,21 @@ namespace API.Controllers
     public class ModulosAcceso(IModulosAccesoService modulosAccesoService) : ControllerBase
     {
         [HttpGet("[action]")]
-        public async Task<ActionResult<IReadOnlyList<DTOModulosAcceso>>> ObtenerModulosAcceso()
+        public async Task<ActionResult<IReadOnlyList<DTOModulosAcceso>>> GetModulosAcceso()
         {
             var res = await modulosAccesoService.ObtenerModulosAcceso();
             return Ok(res);
         }
         
         [HttpGet("[action]")]
-        public async Task<ActionResult<IReadOnlyList<DTOModulosAcceso>>> ObtenerModulos()
+        public async Task<ActionResult<IReadOnlyList<DTOModulosAcceso>>> GetModulos()
         {
             var res = await modulosAccesoService.ObtenerModulos();
             return Ok(res);
         }
         
         [HttpGet("[action]")]
-        public async Task<ActionResult<IReadOnlyList<DTOModulosAcceso>>> ObtenerNiveles()
+        public async Task<ActionResult<IReadOnlyList<DTOModulosAcceso>>> GetNiveles()
         {
             var res = await modulosAccesoService.ObtenerNiveles();
             return Ok(res);
@@ -55,7 +55,7 @@ namespace API.Controllers
                 return BadRequest(new { mensaje = "No se pudo registrar el acceso al módulo" });
             }
             
-            return CreatedAtAction(nameof(ObtenerModulosAcceso), new { id = res.IDModuloAcceso }, res);
+            return CreatedAtAction(nameof(GetModulosAcceso), new { id = res.IDModuloAcceso }, res);
         }
 
         [HttpDelete("[action]")]
