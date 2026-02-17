@@ -57,4 +57,13 @@ public class ModulosAccesoRepository(AppDbContext context) : IModulosAccesoRepos
     
     return moduloAcceso;
   }
+
+  public async Task<IReadOnlyList<Modulo>> ObtenerModulos()
+  {
+    return await context.Modulos.Where(m => m.Activo).ToListAsync();
+  }
+  public async Task<IReadOnlyList<NivelesAcceso>> ObtenerNiveles()
+  {
+    return await context.NivelesAcceso.ToListAsync();
+  }
 }

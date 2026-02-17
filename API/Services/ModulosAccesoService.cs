@@ -49,4 +49,21 @@ public class ModulosAccesoService(IModulosAccesoRepository modulosAccesoReposito
     var registro = await modulosAccesoRepository.EliminarAccesoModulo(IDModuloAcceso);
     return ConvertirDTO(registro);
   }
+  public async Task<IReadOnlyList<DTOModulo>> ObtenerModulos()
+  {
+    var registros = await modulosAccesoRepository.ObtenerModulos();
+    return [.. registros.Select(r => new DTOModulo{
+      IDModulo= r.IDModulo,
+      Icono = r.Icono,
+      Nombre = r.Nombre
+    })];
+  }
+  public async Task<IReadOnlyList<DTONivel>> ObtenerNiveles()
+  {
+    var registros = await modulosAccesoRepository.ObtenerNiveles();
+    return [.. registros.Select(r => new DTONivel{
+      Descripcion = r.Descripcion,
+      NivelAcceso = r.NivelAcceso
+    })];
+  }
 }
