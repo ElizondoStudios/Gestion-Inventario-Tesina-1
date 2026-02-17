@@ -9,4 +9,5 @@ public class DTOUsuario
   public required string Correo { get; set; }
   public bool Activo { get; set; }
   public int IDPerfilPuesto { get; set; }
+  public required string DescripcionPerfilPuesto { get; set; }
 }

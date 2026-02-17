@@ -19,6 +19,7 @@ public class UsuarioService(IUsuariosRepository usuariosRepository): IUsuariosSe
       Nombre = registro.Nombre,
       Correo = registro.Correo,
       IDPerfilPuesto = registro.IDPerfilPuesto,
+      DescripcionPerfilPuesto = registro.PerfilPuesto.Descripcion,
       Activo = registro.Activo
     };
   }
