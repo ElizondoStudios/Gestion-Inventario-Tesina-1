@@ -15,11 +15,16 @@ export default function Header() {
   }, [])
 
   return (
-    <div className='w-full flex justify-between'>
-      <div>
-        <span className="text-gray-400">Páginas</span>
-        <span className='m-2'>/</span>
-        <span>{nombreRuta}</span>
+    <div className='w-full flex justify-between items-center'>
+      <div className='flex items-center gap-4'>
+        <label htmlFor="my-drawer-1" className="btn btn-ghost lg:hidden">
+          <i className="material-symbols-outlined">menu</i>
+        </label>
+        <div>
+          <span className="text-gray-400">Páginas</span>
+          <span className='m-2'>/</span>
+          <span>{nombreRuta}</span>
+        </div>
       </div>
       <div className="flex gap-4">
         <div className='flex gap-2 font-bold text-sm'>

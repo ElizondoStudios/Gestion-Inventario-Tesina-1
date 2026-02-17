@@ -17,13 +17,15 @@ export default function DashboardLayout({children}: {children: React.ReactNode})
   
   return (
     <>
-      <main className='min-h-dvh w-full flex'>
-        <div className="sticky w-1/5">
-          <Sidebar></Sidebar>
-        </div>
-        <div className='w-4/5 p-4'>
+      <main className='min-h-dvh w-full drawer lg:drawer-open'>
+        <input id="my-drawer-1" type="checkbox" className="drawer-toggle" />
+        <div className='drawer-content p-4 w-full'>
           <Header></Header>
           {children}
+        </div>
+        <div className="drawer-side">
+          <label htmlFor="my-drawer-1" aria-label="close sidebar" className="drawer-overlay"></label>
+          <Sidebar></Sidebar>
         </div>
       </main>
       <footer></footer>
