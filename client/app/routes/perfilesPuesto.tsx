@@ -89,11 +89,12 @@ export default function perfilesPuesto() {
   // Datagrid
   const columns: GridColDef[] = [
     { field: "IDPerfilPuesto", headerName: "ID", width: 70 },
-    { field: "Descripcion", headerName: "Descripción", flex: 1 },
+    { field: "Descripcion", headerName: "Descripción", flex: 1, minWidth: 150 },
     {
       field: "Activo",
       headerName: "Activo",
       flex: 1,
+      minWidth: 100,
       renderCell: (cell) => (
         <Switch
           checked={cell.row.Activo}

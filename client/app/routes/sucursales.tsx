@@ -89,12 +89,13 @@ export default function sucursales() {
   // Datagrid
   const columns: GridColDef[] = [
     { field: "IDSucursal", headerName: "ID", width: 70 },
-    { field: "Nombre", headerName: "Nombre", flex: 1 },
-    { field: "Direccion", headerName: "Dirección", flex: 1 },
+    { field: "Nombre", headerName: "Nombre", flex: 1, minWidth: 300 },
+    { field: "Direccion", headerName: "Dirección", flex: 1, minWidth: 200 },
     {
       field: "Activo",
       headerName: "Activo",
       flex: 1,
+      minWidth: 100,
       renderCell: (cell) => (
         <Switch
           checked={cell.row.Activo}

@@ -105,8 +105,8 @@ export default function inventario() {
   // Datagrid
   const columns: GridColDef[] = [
     { field: "NoParte", headerName: "No. Parte", width: 120 },
-    { field: "NombreProducto", headerName: "Nombre", flex: 1 },
-    { field: "DescripcionProducto", headerName: "Descripción", flex: 1 },
+    { field: "NombreProducto", headerName: "Nombre", flex: 1, minWidth: 200 },
+    { field: "DescripcionProducto", headerName: "Descripción", flex: 1, minWidth: 300 },
     {
       field: "Precio",
       headerName: "Precio",

@@ -103,12 +103,13 @@ export default function usuarios() {
   // Datagrid
   const columns: GridColDef[] = [
     { field: "IDUsuario", headerName: "ID", width: 70 },
-    { field: "Nombre", headerName: "Nombre", flex: 1 },
-    { field: "Correo", headerName: "Correo", flex: 1 },
+    { field: "Nombre", headerName: "Nombre", flex: 1, minWidth: 150 },
+    { field: "Correo", headerName: "Correo", flex: 1, minWidth: 150 },
     {
       field: "Activo",
       headerName: "Activo",
       flex: 1,
+      minWidth: 100,
       renderCell: (cell) => (
         <Switch
           checked={cell.row.Activo}
@@ -125,6 +126,7 @@ export default function usuarios() {
       field: "DescripcionPerfilPuesto",
       headerName: "Perfil de Puesto",
       flex: 1,
+      minWidth: 150,
     },
     {
       field: "acciones",
