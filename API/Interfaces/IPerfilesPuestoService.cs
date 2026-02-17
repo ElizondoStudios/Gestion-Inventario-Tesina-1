@@ -6,6 +6,7 @@ namespace API.Interfaces;
 public interface IPerfilesPuestoService
 {
     Task<IReadOnlyList<DTOPerfilPuesto>> ObtenerPerfilesPuesto();
+    Task<IReadOnlyList<DTOPerfilPuesto>> ObtenerPerfilesPuestoActivos();
     Task<DTOPerfilPuesto> ObtenerPerfilPuesto(int IDPerfilPuesto);
     Task<DTOPerfilPuesto> CrearPerfilPuesto(DTOCrearPerfilPuesto dto);
     Task<DTOPerfilPuesto> ActualizarPerfilPuesto(DTOActualizarPerfilPuesto dto);

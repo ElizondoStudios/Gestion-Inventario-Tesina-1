@@ -19,6 +19,12 @@ namespace API.Controllers
             var res = await perfilesPuestoService.ObtenerPerfilesPuesto();
             return Ok(res);
         }
+        [HttpGet("[action]")]
+        public async Task<ActionResult<IReadOnlyList<DTOPerfilPuesto>>> GetPerfilesPuestoActivos()
+        {
+            var res = await perfilesPuestoService.ObtenerPerfilesPuestoActivos();
+            return Ok(res);
+        }
         
         [HttpGet("[action]")]
         public async Task<ActionResult<DTOPerfilPuesto>> GetPerfilPuesto([Required] int IDPerfilPuesto)
