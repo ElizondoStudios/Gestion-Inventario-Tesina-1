@@ -106,20 +106,20 @@ export default function inventario() {
   const columns: GridColDef[] = [
     { field: "NoParte", headerName: "No. Parte", width: 120 },
     { field: "NombreProducto", headerName: "Nombre", flex: 1, minWidth: 200 },
-    { field: "DescripcionProducto", headerName: "Descripción", flex: 1, minWidth: 300 },
+    { field: "DescripcionProducto", headerName: "Descripción", flex: 1, minWidth: 200 },
     {
       field: "Precio",
       headerName: "Precio",
-      width: 120,
+      width: 100,
       renderCell: (cell) => `$${cell.row.Precio.toFixed(2)}`,
     },
     {
       field: "Costo",
       headerName: "Costo",
-      width: 120,
+      width: 100,
       renderCell: (cell) => `$${cell.row.Costo.toFixed(2)}`,
     },
-    { field: "DescripcionUnidad", headerName: "Unidad", width: 120 },
+    { field: "DescripcionUnidad", headerName: "Unidad", width: 100 },
     {
       field: "Activo",
       headerName: "Activo",
