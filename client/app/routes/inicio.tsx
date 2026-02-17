@@ -74,7 +74,7 @@ export default function inicio() {
           <div className="card-body flex flex-row justify-between">
             <div className="flex flex-col">
               <span>Total Ventas</span>
-              <span className="font-bold">
+              <span className="card-title">
                 {formatCurrency(totales?.Ventas)}
               </span>
             </div>
@@ -88,7 +88,7 @@ export default function inicio() {
           <div className="card-body flex flex-row justify-between">
             <div className="flex flex-col">
               <span>Total Compras</span>
-              <span className="font-bold">
+              <span className="card-title">
                 {formatCurrency(totales?.Compras)}
               </span>
             </div>
@@ -102,7 +102,7 @@ export default function inicio() {
           <div className="card-body flex flex-row justify-between">
             <div className="flex flex-col">
               <span>Total Merma</span>
-              <span className="font-bold">
+              <span className="card-title">
                 {formatCurrency(totales?.Merma)}
               </span>
             </div>
@@ -116,12 +116,12 @@ export default function inicio() {
       <div className="w-full grid grid-cols-5 gap-4 mt-4">
         <div className="col-span-5 lg:col-span-2 card bg-base-100 shadow">
           <div className="card-body">
-            <span className="font-bold">Movimientos Recientes</span>
+            <h1 className="card-title">Movimientos Recientes</h1>
           </div>
         </div>
         <div className="col-span-5 lg:col-span-3 card bg-base-100 shadow">
           <div className="card-body">
-            <span className="font-bold">Ventas vs Compras</span>
+            <h1 className="card-title">Ventas vs Compras</h1>
           </div>
         </div>
       </div>
@@ -129,7 +129,7 @@ export default function inicio() {
       <div className="w-full mt-4">
         <div className="w-full card bg-base-100 shadow">
           <div className="card-body">
-            <span className="font-bold">Alertas Inventario</span>
+            <h1 className="card-title">Alertas Inventario</h1>
           </div>
         </div>
       </div>

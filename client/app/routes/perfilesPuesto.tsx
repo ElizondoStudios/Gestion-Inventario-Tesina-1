@@ -175,6 +175,7 @@ export default function perfilesPuesto() {
       <div className="w-full h-full py-4">
         <div className="card bg-base-100">
           <div className="card-body">
+            <h1 className="card-title">Perfiles de Puesto</h1>
             <div className="w-full flex justify-end">
               <ActionButton icon="add" text="Crear" action={abrirModalCrear} />
             </div>

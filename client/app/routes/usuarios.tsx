@@ -187,6 +187,7 @@ export default function usuarios() {
       <div className="w-full h-full py-4">
         <div className="card bg-base-100">
           <div className="card-body">
+            <h1 className="card-title">Usuarios</h1>
             <div className="w-full flex justify-end">
               <ActionButton icon="add" text="Crear" action={abrirModalCrear} />
             </div>
