@@ -36,6 +36,7 @@ public class InventarioRepository(AppDbContext context) : IInventarioRepository
         .SetProperty(i => i.NombreProducto, producto.NombreProducto)
         .SetProperty(i => i.DescripcionProducto, producto.DescripcionProducto)
         .SetProperty(i => i.Precio, producto.Precio)
+        .SetProperty(i => i.Costo, producto.Costo)
       );
 
     return filas > 0;

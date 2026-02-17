@@ -1,0 +1,16 @@
+meta {
+  name: GetAlertasInventario
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/Inicio/GetAlertasInventario
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

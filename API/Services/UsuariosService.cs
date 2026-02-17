@@ -19,6 +19,7 @@ public class UsuarioService(IUsuariosRepository usuariosRepository): IUsuariosSe
       Nombre = registro.Nombre,
       Correo = registro.Correo,
       IDPerfilPuesto = registro.IDPerfilPuesto,
+      DescripcionPerfilPuesto = registro.PerfilPuesto.Descripcion,
       Activo = registro.Activo
     };
   }
@@ -63,7 +64,9 @@ public class UsuarioService(IUsuariosRepository usuariosRepository): IUsuariosSe
       throw new Exception("Ocurrió un error al crear el registro");
     }
 
-    return ConvertirDTO(registro)!;
+    // Recargar el usuario con sus relaciones
+    var usuarioCreado = await usuariosRepository.ObtenerUsuario(registro.IDUsuario);
+    return ConvertirDTO(usuarioCreado)!;
   }
   
   public async Task<DTOUsuario> ActualizarUsuario(DTOActualizarUsuario dto)

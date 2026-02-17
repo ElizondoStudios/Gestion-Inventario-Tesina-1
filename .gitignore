@@ -1,3 +1,12 @@
+# API
 /API/bin/
 /API/obj/
 *.db*
+
+# Client
+/client/.DS_Store
+/client/.env
+/client/node_modules/
+/client/.react-router/
+/client/build/
+/client/package-lock.json

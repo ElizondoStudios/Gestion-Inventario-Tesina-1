@@ -8,5 +8,6 @@ public class DTOCrearInventario
   public required string NombreProducto { get; set; }
   public required string DescripcionProducto { get; set; }
   public decimal Precio { get; set; }
+  public decimal Costo { get; set; }
   public int IDUnidad { get; set; }
 }

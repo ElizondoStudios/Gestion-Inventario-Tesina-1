@@ -17,6 +17,7 @@ public class InventarioService(IInventarioRepository inventarioRepository, IUnid
       NombreProducto = registro.NombreProducto,
       DescripcionProducto = registro.DescripcionProducto,
       Precio = registro.Precio,
+      Costo = registro.Costo,
       Activo = registro.Activo,
       IDUnidad = registro.IDUnidad,
       DescripcionUnidad = registro.Unidad?.Descripcion,
@@ -56,6 +57,7 @@ public class InventarioService(IInventarioRepository inventarioRepository, IUnid
       NombreProducto = dto.NombreProducto,
       DescripcionProducto = dto.DescripcionProducto,
       Precio = dto.Precio,
+      Costo = dto.Costo,
       IDUnidad = dto.IDUnidad,
       Activo = true
     };
@@ -89,6 +91,7 @@ public class InventarioService(IInventarioRepository inventarioRepository, IUnid
     registro.NombreProducto = dto.NombreProducto;
     registro.DescripcionProducto = dto.DescripcionProducto;
     registro.Precio = dto.Precio;
+    registro.Costo = dto.Costo;
     registro.IDUnidad = dto.IDUnidad;
 
     // Persistir

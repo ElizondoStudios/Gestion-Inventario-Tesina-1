@@ -12,7 +12,7 @@ public class LoginService(IUsuariosRepository usuariosRepository): ILoginService
   public async Task<Usuario?> IniciarSesion(DTOIniciarSesion dto)
   {
     var usuario = await usuariosRepository.ObtenerUsuarioPorCorreo(dto.Correo);
-    if (usuario != null)
+    if (usuario != null && usuario.Activo)
     {
       using var hmac = new HMACSHA512(usuario.ContraseniaSalt);
       var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(dto.Contrasenia));
@@ -20,7 +20,8 @@ public class LoginService(IUsuariosRepository usuariosRepository): ILoginService
       {
         if (computedHash[i] != usuario.ContraseniaHash[i]) return null;
       }
+      return usuario;
     }
-    return usuario;
+    return null;
   }
 }

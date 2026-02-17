@@ -24,6 +24,9 @@ namespace API.Migrations
                     b.Property<bool>("Activo")
                         .HasColumnType("INTEGER");
 
+                    b.Property<decimal>("Costo")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("DescripcionProducto")
                         .IsRequired()
                         .HasColumnType("TEXT");

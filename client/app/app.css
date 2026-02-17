@@ -1,0 +1,29 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+@theme {
+  --font-sans: "Helvetica", ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+:root{
+  --color-primary: var(--color-teal-400);
+  --color-primary-content: white;
+}
+
+html,
+body {
+  @apply bg-gray-50 dark:bg-gray-900 text-gray-700 dark:text-gray-50;
+  
+  @media (prefers-color-scheme: dark) {
+    color-scheme: dark;
+  }
+}
+
+body *{
+  @apply border-gray-200 dark:border-gray-700 transition-all;
+}
+
+.material-symbols-outlined{
+  @apply font-light;
+}
