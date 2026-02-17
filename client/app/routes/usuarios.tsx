@@ -11,6 +11,7 @@ import Modal from "@mui/material/Modal";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { crearUsuarioSchema, type CrearUsuarioFormData } from "~/form schemas/crearUsuarioSchema";
+import { editarUsuarioSchema, type EditarUsuarioFormData } from "~/form schemas/editarUsuarioSchema";
 
 export default function usuarios() {
   // State
@@ -18,6 +19,7 @@ export default function usuarios() {
   const [idUsuario, setIdUsuario] = useState<number>(0);
   const [perfilesPuesto, setPerfilesPuesto] = useState<DTOPerfilPuesto[]>([]);
   const [verModalCrear, setVerModalCrear] = useState<boolean>(false);
+  const [verModalEditar, setVerModalEditar] = useState<boolean>(false);
 
   // Effects
   useEffect(() => {
@@ -79,6 +81,18 @@ export default function usuarios() {
   const cerrarModalCrear = () => {
     setVerModalCrear(false);
   };
+  const abrirModalEditar = (usuario: DTOUsuario) => {
+    resetEditarUsuario({
+      IDUsuario: usuario.IDUsuario,
+      Nombre: usuario.Nombre,
+      Correo: usuario.Correo,
+      IDPerfilPuesto: `${usuario.IDPerfilPuesto}`
+    })
+    setVerModalEditar(true);
+  };
+  const cerrarModalEditar = () => {
+    setVerModalEditar(false);
+  };
 
   // Datagrid
   const columns: GridColDef[] = [
@@ -111,7 +125,7 @@ export default function usuarios() {
       headerName: "Acciones",
       width: 100,
       renderCell: (cell) => (
-        <ActionButton icon="edit" text="Editar" action={() => {}} />
+        <ActionButton icon="edit" text="Editar" action={() => {abrirModalEditar(cell.row)}} disabled={!cell.row.Activo} />
       ),
     },
   ];
@@ -122,17 +136,39 @@ export default function usuarios() {
   const {
     register: registerCrearUsuario,
     handleSubmit: handleSubmitCrearUsuario,
-    formState: { errors },
+    formState: { errors: errorsCrearUsuario },
   } = useForm<CrearUsuarioFormData>({
     resolver: zodResolver(crearUsuarioSchema),
   });
 
-  const onSubmit = (formData: CrearUsuarioFormData) => {
+  const onSubmitCrearUsuario = (formData: CrearUsuarioFormData) => {
     api.UsuariosCrearUsuario({...formData, IDPerfilPuesto: parseInt(formData.IDPerfilPuesto)})
     .then(() => {
       toast.success("Se creó el usuario de forma correcta")
       GetUsuarios();
       cerrarModalCrear();
+    })
+    .catch(() => {
+      toast.error("Hubo un error al crear el usuario")
+    })
+  };
+  
+  // Editar Usuario Form
+  const {
+    register: registerEditarUsuario,
+    handleSubmit: handleSubmitEditarUsuario,
+    formState: { errors: errorsEditarUsuario },
+    reset: resetEditarUsuario
+  } = useForm<EditarUsuarioFormData>({
+    resolver: zodResolver(editarUsuarioSchema),
+  });
+
+  const onSubmitEditarUsuario = (formData: EditarUsuarioFormData) => {
+    api.UsuariosActualizarUsuario({...formData, IDPerfilPuesto: parseInt(formData.IDPerfilPuesto)})
+    .then(() => {
+      toast.success("Se creó el usuario de forma correcta")
+      GetUsuarios();
+      cerrarModalEditar();
     })
     .catch(() => {
       toast.error("Hubo un error al crear el usuario")
@@ -169,26 +205,26 @@ export default function usuarios() {
         <div className="card w-4/5 bg-base-100">
           <div className="card-body">
             <h2 className="card-title">Crear Usuario</h2>
-            <form className="w-full grid grid-cols-2 gap-4" onSubmit={handleSubmitCrearUsuario(onSubmit)}>
+            <form className="w-full grid grid-cols-2 gap-4" onSubmit={handleSubmitCrearUsuario(onSubmitCrearUsuario)}>
             <div className="col-span-2">
               <label>Nombre</label>
               <input {...registerCrearUsuario("Nombre")} type="text" className=" w-full input" placeholder="Nombre Apellido" />
-              {errors.Nombre && (
-                <p className='text-sm text-error'>{errors.Nombre.message}</p>
+              {errorsCrearUsuario.Nombre && (
+                <p className='text-sm text-error'>{errorsCrearUsuario.Nombre.message}</p>
               )}
             </div>
             <div className="col-span-2 lg:col-span-1">
               <label>Correo</label>
               <input {...registerCrearUsuario("Correo")} type="email" className=" w-full input" placeholder="tucorreo@correo.com" />
-              {errors.Correo && (
-                <p className='text-sm text-error'>{errors.Correo.message}</p>
+              {errorsCrearUsuario.Correo && (
+                <p className='text-sm text-error'>{errorsCrearUsuario.Correo.message}</p>
               )}
             </div>
             <div className="col-span-2 lg:col-span-1">
               <label>Contraseña</label>
               <input {...registerCrearUsuario("Contrasenia")} type="text" className=" w-full input" placeholder="******" />
-              {errors.Contrasenia && (
-                <p className='text-sm text-error'>{errors.Contrasenia.message}</p>
+              {errorsCrearUsuario.Contrasenia && (
+                <p className='text-sm text-error'>{errorsCrearUsuario.Contrasenia.message}</p>
               )}
             </div>
             <div className="col-span-2">
@@ -200,11 +236,53 @@ export default function usuarios() {
                   ))
                 }
               </select>
-              {errors.IDPerfilPuesto && (
-                <p className='text-sm text-error'>{errors.IDPerfilPuesto.message}</p>
+              {errorsCrearUsuario.IDPerfilPuesto && (
+                <p className='text-sm text-error'>{errorsCrearUsuario.IDPerfilPuesto.message}</p>
               )}
             </div>
             <button type="submit" className='btn btn-primary col-span-2'>Crear Usuario</button>
+          </form>
+          </div>
+        </div>
+      </Modal>
+      {/* Modal Editar */}
+      <Modal
+        open={verModalEditar}
+        onClose={cerrarModalEditar}
+        className="flex items-start justify-center py-10"
+      >
+        <div className="card w-4/5 bg-base-100">
+          <div className="card-body">
+            <h2 className="card-title">Editar Usuario</h2>
+            <form className="w-full grid grid-cols-2 gap-4" onSubmit={handleSubmitEditarUsuario(onSubmitEditarUsuario)}>
+            <div className="col-span-2">
+              <label>Nombre</label>
+              <input {...registerEditarUsuario("Nombre")} type="text" className=" w-full input" placeholder="Nombre Apellido" />
+              {errorsEditarUsuario.Nombre && (
+                <p className='text-sm text-error'>{errorsEditarUsuario.Nombre.message}</p>
+              )}
+            </div>
+            <div className="col-span-2">
+              <label>Correo</label>
+              <input {...registerEditarUsuario("Correo")} type="email" className=" w-full input" placeholder="tucorreo@correo.com" />
+              {errorsEditarUsuario.Correo && (
+                <p className='text-sm text-error'>{errorsEditarUsuario.Correo.message}</p>
+              )}
+            </div>
+            <div className="col-span-2">
+              <label>Perfil de Puesto</label>
+              <select className="w-full select" {...registerEditarUsuario("IDPerfilPuesto")}>
+                {
+                  perfilesPuesto.map(perfilPuesto => (
+                    <option key={`perfilPuesto-${perfilPuesto.IDPerfilPuesto}`} value={perfilPuesto.IDPerfilPuesto}>{perfilPuesto.Descripcion}</option>
+                  ))
+                }
+              </select>
+              {errorsEditarUsuario.IDPerfilPuesto && (
+                <p className='text-sm text-error'>{errorsEditarUsuario.IDPerfilPuesto.message}</p>
+              )}
+            </div>
+            <button type="submit" className='btn btn-primary col-span-2'>Editar Usuario</button>
           </form>
           </div>
         </div>
