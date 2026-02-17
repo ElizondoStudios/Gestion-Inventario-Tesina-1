@@ -15,6 +15,7 @@ import type {
   DTOTotalesInicio,
   DTOVentasVsComprasInicio,
 } from "DTOs/Inicio";
+import type { DTOPerfilPuesto } from "DTOs/PerfilesPuesto";
 
 const API_URL = import.meta.env.VITE_API_URL;
 const apiClient = axios.create({
@@ -271,6 +272,20 @@ export const api = {
           url: `${API_URL}/Usuarios/HabilitarUsuario`,
           method: "put",
           params: { IDUsuario },
+        })
+        .then((res) => res.data);
+    } catch (error: any) {
+      console.error(error.message);
+      throw error;
+    }
+  },
+  // Perfiles Puesto
+  PerfilesPuestoGetPerfilesPuesto: async (): Promise<DTOPerfilPuesto[]> => {
+    try {
+      return apiClient
+        .request({
+          url: `${API_URL}/PerfilesPuesto/GetPerfilesPuesto`,
+          method: "get",
         })
         .then((res) => res.data);
     } catch (error: any) {

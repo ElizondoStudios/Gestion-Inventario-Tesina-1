@@ -13,6 +13,8 @@ import "./app.css";
 import { store } from "services/store";
 import { ToastContainer } from "react-toastify";
 import { useEffect } from "react";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { esES } from '@mui/material/locale';
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -45,6 +47,16 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
+// Material UI Theme
+const theme = createTheme(
+  {
+    palette: {
+      primary: { main: '#00d5be' },
+    },
+  },
+  esES,
+);
+
 export default function App() {
   useEffect(() => {
     import('react-toastify/ReactToastify.css');
@@ -52,9 +64,11 @@ export default function App() {
   
   return (
     <Provider store={store}>
-      <Loading />
-      <Outlet />
-      <ToastContainer />
+      <ThemeProvider theme={theme}>
+        <Loading />
+        <Outlet />
+        <ToastContainer />
+      </ThemeProvider>
     </Provider>
   );
 }
