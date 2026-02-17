@@ -6,9 +6,9 @@ import {
   decrementCount,
 } from "./slices/loadingSlice";
 import { auth } from "./auth";
-import type { DTOIniciarSesion, DTOSesion } from "DTOs/Login";
-const API_URL = import.meta.env.VITE_API_URL;
 import { store } from "./store";
+import type { DTOIniciarSesion, DTOSesion } from "DTOs/Login";
+import type { DTOUsuario, DTOActualizarUsuario, DTOCrearUsuario } from "DTOs/Usuarios";
 import type {
   DTOAlertasInventarioInicio,
   DTOMovimientosRecientesInicio,
@@ -16,6 +16,7 @@ import type {
   DTOVentasVsComprasInicio,
 } from "DTOs/Inicio";
 
+const API_URL = import.meta.env.VITE_API_URL;
 const apiClient = axios.create({
   baseURL: API_URL,
   timeout: 60000,
@@ -186,6 +187,90 @@ export const api = {
         .request({
           url: `${API_URL}/Inicio/GetVentasVsCompras`,
           method: "get",
+        })
+        .then((res) => res.data);
+    } catch (error: any) {
+      console.error(error.message);
+      throw error;
+    }
+  },
+  // Usuarios
+  UsuariosGetUsuarios: async (): Promise<DTOUsuario[]> => {
+    try {
+      return apiClient
+        .request({
+          url: `${API_URL}/Usuarios/GetUsuarios`,
+          method: "get",
+        })
+        .then((res) => res.data);
+    } catch (error: any) {
+      console.error(error.message);
+      throw error;
+    }
+  },
+  UsuariosGetUsuario: async (IDUsuario: number): Promise<DTOUsuario> => {
+    try {
+      return apiClient
+        .request({
+          url: `${API_URL}/Usuarios/GetUsuario`,
+          method: "get",
+          params: { IDUsuario },
+        })
+        .then((res) => res.data);
+    } catch (error: any) {
+      console.error(error.message);
+      throw error;
+    }
+  },
+  UsuariosCrearUsuario: async (params: DTOCrearUsuario): Promise<DTOUsuario> => {
+    try {
+      return apiClient
+        .request({
+          url: `${API_URL}/Usuarios/CrearUsuario`,
+          method: "post",
+          data: params,
+        })
+        .then((res) => res.data);
+    } catch (error: any) {
+      console.error(error.message);
+      throw error;
+    }
+  },
+  UsuariosActualizarUsuario: async (params: DTOActualizarUsuario): Promise<DTOUsuario> => {
+    try {
+      return apiClient
+        .request({
+          url: `${API_URL}/Usuarios/ActualizarUsuario`,
+          method: "put",
+          data: params,
+        })
+        .then((res) => res.data);
+    } catch (error: any) {
+      console.error(error.message);
+      throw error;
+    }
+  },
+  UsuariosInhabilitarUsuario: async (IDUsuario: number): Promise<void> => {
+    try {
+      return apiClient
+        .request({
+          url: `${API_URL}/Usuarios/InhabilitarUsuario`,
+          method: "put",
+          params: { IDUsuario },
+        })
+        .then((res) => res.data);
+    } catch (error: any) {
+      console.error(error.message);
+      throw error;
+    }
+  },
+  UsuariosHabilitarUsuario: async (IDUsuario: number): Promise<void> => {
+    try {
+      return apiClient
+        .request({
+          url: `${API_URL}/Usuarios/HabilitarUsuario`,
+          method: "put",
+          params: { IDUsuario },
         })
         .then((res) => res.data);
     } catch (error: any) {
