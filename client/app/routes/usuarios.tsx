@@ -12,6 +12,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { crearUsuarioSchema, type CrearUsuarioFormData } from "~/form schemas/crearUsuarioSchema";
 import { editarUsuarioSchema, type EditarUsuarioFormData } from "~/form schemas/editarUsuarioSchema";
+import { useDispatch } from "react-redux";
+import { changeCurrentPage } from "services/slices/currentPageSlice";
 
 export default function usuarios() {
   // State
@@ -21,8 +23,12 @@ export default function usuarios() {
   const [verModalCrear, setVerModalCrear] = useState<boolean>(false);
   const [verModalEditar, setVerModalEditar] = useState<boolean>(false);
 
+  // Redux
+  const dispatch = useDispatch();
+
   // Effects
   useEffect(() => {
+    dispatch(changeCurrentPage("Usuarios"))
     setIdUsuario(parseInt(auth.getUserId() ?? "0"));
     GetUsuarios();
     GetPerfilesPuesto();

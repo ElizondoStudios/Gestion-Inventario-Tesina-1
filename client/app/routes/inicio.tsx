@@ -5,8 +5,10 @@ import type {
   DTOVentasVsComprasInicio,
 } from "DTOs/Inicio";
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { api } from "services/api";
+import { changeCurrentPage } from "services/slices/currentPageSlice";
 import { formatCurrency } from "~/util/format";
 
 export default function inicio() {
@@ -19,8 +21,12 @@ export default function inicio() {
   const [alertasInventario, setAlertasInventario] =
     useState<DTOAlertasInventarioInicio[]>();
 
+  // Redux
+  const dispatch = useDispatch();
+  
   // Cargar datos
   useEffect(() => {
+    dispatch(changeCurrentPage("Inicio"))
     // Totales
     api
       .InicioGetTotales()

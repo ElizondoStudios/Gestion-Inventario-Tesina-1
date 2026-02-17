@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux';
 import { NavLink } from "react-router";
 import { auth } from 'services/auth';
 
 export default function Header() {
   const [nombreUsuario, setNombreUsuario] = useState("");
-  const [nombreRuta, setNombreRuta]= useState("Inicio");
+  const nombreRuta = useSelector((state: any) => state.currentPage.value)
+
 
   useEffect(() => {
     let nombre= auth.getNombre()
