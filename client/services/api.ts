@@ -16,6 +16,9 @@ import type {
   DTOVentasVsComprasInicio,
 } from "DTOs/Inicio";
 import type { DTOActualizarPerfilPuesto, DTOCrearPerfilPuesto, DTOPerfilPuesto } from "DTOs/PerfilesPuesto";
+import type { DTOActualizarSucursal, DTOCrearSucursal, DTOSucursal } from "DTOs/Sucursales";
+import type { DTOActualizarInventario, DTOCrearInventario, DTOInventario } from "DTOs/Inventario";
+import type { DTOUnidad } from "DTOs/Unidades";
 
 const API_URL = import.meta.env.VITE_API_URL;
 const apiClient = axios.create({
@@ -369,6 +372,188 @@ export const api = {
           url: `${API_URL}/PerfilesPuesto/HabilitarPerfilPuesto`,
           method: "put",
           params: { IDPerfilPuesto },
+        })
+        .then((res) => res.data);
+    } catch (error: any) {
+      console.error(error.message);
+      throw error;
+    }
+  },
+  // Sucursales
+  SucursalesGetSucursales: async (): Promise<DTOSucursal[]> => {
+    try {
+      return apiClient
+        .request({
+          url: `${API_URL}/Sucursales/GetSucursales`,
+          method: "get",
+        })
+        .then((res) => res.data);
+    } catch (error: any) {
+      console.error(error.message);
+      throw error;
+    }
+  },
+  SucursalesGetSucursal: async (IDSucursal: number): Promise<DTOSucursal> => {
+    try {
+      return apiClient
+        .request({
+          url: `${API_URL}/Sucursales/GetSucursal`,
+          method: "get",
+          params: { IDSucursal },
+        })
+        .then((res) => res.data);
+    } catch (error: any) {
+      console.error(error.message);
+      throw error;
+    }
+  },
+  SucursalesCrearSucursal: async (params: DTOCrearSucursal): Promise<DTOSucursal> => {
+    try {
+      return apiClient
+        .request({
+          url: `${API_URL}/Sucursales/CrearSucursal`,
+          method: "post",
+          data: params,
+        })
+        .then((res) => res.data);
+    } catch (error: any) {
+      console.error(error.message);
+      throw error;
+    }
+  },
+  SucursalesActualizarSucursal: async (params: DTOActualizarSucursal): Promise<DTOSucursal> => {
+    try {
+      return apiClient
+        .request({
+          url: `${API_URL}/Sucursales/ActualizarSucursal`,
+          method: "put",
+          data: params,
+        })
+        .then((res) => res.data);
+    } catch (error: any) {
+      console.error(error.message);
+      throw error;
+    }
+  },
+  SucursalesInhabilitarSucursal: async (IDSucursal: number): Promise<void> => {
+    try {
+      return apiClient
+        .request({
+          url: `${API_URL}/Sucursales/InhabilitarSucursal`,
+          method: "put",
+          params: { IDSucursal },
+        })
+        .then((res) => res.data);
+    } catch (error: any) {
+      console.error(error.message);
+      throw error;
+    }
+  },
+  SucursalesHabilitarSucursal: async (IDSucursal: number): Promise<void> => {
+    try {
+      return apiClient
+        .request({
+          url: `${API_URL}/Sucursales/HabilitarSucursal`,
+          method: "put",
+          params: { IDSucursal },
+        })
+        .then((res) => res.data);
+    } catch (error: any) {
+      console.error(error.message);
+      throw error;
+    }
+  },
+  // Inventario
+  InventarioGetInventario: async (): Promise<DTOInventario[]> => {
+    try {
+      return apiClient
+        .request({
+          url: `${API_URL}/Inventario/GetInventario`,
+          method: "get",
+        })
+        .then((res) => res.data);
+    } catch (error: any) {
+      console.error(error.message);
+      throw error;
+    }
+  },
+  InventarioGetProducto: async (NoParte: string): Promise<DTOInventario> => {
+    try {
+      return apiClient
+        .request({
+          url: `${API_URL}/Inventario/GetProducto`,
+          method: "get",
+          params: { NoParte },
+        })
+        .then((res) => res.data);
+    } catch (error: any) {
+      console.error(error.message);
+      throw error;
+    }
+  },
+  InventarioCrearProducto: async (params: DTOCrearInventario): Promise<DTOInventario> => {
+    try {
+      return apiClient
+        .request({
+          url: `${API_URL}/Inventario/CrearProducto`,
+          method: "post",
+          data: params,
+        })
+        .then((res) => res.data);
+    } catch (error: any) {
+      console.error(error.message);
+      throw error;
+    }
+  },
+  InventarioActualizarProducto: async (params: DTOActualizarInventario): Promise<DTOInventario> => {
+    try {
+      return apiClient
+        .request({
+          url: `${API_URL}/Inventario/ActualizarProducto`,
+          method: "put",
+          data: params,
+        })
+        .then((res) => res.data);
+    } catch (error: any) {
+      console.error(error.message);
+      throw error;
+    }
+  },
+  InventarioInhabilitarProducto: async (NoParte: string): Promise<void> => {
+    try {
+      return apiClient
+        .request({
+          url: `${API_URL}/Inventario/InhabilitarProducto`,
+          method: "put",
+          params: { NoParte },
+        })
+        .then((res) => res.data);
+    } catch (error: any) {
+      console.error(error.message);
+      throw error;
+    }
+  },
+  InventarioHabilitarProducto: async (NoParte: string): Promise<void> => {
+    try {
+      return apiClient
+        .request({
+          url: `${API_URL}/Inventario/HabilitarProducto`,
+          method: "put",
+          params: { NoParte },
+        })
+        .then((res) => res.data);
+    } catch (error: any) {
+      console.error(error.message);
+      throw error;
+    }
+  },
+  // Unidades
+  UnidadesGetUnidades: async (): Promise<DTOUnidad[]> => {
+    try {
+      return apiClient
+        .request({
+          url: `${API_URL}/Unidades/GetUnidades`,
+          method: "get",
         })
         .then((res) => res.data);
     } catch (error: any) {
