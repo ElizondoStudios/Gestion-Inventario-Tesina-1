@@ -5,21 +5,20 @@ import { toast } from "react-toastify";
 import { api } from "services/api";
 import { DataGrid, type GridColDef } from "@mui/x-data-grid";
 import Switch from "@mui/material/Switch";
-import { auth } from "services/auth";
 import ActionButton from "~/components/ActionButton";
 import Modal from "@mui/material/Modal";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  crearUsuarioSchema,
-  type CrearUsuarioFormData,
-} from "~/form schemas/crearUsuarioSchema";
-import {
-  editarUsuarioSchema,
-  type EditarUsuarioFormData,
-} from "~/form schemas/editarUsuarioSchema";
 import { useDispatch } from "react-redux";
 import { changeCurrentPage } from "services/slices/currentPageSlice";
+import {
+  crearPerfilPuestoSchema,
+  type CrearPerfilPuestoFormData,
+} from "~/form schemas/crearPerfilPuestoSchema";
+import {
+  editarPerfilPuestoSchema,
+  type EditarPerfilPuestoFormData,
+} from "~/form schemas/editarPerfilPuestoSchema";
 
 export default function perfilesPuesto() {
   // State
@@ -76,13 +75,11 @@ export default function perfilesPuesto() {
   const cerrarModalCrear = () => {
     setVerModalCrear(false);
   };
-  const abrirModalEditar = (usuario: DTOUsuario) => {
-    // resetEditarUsuario({
-    //   IDUsuario: usuario.IDUsuario,
-    //   Nombre: usuario.Nombre,
-    //   Correo: usuario.Correo,
-    //   IDPerfilPuesto: `${usuario.IDPerfilPuesto}`,
-    // });
+  const abrirModalEditar = (perfilPuesto: DTOPerfilPuesto) => {
+    resetEditarPerfilPuesto({
+      IDPerfilPuesto: perfilPuesto.IDPerfilPuesto,
+      Descripcion: perfilPuesto.Descripcion
+    })
     setVerModalEditar(true);
   };
   const cerrarModalEditar = () => {
@@ -126,6 +123,51 @@ export default function perfilesPuesto() {
     },
   ];
 
+  // Crear PerfilPuesto Form
+  const {
+    register: registerCrearPerfilPuesto,
+    handleSubmit: handleSubmitCrearPerfilPuesto,
+    formState: { errors: errorsCrearPerfilPuesto },
+  } = useForm<CrearPerfilPuestoFormData>({
+    resolver: zodResolver(crearPerfilPuestoSchema),
+  });
+
+  const onSubmitCrearPerfilPuesto = (formData: CrearPerfilPuestoFormData) => {
+    api
+      .PerfilesPuestoCrearPerfilPuesto(formData)
+      .then(() => {
+        toast.success("Se creó el usuario de forma correcta");
+        GetPerfilesPuesto();
+        cerrarModalCrear();
+      })
+      .catch(() => {
+        toast.error("Hubo un error al crear el usuario");
+      });
+  };
+
+  // Editar PerfilPuesto Form
+  const {
+    register: registerEditarPerfilPuesto,
+    handleSubmit: handleSubmitEditarPerfilPuesto,
+    formState: { errors: errorsEditarPerfilPuesto },
+    reset: resetEditarPerfilPuesto,
+  } = useForm<EditarPerfilPuestoFormData>({
+    resolver: zodResolver(editarPerfilPuestoSchema),
+  });
+
+  const onSubmitEditarPerfilPuesto = (formData: EditarPerfilPuestoFormData) => {
+    api
+      .PerfilesPuestoActualizarPerfilPuesto(formData)
+      .then(() => {
+        toast.success("Se creó el usuario de forma correcta");
+        GetPerfilesPuesto();
+        cerrarModalEditar();
+      })
+      .catch(() => {
+        toast.error("Hubo un error al crear el usuario");
+      });
+  };
+
   const paginationModel = { page: 0, pageSize: 10 };
   return (
     <>
@@ -148,6 +190,78 @@ export default function perfilesPuesto() {
           </div>
         </div>
       </div>
+      {/* Modal Crear */}
+      <Modal
+        open={verModalCrear}
+        onClose={cerrarModalCrear}
+        className="flex items-start justify-center py-10"
+      >
+        <div className="card w-4/5 bg-base-100">
+          <div className="card-body">
+            <h2 className="card-title">Crear Perfil de Puesto</h2>
+            <form
+              className="w-full grid grid-cols-2 gap-4"
+              onSubmit={handleSubmitCrearPerfilPuesto(
+                onSubmitCrearPerfilPuesto,
+              )}
+            >
+              <div className="col-span-2">
+                <label>Descripción</label>
+                <input
+                  {...registerCrearPerfilPuesto("Descripcion")}
+                  type="text"
+                  className=" w-full input"
+                  placeholder="Descripción"
+                />
+                {errorsCrearPerfilPuesto.Descripcion && (
+                  <p className="text-sm text-error">
+                    {errorsCrearPerfilPuesto.Descripcion.message}
+                  </p>
+                )}
+              </div>
+              <button type="submit" className="btn btn-primary col-span-2">
+                Crear Perfil de Puesto
+              </button>
+            </form>
+          </div>
+        </div>
+      </Modal>
+      {/* Modal Editar */}
+      <Modal
+        open={verModalEditar}
+        onClose={cerrarModalEditar}
+        className="flex items-start justify-center py-10"
+      >
+        <div className="card w-4/5 bg-base-100">
+          <div className="card-body">
+            <h2 className="card-title">Editar Perfil de Puesto</h2>
+            <form
+              className="w-full grid grid-cols-2 gap-4"
+              onSubmit={handleSubmitEditarPerfilPuesto(
+                onSubmitEditarPerfilPuesto,
+              )}
+            >
+              <div className="col-span-2">
+                <label>Descripción</label>
+                <input
+                  {...registerEditarPerfilPuesto("Descripcion")}
+                  type="text"
+                  className=" w-full input"
+                  placeholder="Descripción"
+                />
+                {errorsEditarPerfilPuesto.Descripcion && (
+                  <p className="text-sm text-error">
+                    {errorsEditarPerfilPuesto.Descripcion.message}
+                  </p>
+                )}
+              </div>
+              <button type="submit" className="btn btn-primary col-span-2">
+                Editar Perfil de Puesto
+              </button>
+            </form>
+          </div>
+        </div>
+      </Modal>
     </>
   );
 }
