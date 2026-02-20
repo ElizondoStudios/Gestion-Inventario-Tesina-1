@@ -19,6 +19,7 @@ import type { DTOActualizarPerfilPuesto, DTOCrearPerfilPuesto, DTOPerfilPuesto }
 import type { DTOActualizarSucursal, DTOCrearSucursal, DTOSucursal } from "DTOs/Sucursales";
 import type { DTOActualizarInventario, DTOCrearInventario, DTOInventario } from "DTOs/Inventario";
 import type { DTOUnidad } from "DTOs/Unidades";
+import type { DTOModulo, DTONivel } from "DTOs/ModulosAcceso";
 
 const API_URL = import.meta.env.VITE_API_URL;
 const apiClient = axios.create({
@@ -553,6 +554,46 @@ export const api = {
       return apiClient
         .request({
           url: `${API_URL}/Unidades/GetUnidades`,
+          method: "get",
+        })
+        .then((res) => res.data);
+    } catch (error: any) {
+      console.error(error.message);
+      throw error;
+    }
+  },
+  // Modulos Acceso
+  GetModulos: async (): Promise<DTOModulo[]> => {
+    try {
+      return apiClient
+        .request({
+          url: `${API_URL}/ModulosAcceso/GetModulos`,
+          method: "get",
+        })
+        .then((res) => res.data);
+    } catch (error: any) {
+      console.error(error.message);
+      throw error;
+    }
+  },
+  GetNiveles: async (): Promise<DTONivel[]> => {
+    try {
+      return apiClient
+        .request({
+          url: `${API_URL}/ModulosAcceso/GetNiveles`,
+          method: "get",
+        })
+        .then((res) => res.data);
+    } catch (error: any) {
+      console.error(error.message);
+      throw error;
+    }
+  },
+  GetModulosAcceso: async (): Promise<DTONivel[]> => {
+    try {
+      return apiClient
+        .request({
+          url: `${API_URL}/ModulosAcceso/GetModulosAcceso`,
           method: "get",
         })
         .then((res) => res.data);

@@ -19,12 +19,19 @@ import {
   editarPerfilPuestoSchema,
   type EditarPerfilPuestoFormData,
 } from "~/form schemas/editarPerfilPuestoSchema";
+import type { DTOModulo, DTONivel } from "DTOs/ModulosAcceso";
+import { crearAccesoSchema, type CrearAccesoFormData } from "~/form schemas/crearAccesoSchema";
 
 export default function perfilesPuesto() {
   // State
   const [perfilesPuesto, setPerfilesPuesto] = useState<DTOPerfilPuesto[]>([]);
+  const [perfilPuestoSeleccionado, setPerfilPuestoSeleccionado] =
+    useState<DTOPerfilPuesto>();
+  const [modulos, setModulos] = useState<DTOModulo[]>([]);
+  const [niveles, setNiveles] = useState<DTONivel[]>([]);
   const [verModalCrear, setVerModalCrear] = useState<boolean>(false);
   const [verModalEditar, setVerModalEditar] = useState<boolean>(false);
+  const [verModalAccesos, setVerModalAccesos] = useState<boolean>(false);
   // Redux
   const dispatch = useDispatch();
 
@@ -32,6 +39,8 @@ export default function perfilesPuesto() {
   useEffect(() => {
     dispatch(changeCurrentPage("Perfiles de Puesto"));
     GetPerfilesPuesto();
+    GetModulos();
+    GetNiveles();
   }, []);
 
   // API Calls
@@ -67,6 +76,26 @@ export default function perfilesPuesto() {
         toast.error("Hubo un error al habilitar el usuario");
       });
   };
+  const GetModulos = () => {
+    api
+      .GetModulos()
+      .then((data) => {
+        setModulos(data);
+      })
+      .catch((error) => {
+        toast.error("Ocurrió un error al obtener los modulos");
+      });
+  };
+  const GetNiveles = () => {
+    api
+      .GetNiveles()
+      .then((data) => {
+        setNiveles(data);
+      })
+      .catch((error) => {
+        toast.error("Ocurrió un error al obtener los niveles");
+      });
+  };
 
   // Actions
   const abrirModalCrear = () => {
@@ -78,12 +107,19 @@ export default function perfilesPuesto() {
   const abrirModalEditar = (perfilPuesto: DTOPerfilPuesto) => {
     resetEditarPerfilPuesto({
       IDPerfilPuesto: perfilPuesto.IDPerfilPuesto,
-      Descripcion: perfilPuesto.Descripcion
-    })
+      Descripcion: perfilPuesto.Descripcion,
+    });
     setVerModalEditar(true);
   };
   const cerrarModalEditar = () => {
     setVerModalEditar(false);
+  };
+  const abrirModalAccesos = (perfilPuesto: DTOPerfilPuesto) => {
+    setPerfilPuestoSeleccionado(perfilPuesto);
+    setVerModalAccesos(true);
+  };
+  const cerrarModalAccesos = () => {
+    setVerModalAccesos(false);
   };
 
   // Datagrid
@@ -110,16 +146,26 @@ export default function perfilesPuesto() {
     {
       field: "acciones",
       headerName: "Acciones",
-      width: 100,
+      width: 220,
       renderCell: (cell) => (
-        <ActionButton
-          icon="edit"
-          text="Editar"
-          action={() => {
-            abrirModalEditar(cell.row);
-          }}
-          disabled={!cell.row.Activo}
-        />
+        <>
+          <ActionButton
+            icon="key"
+            text="Accesos"
+            action={() => {
+              abrirModalAccesos(cell.row);
+            }}
+            disabled={!cell.row.Activo}
+          />
+          <ActionButton
+            icon="edit"
+            text="Editar"
+            action={() => {
+              abrirModalEditar(cell.row);
+            }}
+            disabled={!cell.row.Activo}
+          />
+        </>
       ),
     },
   ];
@@ -167,6 +213,20 @@ export default function perfilesPuesto() {
       .catch(() => {
         toast.error("Hubo un error al crear el usuario");
       });
+  };
+
+  // Crear acceso
+  const {
+    register: registerCrearAcceso,
+    handleSubmit: handleSubmitCrearAcceso,
+    formState: { errors: errorsCrearAcceso },
+    reset: resetCrearAcceso,
+  } = useForm<CrearAccesoFormData>({
+    resolver: zodResolver(crearAccesoSchema),
+  });
+
+  const onSubmitCrearAcceso = (formData: CrearAccesoFormData) => {
+    console.log(formData)
   };
 
   const paginationModel = { page: 0, pageSize: 10 };
@@ -261,6 +321,68 @@ export default function perfilesPuesto() {
                 Editar Perfil de Puesto
               </button>
             </form>
+          </div>
+        </div>
+      </Modal>
+      {/* Modal Accesos */}
+      <Modal
+        open={verModalAccesos}
+        onClose={cerrarModalAccesos}
+        className="flex items-start justify-center py-10"
+      >
+        <div className="card w-4/5 bg-base-100">
+          <div className="card-body">
+            <h2 className="card-title">
+              Editar Accesos del Perfil de Puesto:
+              {` ${perfilPuestoSeleccionado?.Descripcion}`}
+            </h2>
+            <form className="w-full grid grid-cols-2 gap-4" onSubmit={handleSubmitCrearAcceso(onSubmitCrearAcceso)}>
+              <div className="col-span-2">
+                <h3>Agregar Accesos</h3>
+              </div>
+              <div className="col-span-2 lg:col-span-1">
+                <label>Modulo</label>
+                <select
+                  {...registerCrearAcceso("IDModulo", { valueAsNumber: true })}
+                  className="w-full select"
+                >
+                  {modulos.map((modulo) => (
+                    <option key={modulo.IDModulo} value={modulo.IDModulo}>
+                      {modulo.Nombre}
+                    </option>
+                  ))}
+                </select>
+                {errorsCrearAcceso.IDModulo && (
+                  <p className="text-sm text-error">
+                    {errorsCrearAcceso.IDModulo.message}
+                  </p>
+                )}
+              </div>
+              <div className="col-span-2 lg:col-span-1">
+                <label>Nivel</label>
+                <select
+                  {...registerCrearAcceso("NivelAcceso", { valueAsNumber: true })}
+                  className="w-full select"
+                >
+                  {niveles.map((nivel) => (
+                    <option key={nivel.NivelAcceso} value={nivel.NivelAcceso}>
+                      {nivel.Descripcion}
+                    </option>
+                  ))}
+                </select>
+                {errorsCrearAcceso.NivelAcceso && (
+                  <p className="text-sm text-error">
+                    {errorsCrearAcceso.NivelAcceso.message}
+                  </p>
+                )}
+              </div>
+              <button type="submit" className="btn btn-primary col-span-2">
+                Agregar Acceso
+              </button>
+            </form>
+            <div className="flex flex-col items-start justify-center gap-4 mt-4">
+              <h3>Accesos Agregados</h3>
+            </div>
           </div>
         </div>
       </Modal>
