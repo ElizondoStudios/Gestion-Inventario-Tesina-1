@@ -19,7 +19,7 @@ import type { DTOActualizarPerfilPuesto, DTOCrearPerfilPuesto, DTOPerfilPuesto }
 import type { DTOActualizarSucursal, DTOCrearSucursal, DTOSucursal } from "DTOs/Sucursales";
 import type { DTOActualizarInventario, DTOCrearInventario, DTOInventario } from "DTOs/Inventario";
 import type { DTOUnidad } from "DTOs/Unidades";
-import type { DTOModulo, DTONivel } from "DTOs/ModulosAcceso";
+import type { DTOModulo, DTOModulosAcceso, DTONivel, DTORegistrarAccesoModulo } from "DTOs/ModulosAcceso";
 
 const API_URL = import.meta.env.VITE_API_URL;
 const apiClient = axios.create({
@@ -128,13 +128,13 @@ apiClient.interceptors.response.use(
 
 export const api = {
   // Login
-  Login: async (params: DTOIniciarSesion): Promise<DTOSesion> => {
+  Login: async (data: DTOIniciarSesion): Promise<DTOSesion> => {
     try {
       return apiClient
         .request({
           url: `${API_URL}/Login/IniciarSesion`,
           method: "post",
-          data: params,
+          data: data,
         })
         .then((res) => res.data);
     } catch (error: any) {
@@ -227,13 +227,13 @@ export const api = {
       throw error;
     }
   },
-  UsuariosCrearUsuario: async (params: DTOCrearUsuario): Promise<DTOUsuario> => {
+  UsuariosCrearUsuario: async (data: DTOCrearUsuario): Promise<DTOUsuario> => {
     try {
       return apiClient
         .request({
           url: `${API_URL}/Usuarios/CrearUsuario`,
           method: "post",
-          data: params,
+          data: data,
         })
         .then((res) => res.data);
     } catch (error: any) {
@@ -324,13 +324,13 @@ export const api = {
       throw error;
     }
   },
-  PerfilesPuestoCrearPerfilPuesto: async (params: DTOCrearPerfilPuesto): Promise<DTOPerfilPuesto> => {
+  PerfilesPuestoCrearPerfilPuesto: async (data: DTOCrearPerfilPuesto): Promise<DTOPerfilPuesto> => {
     try {
       return apiClient
         .request({
           url: `${API_URL}/PerfilesPuesto/CrearPerfilPuesto`,
           method: "post",
-          data: params,
+          data: data,
         })
         .then((res) => res.data);
     } catch (error: any) {
@@ -408,13 +408,13 @@ export const api = {
       throw error;
     }
   },
-  SucursalesCrearSucursal: async (params: DTOCrearSucursal): Promise<DTOSucursal> => {
+  SucursalesCrearSucursal: async (data: DTOCrearSucursal): Promise<DTOSucursal> => {
     try {
       return apiClient
         .request({
           url: `${API_URL}/Sucursales/CrearSucursal`,
           method: "post",
-          data: params,
+          data: data,
         })
         .then((res) => res.data);
     } catch (error: any) {
@@ -492,13 +492,13 @@ export const api = {
       throw error;
     }
   },
-  InventarioCrearProducto: async (params: DTOCrearInventario): Promise<DTOInventario> => {
+  InventarioCrearProducto: async (data: DTOCrearInventario): Promise<DTOInventario> => {
     try {
       return apiClient
         .request({
           url: `${API_URL}/Inventario/CrearProducto`,
           method: "post",
-          data: params,
+          data: data,
         })
         .then((res) => res.data);
     } catch (error: any) {
@@ -589,12 +589,27 @@ export const api = {
       throw error;
     }
   },
-  GetModulosAcceso: async (): Promise<DTONivel[]> => {
+  GetModulosAccesoPerfilPuesto: async (IDPerfilPuesto: number): Promise<DTOModulosAcceso[]> => {
     try {
       return apiClient
         .request({
-          url: `${API_URL}/ModulosAcceso/GetModulosAcceso`,
+          url: `${API_URL}/ModulosAcceso/GetModulosAccesoPerfilPuesto`,
           method: "get",
+          params: {IDPerfilPuesto}
+        })
+        .then((res) => res.data);
+    } catch (error: any) {
+      console.error(error.message);
+      throw error;
+    }
+  },
+  RegistrarAccesoModulo: async (data: DTORegistrarAccesoModulo): Promise<DTOModulosAcceso> => {
+    try {
+      return apiClient
+        .request({
+          url: `${API_URL}/ModulosAcceso/RegistrarAccesoModulo`,
+          method: "post",
+          data: data
         })
         .then((res) => res.data);
     } catch (error: any) {

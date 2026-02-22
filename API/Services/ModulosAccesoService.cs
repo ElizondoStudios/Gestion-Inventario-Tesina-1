@@ -28,6 +28,11 @@ public class ModulosAccesoService(IModulosAccesoRepository modulosAccesoReposito
     var registros = await modulosAccesoRepository.ObtenerModulosAcceso();
     return [.. registros.Select(r => ConvertirDTO(r)!)]; 
   }
+  public async Task<IReadOnlyList<DTOModulosAcceso>> ObtenerModulosAccesoPerfilPuesto(int IDPerfilPuesto)
+  {
+    var registros = await modulosAccesoRepository.ObtenerModulosAcceso();
+    return [.. registros.Where(pp => pp.IDPerfilPuesto == IDPerfilPuesto).Select(r => ConvertirDTO(r)!)]; 
+  }
   public async Task<DTOModulosAcceso?> ValidarAccesoModulo(int IDUsuario, int IDModulo)
   {
     var registro = await modulosAccesoRepository.ValidarAccesoModulo(IDUsuario,IDModulo);

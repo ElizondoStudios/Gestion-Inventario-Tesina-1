@@ -19,7 +19,7 @@ import {
   editarPerfilPuestoSchema,
   type EditarPerfilPuestoFormData,
 } from "~/form schemas/editarPerfilPuestoSchema";
-import type { DTOModulo, DTONivel } from "DTOs/ModulosAcceso";
+import type { DTOModulo, DTOModulosAcceso, DTONivel } from "DTOs/ModulosAcceso";
 import { crearAccesoSchema, type CrearAccesoFormData } from "~/form schemas/crearAccesoSchema";
 
 export default function perfilesPuesto() {
@@ -28,6 +28,7 @@ export default function perfilesPuesto() {
   const [perfilPuestoSeleccionado, setPerfilPuestoSeleccionado] =
     useState<DTOPerfilPuesto>();
   const [modulos, setModulos] = useState<DTOModulo[]>([]);
+  const [modulosAccesoPerfilPuesto, setModulosAccesoPerfilPuesto] = useState<DTOModulosAcceso[]>([]);
   const [niveles, setNiveles] = useState<DTONivel[]>([]);
   const [verModalCrear, setVerModalCrear] = useState<boolean>(false);
   const [verModalEditar, setVerModalEditar] = useState<boolean>(false);
@@ -96,6 +97,16 @@ export default function perfilesPuesto() {
         toast.error("Ocurrió un error al obtener los niveles");
       });
   };
+  const GetModulosAccesoPerfilPuesto = (IDPerfilPuesto: number) => {
+    api
+      .GetModulosAccesoPerfilPuesto(IDPerfilPuesto)
+      .then((data) => {
+        setModulosAccesoPerfilPuesto(data);
+      })
+      .catch((error) => {
+        toast.error("Ocurrió un error al obtener los niveles");
+      });
+  };
 
   // Actions
   const abrirModalCrear = () => {
@@ -116,6 +127,8 @@ export default function perfilesPuesto() {
   };
   const abrirModalAccesos = (perfilPuesto: DTOPerfilPuesto) => {
     setPerfilPuestoSeleccionado(perfilPuesto);
+    GetModulosAccesoPerfilPuesto(perfilPuesto.IDPerfilPuesto);
+    resetCrearAcceso({IDPerfilPuesto: perfilPuesto.IDPerfilPuesto})    
     setVerModalAccesos(true);
   };
   const cerrarModalAccesos = () => {
@@ -168,6 +181,10 @@ export default function perfilesPuesto() {
         </>
       ),
     },
+  ];
+  const columnsModulosAccesoPerfilesPuesto: GridColDef[] = [
+    { field: "DescripcionNivelAcceso", headerName: "Nivel", flex: 1, minWidth: 150 },
+    { field: "NombreModulo", headerName: "Módulo", flex: 1, minWidth: 150 },
   ];
 
   // Crear PerfilPuesto Form
@@ -226,7 +243,15 @@ export default function perfilesPuesto() {
   });
 
   const onSubmitCrearAcceso = (formData: CrearAccesoFormData) => {
-    console.log(formData)
+    api
+      .RegistrarAccesoModulo(formData)
+      .then(() => {
+        toast.success("Se registró el acceso");
+        GetModulosAccesoPerfilPuesto(formData.IDPerfilPuesto);
+      })
+      .catch(() => {
+        toast.error("Hubo un error al registrar el acceso");
+      });
   };
 
   const paginationModel = { page: 0, pageSize: 10 };
@@ -361,7 +386,7 @@ export default function perfilesPuesto() {
               <div className="col-span-2 lg:col-span-1">
                 <label>Nivel</label>
                 <select
-                  {...registerCrearAcceso("NivelAcceso", { valueAsNumber: true })}
+                  {...registerCrearAcceso("IDNivelAcceso", { valueAsNumber: true })}
                   className="w-full select"
                 >
                   {niveles.map((nivel) => (
@@ -370,9 +395,9 @@ export default function perfilesPuesto() {
                     </option>
                   ))}
                 </select>
-                {errorsCrearAcceso.NivelAcceso && (
+                {errorsCrearAcceso.IDNivelAcceso && (
                   <p className="text-sm text-error">
-                    {errorsCrearAcceso.NivelAcceso.message}
+                    {errorsCrearAcceso.IDNivelAcceso.message}
                   </p>
                 )}
               </div>
@@ -382,6 +407,17 @@ export default function perfilesPuesto() {
             </form>
             <div className="flex flex-col items-start justify-center gap-4 mt-4">
               <h3>Accesos Agregados</h3>
+              <div className="w-full">
+                <DataGrid
+                  rows={modulosAccesoPerfilPuesto}
+                  columns={columnsModulosAccesoPerfilesPuesto}
+                  initialState={{ pagination: { paginationModel } }}
+                  pageSizeOptions={[5, 10]}
+                  rowSelection={false}
+                  getRowId={(row: DTOModulosAcceso) => row.IDModuloAcceso}
+                  sx={{ border: 0 }}
+                />
+              </div>
             </div>
           </div>
         </div>

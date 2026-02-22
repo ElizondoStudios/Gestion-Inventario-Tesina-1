@@ -9,7 +9,18 @@ export interface DTONivel{
   Descripcion: number;
 }
 
-export interface DTOModuloAcceso{
+export interface DTOModulosAcceso{
+  IDModuloAcceso: number;
+  IDModulo: number;
+  NombreModulo: number;
+  DescripcionNivelAcceso: string;
+  DescripcionPerfilPuesto: string;
   NivelAcceso: number;
-  Descripcion: number;
+  IDPerfilPuesto: number;
+}
+
+export interface DTORegistrarAccesoModulo{
+  IDModulo: number;
+  IDNivelAcceso: number;
+  IDPerfilPuesto: number;
 }
