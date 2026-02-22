@@ -11,5 +11,5 @@ public interface IModulosAccesoService
   Task<IReadOnlyList<DTONivel>> ObtenerNiveles();
   Task<DTOModulosAcceso?> ValidarAccesoModulo(int IDUsuario, int IDModulo);
   Task<DTOModulosAcceso?> RegistrarAccesoModulo(DTORegistrarAccesoModulo dto);
-  Task<DTOModulosAcceso?> EliminarAccesoModulo(int IDModuloAcceso);
+  Task<bool> EliminarAccesoModulo(int IDModuloAcceso);
 }

@@ -10,5 +10,5 @@ public interface IModulosAccesoRepository
   Task<ModulosAcceso?> ObtenerModuloAcceso(int IDModuloAcceso);
   Task<ModulosAcceso?> ValidarAccesoModulo(int IDUsuario, int IDModulo);
   Task<ModulosAcceso?> RegistrarAccesoModulo(ModulosAcceso modulosAcceso);
-  Task<ModulosAcceso?> EliminarAccesoModulo(int IDModuloAcceso);
+  Task<bool> EliminarAccesoModulo(int IDModuloAcceso);
 }

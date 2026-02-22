@@ -617,4 +617,18 @@ export const api = {
       throw error;
     }
   },
+  EliminarAccesoModulo: async (IDModuloAcceso: number): Promise<DTOModulosAcceso> => {
+    try {
+      return apiClient
+        .request({
+          url: `${API_URL}/ModulosAcceso/EliminarAccesoModulo`,
+          method: "delete",
+          params: {IDModuloAcceso}
+        })
+        .then((res) => res.data);
+    } catch (error: any) {
+      console.error(error.message);
+      throw error;
+    }
+  },
 };

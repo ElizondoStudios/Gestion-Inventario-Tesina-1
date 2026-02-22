@@ -70,7 +70,7 @@ namespace API.Controllers
         {
             var res = await modulosAccesoService.EliminarAccesoModulo(IDModuloAcceso);
             
-            if (res == null)
+            if (res == false)
             {
                 return NotFound(new { mensaje = "No se encontró el acceso al módulo especificado" });
             }

@@ -49,10 +49,10 @@ public class ModulosAccesoService(IModulosAccesoRepository modulosAccesoReposito
     var registro = await modulosAccesoRepository.RegistrarAccesoModulo(acceso);
     return ConvertirDTO(registro);
   }
-  public async Task<DTOModulosAcceso?> EliminarAccesoModulo(int IDModuloAcceso)
+  public async Task<bool> EliminarAccesoModulo(int IDModuloAcceso)
   {
-    var registro = await modulosAccesoRepository.EliminarAccesoModulo(IDModuloAcceso);
-    return ConvertirDTO(registro);
+    var exito = await modulosAccesoRepository.EliminarAccesoModulo(IDModuloAcceso);
+    return exito;
   }
   public async Task<IReadOnlyList<DTOModulo>> ObtenerModulos()
   {

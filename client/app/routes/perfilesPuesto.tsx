@@ -107,6 +107,17 @@ export default function perfilesPuesto() {
         toast.error("Ocurrió un error al obtener los niveles");
       });
   };
+  const EliminarAccesoModulo = (IDModuloAcceso: number) => {
+    api
+      .EliminarAccesoModulo(IDModuloAcceso)
+      .then(() => {
+        toast.success("Se eliminó el acceso")
+        cerrarModalAccesos();
+      })
+      .catch(() => {
+        toast.error("Ocurrió un error al eliminar el acceso")
+      })
+  }
 
   // Actions
   const abrirModalCrear = () => {
@@ -185,6 +196,22 @@ export default function perfilesPuesto() {
   const columnsModulosAccesoPerfilesPuesto: GridColDef[] = [
     { field: "DescripcionNivelAcceso", headerName: "Nivel", flex: 1, minWidth: 150 },
     { field: "NombreModulo", headerName: "Módulo", flex: 1, minWidth: 150 },
+    {
+      field: "acciones",
+      headerName: "Acciones",
+      width: 220,
+      renderCell: (cell) => (
+        <>
+          <ActionButton
+            icon="delete"
+            text="Eliminar"
+            action={() => {
+              EliminarAccesoModulo(cell.row.IDModuloAcceso)
+            }}
+          />
+        </>
+      ),
+    },
   ];
 
   // Crear PerfilPuesto Form

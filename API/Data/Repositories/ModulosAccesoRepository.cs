@@ -45,17 +45,17 @@ public class ModulosAccesoRepository(AppDbContext context) : IModulosAccesoRepos
     return await ObtenerModuloAcceso(modulosAcceso.IDModuloAcceso);
   }
 
-  public async Task<ModulosAcceso?> EliminarAccesoModulo(int IDModuloAcceso)
+  public async Task<bool> EliminarAccesoModulo(int IDModuloAcceso)
   {
     var moduloAcceso = await context.ModulosAcceso.FindAsync(IDModuloAcceso);
     
     if (moduloAcceso == null)
-      return null;
+      return false;
     
     context.ModulosAcceso.Remove(moduloAcceso);
     await context.SaveChangesAsync();
     
-    return moduloAcceso;
+    return true;
   }
 
   public async Task<IReadOnlyList<Modulo>> ObtenerModulos()
