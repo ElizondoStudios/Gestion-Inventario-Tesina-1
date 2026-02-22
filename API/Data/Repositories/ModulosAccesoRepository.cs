@@ -15,6 +15,22 @@ public class ModulosAccesoRepository(AppDbContext context) : IModulosAccesoRepos
       .Include(ma => ma.PerfilPuesto)
       .ToListAsync();
   }
+  
+  public async Task<IReadOnlyList<ModulosAcceso>> ObtenerModulosAccesoUsuario(int IDUsuario)
+  {
+    var usuario= await  context.Usuarios.Where(u => u.IDUsuario == IDUsuario).FirstOrDefaultAsync();
+    
+    if(usuario == null)
+      return [];
+    
+    return await context.ModulosAcceso
+      .Include(ma => ma.Modulo)
+        .ThenInclude(m => m.ModuloCategoria)
+      .Include(ma => ma.NivelAcceso)
+      .Include(ma => ma.PerfilPuesto)
+      .Where(ma => ma.PerfilPuesto.IDPerfilPuesto == usuario.IDPerfilPuesto)
+      .ToListAsync();
+  }
 
   public async Task<ModulosAcceso?> ObtenerModuloAcceso(int IDModuloAcceso)
   {

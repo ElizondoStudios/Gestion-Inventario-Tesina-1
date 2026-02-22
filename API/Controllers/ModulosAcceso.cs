@@ -19,6 +19,13 @@ namespace API.Controllers
         }
         
         [HttpGet("[action]")]
+        public async Task<ActionResult<IReadOnlyList<DTOModulosAcceso>>> GetModulosAccesoUsuario(int IDUsuario)
+        {
+            var res = await modulosAccesoService.ObtenerModulosAccesoUsuario(IDUsuario);
+            return Ok(res);
+        }
+
+        [HttpGet("[action]")]
         public async Task<ActionResult<IReadOnlyList<DTOModulosAcceso>>> GetModulosAccesoPerfilPuesto(int IDPerfilPuesto)
         {
             var res = await modulosAccesoService.ObtenerModulosAccesoPerfilPuesto(IDPerfilPuesto);
