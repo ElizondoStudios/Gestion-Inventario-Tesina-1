@@ -16,10 +16,14 @@ public class ModulosAccesoService(IModulosAccesoRepository modulosAccesoReposito
       IDModuloAcceso = registro.IDModuloAcceso,
       IDModulo = registro.IDModulo,
       NombreModulo = registro.Modulo.Nombre,
+      IconoModulo = registro.Modulo.Icono,
       IDPerfilPuesto = registro.IDPerfilPuesto,
       DescripcionPerfilPuesto = registro.PerfilPuesto.Descripcion,
       NivelAcceso = registro.NivelAcceso.NivelAcceso,
       DescripcionNivelAcceso = registro.NivelAcceso.Descripcion,
+      IDModuloCategoria = registro.Modulo.ModuloCategoria.IDModuloCategoria,
+      NombreModuloCategoria = registro.Modulo.ModuloCategoria.Nombre,
+      IconoModuloCategoria = registro.Modulo.ModuloCategoria.Icono,
     };
   }
 

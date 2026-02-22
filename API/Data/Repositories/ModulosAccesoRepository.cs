@@ -29,6 +29,8 @@ public class ModulosAccesoRepository(AppDbContext context) : IModulosAccesoRepos
       .Include(ma => ma.NivelAcceso)
       .Include(ma => ma.PerfilPuesto)
       .Where(ma => ma.PerfilPuesto.IDPerfilPuesto == usuario.IDPerfilPuesto)
+      .OrderBy(ma => ma.Modulo.Nombre)
+      .OrderBy(ma => ma.Modulo.ModuloCategoria.Nombre)
       .ToListAsync();
   }
 

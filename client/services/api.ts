@@ -603,6 +603,21 @@ export const api = {
       throw error;
     }
   },
+  GetModulosAccesoUsuario: async (IDUsuario: number): Promise<DTOModulosAcceso[]> => {
+    try {
+      return apiClient
+        .request({
+          url: `${API_URL}/ModulosAcceso/GetModulosAccesoUsuario`,
+          method: "get",
+          params: {IDUsuario}
+        })
+        .then((res) => res.data);
+    } catch (error: any) {
+      console.error(error.message);
+      throw error;
+    }
+  },
+  
   RegistrarAccesoModulo: async (data: DTORegistrarAccesoModulo): Promise<DTOModulosAcceso> => {
     try {
       return apiClient

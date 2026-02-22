@@ -12,11 +12,15 @@ export interface DTONivel{
 export interface DTOModulosAcceso{
   IDModuloAcceso: number;
   IDModulo: number;
-  NombreModulo: number;
+  NombreModulo: string;
+  IconoModulo: string;
   DescripcionNivelAcceso: string;
   DescripcionPerfilPuesto: string;
   NivelAcceso: number;
   IDPerfilPuesto: number;
+  IDModuloCategoria: number;
+  NombreModuloCategoria: string;
+  IconoModuloCategoria: string;
 }
 
 export interface DTORegistrarAccesoModulo{

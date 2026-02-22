@@ -1,8 +1,57 @@
+import { useEffect, useState } from "react";
 import "./Sidebar.css";
 import { NavLink } from "react-router";
+import { api } from "services/api";
+import type { DTOModulosAcceso } from "DTOs/ModulosAcceso";
+import { auth } from "services/auth";
+import { toast } from "react-toastify";
+
+type modulosCategorias = {
+  NombreModuloCategoria: string;
+  IDModuloCategoria: number;
+  Modulos: DTOModulosAcceso[];
+}[];
 
 export default function Sidebar() {
   const APP_NAME = import.meta.env.VITE_APP_NAME;
+
+  // State
+  const [modulosCategorias, setModulosCategorias] = useState<modulosCategorias>(
+    [],
+  );
+
+  // Effect
+  useEffect(() => {
+    const idUsuario = parseInt(auth.getUserId() ?? "0");
+    api
+      .GetModulosAccesoUsuario(idUsuario)
+      .then((data) => {
+        const categorias: modulosCategorias = [];
+        data.forEach((ma) => {
+          const categoria = categorias.find(
+            (categoria) => categoria.IDModuloCategoria === ma.IDModuloCategoria,
+          );
+          if (categoria) {
+            categoria.Modulos.push(ma);
+          } else {
+            categorias.push({
+              IDModuloCategoria: ma.IDModuloCategoria,
+              NombreModuloCategoria: ma.NombreModuloCategoria,
+              Modulos: [ma],
+            });
+          }
+        });
+        setModulosCategorias(categorias);
+      })
+      .catch((error) => {
+        toast.error("Hubo un error al cargar los módulos con acceso");
+      });
+  }, []);
+
+  // Util
+  const formatRoute = (nombre: string) => {
+    return nombre.toLocaleLowerCase().replaceAll(" ", "-");
+  };
 
   return (
     <nav className="flex flex-col p-5 gap-5 bg-base-200 min-h-full w-68">
@@ -25,66 +74,31 @@ export default function Sidebar() {
           </NavLink>
         </li>
       </ul>
-      <span className="font-bold">ADMINISTRACIÓN</span>
-      <ul>
-        <li>
-          <NavLink
-            to="/dashboard/usuarios"
-            className={({ isActive }) =>
-              isActive ? "sidebar-item active" : "sidebar-item"
-            }
-          >
-            <div className="sidebar-item--icon">
-              <i className="material-symbols-outlined">group</i>
-            </div>
-            <span className="sidebar-item--text">Usuarios</span>
-          </NavLink>
-        </li>
-        <li>
-          <NavLink
-            to="/dashboard/perfiles-puesto"
-            className={({ isActive }) =>
-              isActive ? "sidebar-item active" : "sidebar-item"
-            }
-          >
-            <div className="sidebar-item--icon">
-              <i className="material-symbols-outlined">
-                supervised_user_circle
-              </i>
-            </div>
-            <span className="sidebar-item--text">Perfiles de Puesto</span>
-          </NavLink>
-        </li>
-      </ul>
-      <span className="font-bold">INVENTARIO</span>
-      <ul>
-        <li>
-          <NavLink
-            to="/dashboard/inventario"
-            className={({ isActive }) =>
-              isActive ? "sidebar-item active" : "sidebar-item"
-            }
-          >
-            <div className="sidebar-item--icon">
-              <i className="material-symbols-outlined">inventory</i>
-            </div>
-            <span className="sidebar-item--text">Inventario</span>
-          </NavLink>
-        </li>
-        <li>
-          <NavLink
-            to="/dashboard/sucursales"
-            className={({ isActive }) =>
-              isActive ? "sidebar-item active" : "sidebar-item"
-            }
-          >
-            <div className="sidebar-item--icon">
-              <i className="material-symbols-outlined">warehouse</i>
-            </div>
-            <span className="sidebar-item--text">Sucursales</span>
-          </NavLink>
-        </li>
-      </ul>
+      {modulosCategorias.map((mc) => (
+        <div key={mc.IDModuloCategoria}>
+          <span className="font-bold">{mc.NombreModuloCategoria}</span>
+          <ul>
+            {mc.Modulos.map((ma) => (
+              <li key={ma.IDModuloAcceso}>
+                <NavLink
+                  to={`/dashboard/${formatRoute(ma.NombreModulo)}`}
+                  className={({ isActive }) =>
+                    isActive ? "sidebar-item active" : "sidebar-item"
+                  }
+                >
+                  <div className="sidebar-item--icon">
+                    <i className="material-symbols-outlined">
+                      {ma.IconoModulo}
+                    </i>
+                  </div>
+                  <span className="sidebar-item--text">{ma.NombreModulo}</span>
+                </NavLink>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+      <ul></ul>
     </nav>
   );
 }
