@@ -71,4 +71,13 @@ public class UsuarioSucursalRepository(AppDbContext context) : IUsuarioSucursalR
 
     return filas > 0;
   }
+  
+  public async Task<bool> EliminarUsuarioSucursal(int IDSucursalUsuario)
+  {
+    var filas = await context.UsuariosSucursales
+      .Where(us => us.IDSucursalUsuario == IDSucursalUsuario)
+      .ExecuteDeleteAsync();
+
+    return filas > 0;
+  }
 }

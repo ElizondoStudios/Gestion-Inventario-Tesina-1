@@ -75,6 +75,12 @@ public class UsuarioSucursalService(IUsuarioSucursalRepository usuarioSucursalRe
     var registro = await usuarioSucursalRepository.ObtenerUsuarioSucursal(IDSucursalUsuario);
     return ConvertirDTO(registro);
   }
+  
+  public async Task<bool> EliminarUsuarioSucursal(int IDSucursalUsuario)
+  {
+    var success = await usuarioSucursalRepository.EliminarUsuarioSucursal(IDSucursalUsuario);
+    return success;
+  }
 
   public async Task<DTOUsuarioSucursal?> HabilitarUsuarioSucursal(int IDSucursalUsuario)
   {

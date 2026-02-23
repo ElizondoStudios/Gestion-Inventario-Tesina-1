@@ -1,4 +1,6 @@
 import type { DTOSucursal } from "DTOs/Sucursales";
+import type { DTOUsuarioSucursal } from "DTOs/UsuarioSucursal";
+import type { DTOUsuario } from "DTOs/Usuarios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { api } from "services/api";
@@ -18,12 +20,23 @@ import {
   editarSucursalSchema,
   type EditarSucursalFormData,
 } from "~/form schemas/editarSucursalSchema";
+import {
+  crearUsuarioSucursalSchema,
+  type CrearUsuarioSucursalFormData,
+} from "~/form schemas/crearUsuarioSucursalSchema";
 
 export default function sucursales() {
   // State
   const [sucursales, setSucursales] = useState<DTOSucursal[]>([]);
+  const [sucursalSeleccionada, setSucursalSeleccionada] =
+    useState<DTOSucursal>();
+  const [usuarios, setUsuarios] = useState<DTOUsuario[]>([]);
+  const [usuariosSucursal, setUsuariosSucursal] = useState<
+    DTOUsuarioSucursal[]
+  >([]);
   const [verModalCrear, setVerModalCrear] = useState<boolean>(false);
   const [verModalEditar, setVerModalEditar] = useState<boolean>(false);
+  const [verModalUsuarios, setVerModalUsuarios] = useState<boolean>(false);
   // Redux
   const dispatch = useDispatch();
 
@@ -31,6 +44,7 @@ export default function sucursales() {
   useEffect(() => {
     dispatch(changeCurrentPage("Sucursales"));
     GetSucursales();
+    GetUsuarios();
   }, []);
 
   // API Calls
@@ -66,6 +80,37 @@ export default function sucursales() {
         toast.error("Hubo un error al habilitar la sucursal");
       });
   };
+  const GetUsuarios = () => {
+    api
+      .UsuariosGetUsuarios()
+      .then((data) => {
+        setUsuarios(data);
+      })
+      .catch((error) => {
+        toast.error("Ocurrió un error al obtener los usuarios");
+      });
+  };
+  const GetUsuariosSucursal = (IDSucursal: number) => {
+    api
+      .UsuarioSucursalGetUsuariosPorSucursal(IDSucursal)
+      .then((data) => {
+        setUsuariosSucursal(data);
+      })
+      .catch((error) => {
+        toast.error("Ocurrió un error al obtener los usuarios de la sucursal");
+      });
+  };
+  const EliminarUsuarioSucursal = (IDSucursalUsuario: number) => {
+    api
+      .UsuarioSucursalEliminarUsuarioSucursal(IDSucursalUsuario)
+      .then(() => {
+        toast.success("Se eliminó el usuario de la sucursal");
+        cerrarModalUsuarios();
+      })
+      .catch(() => {
+        toast.error("Ocurrió un error al eliminar el usuario de la sucursal");
+      });
+  };
 
   // Actions
   const abrirModalCrear = () => {
@@ -84,6 +129,15 @@ export default function sucursales() {
   };
   const cerrarModalEditar = () => {
     setVerModalEditar(false);
+  };
+  const abrirModalUsuarios = (sucursal: DTOSucursal) => {
+    setSucursalSeleccionada(sucursal);
+    GetUsuariosSucursal(sucursal.IDSucursal);
+    resetCrearUsuarioSucursal({ IDSucursal: sucursal.IDSucursal });
+    setVerModalUsuarios(true);
+  };
+  const cerrarModalUsuarios = () => {
+    setVerModalUsuarios(false);
   };
 
   // Datagrid
@@ -111,15 +165,42 @@ export default function sucursales() {
     {
       field: "acciones",
       headerName: "Acciones",
-      width: 110,
+      width: 220,
+      renderCell: (cell) => (
+        <>
+          <ActionButton
+            icon="people"
+            text="Usuarios"
+            action={() => {
+              abrirModalUsuarios(cell.row);
+            }}
+            disabled={!cell.row.Activo}
+          />
+          <ActionButton
+            icon="edit"
+            text="Editar"
+            action={() => {
+              abrirModalEditar(cell.row);
+            }}
+            disabled={!cell.row.Activo}
+          />
+        </>
+      ),
+    },
+  ];
+  const columnsUsuariosSucursal: GridColDef[] = [
+    { field: "NombreUsuario", headerName: "Usuario", flex: 1, minWidth: 200 },
+    {
+      field: "acciones",
+      headerName: "Acciones",
+      width: 120,
       renderCell: (cell) => (
         <ActionButton
-          icon="edit"
-          text="Editar"
+          icon="delete"
+          text="Eliminar"
           action={() => {
-            abrirModalEditar(cell.row);
+            EliminarUsuarioSucursal(cell.row.IDSucursalUsuario);
           }}
-          disabled={!cell.row.Activo}
         />
       ),
     },
@@ -167,6 +248,30 @@ export default function sucursales() {
       })
       .catch(() => {
         toast.error("Hubo un error al actualizar la sucursal");
+      });
+  };
+
+  // Crear Usuario Sucursal Form
+  const {
+    register: registerCrearUsuarioSucursal,
+    handleSubmit: handleSubmitCrearUsuarioSucursal,
+    formState: { errors: errorsCrearUsuarioSucursal },
+    reset: resetCrearUsuarioSucursal,
+  } = useForm<CrearUsuarioSucursalFormData>({
+    resolver: zodResolver(crearUsuarioSucursalSchema),
+  });
+
+  const onSubmitCrearUsuarioSucursal = (
+    formData: CrearUsuarioSucursalFormData,
+  ) => {
+    api
+      .UsuarioSucursalCrearUsuarioSucursal(formData)
+      .then(() => {
+        toast.success("Se agregó el usuario a la sucursal");
+        GetUsuariosSucursal(formData.IDSucursal);
+      })
+      .catch(() => {
+        toast.error("Hubo un error al agregar el usuario a la sucursal");
       });
   };
 
@@ -286,6 +391,71 @@ export default function sucursales() {
                 Editar Sucursal
               </button>
             </form>
+          </div>
+        </div>
+      </Modal>
+      {/* Modal Usuarios */}
+      <Modal
+        open={verModalUsuarios}
+        onClose={cerrarModalUsuarios}
+        className="flex items-start justify-center py-10"
+      >
+        <div className="card w-4/5 bg-base-100">
+          <div className="card-body">
+            <h2 className="card-title">
+              Usuarios de la Sucursal: {sucursalSeleccionada?.Nombre}
+            </h2>
+            <form
+              className="w-full grid grid-cols-2 gap-4"
+              onSubmit={handleSubmitCrearUsuarioSucursal(
+                onSubmitCrearUsuarioSucursal,
+              )}
+            >
+              <div className="col-span-2">
+                <label>Usuario</label>
+                <select
+                  {...registerCrearUsuarioSucursal("IDUsuario", {
+                    valueAsNumber: true,
+                  })}
+                  className="w-full select"
+                >
+                  <option value="">Seleccionar Usuario</option>
+                  {usuarios
+                    .filter(
+                      (usuario) =>
+                        !usuariosSucursal.some(
+                          (us) => us.IDUsuario == usuario.IDUsuario,
+                        ),
+                    )
+                    .map((usuario) => (
+                      <option key={usuario.IDUsuario} value={usuario.IDUsuario}>
+                        {usuario.Nombre}
+                      </option>
+                    ))}
+                </select>
+                {errorsCrearUsuarioSucursal.IDUsuario && (
+                  <p className="text-sm text-error">
+                    {errorsCrearUsuarioSucursal.IDUsuario.message}
+                  </p>
+                )}
+              </div>
+              <button type="submit" className="btn btn-primary col-span-2">
+                Agregar Usuario
+              </button>
+            </form>
+            <div className="flex flex-col items-start justify-center gap-4 mt-4">
+              <h3 className="font-semibold">Usuarios Asignados</h3>
+              <DataGrid
+                rows={usuariosSucursal}
+                columns={columnsUsuariosSucursal}
+                initialState={{ pagination: { paginationModel } }}
+                pageSizeOptions={[5, 10]}
+                rowSelection={false}
+                getRowId={(row: DTOUsuarioSucursal) => row.IDSucursalUsuario}
+                sx={{ border: 0 }}
+                className="w-full"
+              />
+            </div>
           </div>
         </div>
       </Modal>

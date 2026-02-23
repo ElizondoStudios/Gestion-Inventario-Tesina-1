@@ -20,6 +20,7 @@ import type { DTOActualizarSucursal, DTOCrearSucursal, DTOSucursal } from "DTOs/
 import type { DTOActualizarInventario, DTOCrearInventario, DTOInventario } from "DTOs/Inventario";
 import type { DTOUnidad } from "DTOs/Unidades";
 import type { DTOModulo, DTOModulosAcceso, DTONivel, DTORegistrarAccesoModulo } from "DTOs/ModulosAcceso";
+import type { DTOCrearUsuarioSucursal, DTOUsuarioSucursal } from "DTOs/UsuarioSucursal";
 
 const API_URL = import.meta.env.VITE_API_URL;
 const apiClient = axios.create({
@@ -639,6 +640,77 @@ export const api = {
           url: `${API_URL}/ModulosAcceso/EliminarAccesoModulo`,
           method: "delete",
           params: {IDModuloAcceso}
+        })
+        .then((res) => res.data);
+    } catch (error: any) {
+      console.error(error.message);
+      throw error;
+    }
+  },
+  // Usuario Sucursal
+  UsuarioSucursalGetUsuariosPorSucursal: async (IDSucursal: number): Promise<DTOUsuarioSucursal[]> => {
+    try {
+      return apiClient
+        .request({
+          url: `${API_URL}/UsuarioSucursal/GetUsuariosPorSucursal`,
+          method: "get",
+          params: { IDSucursal },
+        })
+        .then((res) => res.data);
+    } catch (error: any) {
+      console.error(error.message);
+      throw error;
+    }
+  },
+  UsuarioSucursalCrearUsuarioSucursal: async (data: DTOCrearUsuarioSucursal): Promise<DTOUsuarioSucursal> => {
+    try {
+      return apiClient
+        .request({
+          url: `${API_URL}/UsuarioSucursal/CrearUsuarioSucursal`,
+          method: "post",
+          data: data,
+        })
+        .then((res) => res.data);
+    } catch (error: any) {
+      console.error(error.message);
+      throw error;
+    }
+  },
+  UsuarioSucursalEliminarUsuarioSucursal: async (IDSucursalUsuario: number): Promise<boolean> => {
+    try {
+      return apiClient
+        .request({
+          url: `${API_URL}/UsuarioSucursal/EliminarUsuarioSucursal`,
+          method: "delete",
+          params: { IDSucursalUsuario },
+        })
+        .then((res) => res.data);
+    } catch (error: any) {
+      console.error(error.message);
+      throw error;
+    }
+  },
+  UsuarioSucursalInhabilitarUsuarioSucursal: async (IDSucursalUsuario: number): Promise<DTOUsuarioSucursal> => {
+    try {
+      return apiClient
+        .request({
+          url: `${API_URL}/UsuarioSucursal/InhabilitarUsuarioSucursal`,
+          method: "put",
+          params: { IDSucursalUsuario },
+        })
+        .then((res) => res.data);
+    } catch (error: any) {
+      console.error(error.message);
+      throw error;
+    }
+  },
+  UsuarioSucursalHabilitarUsuarioSucursal: async (IDSucursalUsuario: number): Promise<DTOUsuarioSucursal> => {
+    try {
+      return apiClient
+        .request({
+          url: `${API_URL}/UsuarioSucursal/HabilitarUsuarioSucursal`,
+          method: "put",
+          params: { IDSucursalUsuario },
         })
         .then((res) => res.data);
     } catch (error: any) {

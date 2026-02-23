@@ -12,4 +12,5 @@ public interface IUsuarioSucursalService
   Task<DTOUsuarioSucursal?> CrearUsuarioSucursal(DTOCrearUsuarioSucursal dto);
   Task<DTOUsuarioSucursal?> InhabilitarUsuarioSucursal(int IDSucursalUsuario);
   Task<DTOUsuarioSucursal?> HabilitarUsuarioSucursal(int IDSucursalUsuario);
+  Task<bool> EliminarUsuarioSucursal(int IDSucursalUsuario);
 }

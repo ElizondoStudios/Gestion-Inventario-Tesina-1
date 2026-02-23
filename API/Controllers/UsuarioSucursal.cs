@@ -49,6 +49,13 @@ namespace API.Controllers
             return Ok(res);
         }
         
+        [HttpDelete("[action]")]
+        public async Task<ActionResult<DTOUsuarioSucursal>> EliminarUsuarioSucursal([Required] int IDSucursalUsuario)
+        {
+            var res = await usuarioSucursalService.EliminarUsuarioSucursal(IDSucursalUsuario);
+            return Ok(res);
+        }
+
         [HttpPut("[action]")]
         public async Task<ActionResult<DTOUsuarioSucursal>> InhabilitarUsuarioSucursal([Required] int IDSucursalUsuario)
         {
