@@ -60,7 +60,11 @@ export default function inventario() {
 
     // Inicializar generar movimiento
     resetGenerarMovimiento({
-      IDUsuario: parseInt(auth.getUserId() ?? "0")
+      IDUsuario: parseInt(auth.getUserId() ?? "0"),
+      IDSucursal: 0,
+      IDTipoMovimiento: 0,
+      NoParte: "0",
+      Cantidad: 0,
     });
   }, []);
 
@@ -130,9 +134,7 @@ export default function inventario() {
   };
   const GetInventarioPorSucursal = (IDSucursal: number) => {
     api
-      .SucursalesInventarioGetInventarioPorSucursal(
-        IDSucursal,
-      )
+      .SucursalesInventarioGetInventarioPorSucursal(IDSucursal)
       .then((data) => {
         setInventarioSucursal(data);
       })
@@ -297,8 +299,15 @@ export default function inventario() {
       .then(() => {
         toast.success("Se generó el movimiento de inventario");
         GetLogPorSucursal();
+        setInventarioSucursalSeleccionado(undefined);
+        setSucursalSeleccionada(undefined);
+        setTipoMovimientoSeleccionado(undefined);
         resetGenerarMovimiento({
-          IDUsuario: formData.IDUsuario
+          IDUsuario: formData.IDUsuario,
+          IDSucursal: 0,
+          IDTipoMovimiento: 0,
+          NoParte: "0",
+          Cantidad: 0,
         });
       })
       .catch(() => {
@@ -326,7 +335,7 @@ export default function inventario() {
                   {...registerGenerarMovimiento("IDSucursal", {
                     valueAsNumber: true,
                     onChange: (event) => {
-                      const IDSucursal= parseInt(event.target.value)
+                      const IDSucursal = parseInt(event.target.value);
                       sucursalSeleccionadaChange(IDSucursal);
                       GetInventarioPorSucursal(IDSucursal);
                     },
@@ -447,15 +456,22 @@ export default function inventario() {
                     placeholder="1.11"
                   />
                 ) : (
-                  <input
-                    {...registerGenerarMovimiento("Cantidad", {
-                      valueAsNumber: true,
-                    })}
-                    type="number"
-                    className=" w-full input"
-                    placeholder="1.11"
-                    max={inventarioSucursalSeleccionado?.Existencia}
-                  />
+                  <>
+                    <input
+                      {...registerGenerarMovimiento("Cantidad", {
+                        valueAsNumber: true,
+                      })}
+                      type="number"
+                      className=" w-full input"
+                      placeholder="1.11"
+                      max={inventarioSucursalSeleccionado?.Existencia}
+                    />
+                    {inventarioSucursalSeleccionado && (
+                      <p className="text-sm text-warning">
+                        {inventarioSucursalSeleccionado?.Existencia}
+                      </p>
+                    )}
+                  </>
                 )}
                 {errorsGenerarMovimiento.Cantidad && (
                   <p className="text-sm text-error">
