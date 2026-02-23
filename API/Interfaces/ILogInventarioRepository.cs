@@ -15,4 +15,5 @@ public interface ILogInventarioRepository
   Task<IQueryable<LogInventario>> ObtenerTotales();
   Task<IReadOnlyList<LogInventario>> ObtenerMovimientosRecientes();
   Task<IReadOnlyList<LogInventario>> ObtenerVentasVsCompras();
+  Task<IReadOnlyList<TiposMovimientosInventario>> ObtenerTiposMovimiento();
 }

@@ -8,7 +8,7 @@ namespace API.Services;
 public class LogInventarioService(
   ILogInventarioRepository registroInventarioRepository,
   ISucursalesInventarioRepository sucursalesInventarioRepository
-): ILogInventarioService
+) : ILogInventarioService
 {
   private static DTOLogInventario? ConvertirDTO(LogInventario? registro)
   {
@@ -61,16 +61,27 @@ public class LogInventarioService(
   private async Task ActualizarInventarioSucursal(string NoParte, int IDSucursal, decimal cantidad, int IDTipoMovimiento)
   {
     var tipoMovimiento = await registroInventarioRepository.ObtenerTipoMovimiento(IDTipoMovimiento);
-    
+
     if (tipoMovimiento == null)
       throw new Exception($"No se encontró el tipo de movimiento con ID {IDTipoMovimiento}");
 
     bool esEntrada = tipoMovimiento.EntradaSalida;
 
     var inventarioSucursal = await sucursalesInventarioRepository.ObtenerInventarioPorProductoYSucursal(NoParte, IDSucursal);
-    
+
     if (inventarioSucursal == null)
-      throw new Exception($"No se encontró el inventario del producto {NoParte} en la sucursal {IDSucursal}");
+    {
+      // No existe el inventario sucursal, hay que crearlo
+      var sucursalInventario= new SucursalesInventario
+      {
+        Existencia = cantidad,
+        UmbralExistencia = 100,
+        NoParte = NoParte,
+        IDSucursal = IDSucursal
+      };
+      await sucursalesInventarioRepository.CrearSucursalInventario(sucursalInventario);
+      return;
+    }
 
     // Si es entrada, suma; si es salida, resta
     if (esEntrada)
@@ -83,7 +94,7 @@ public class LogInventarioService(
       throw new Exception("No hay suficiente existencia para realizar esta operación");
 
     var resultado = await sucursalesInventarioRepository.ActualizarSucursalInventario(inventarioSucursal);
-    
+
     if (!resultado)
       throw new Exception("No se pudo actualizar el inventario de la sucursal");
   }
@@ -102,11 +113,23 @@ public class LogInventarioService(
     };
 
     var resultado = await registroInventarioRepository.CrearLogInventario(nuevoLog);
-    
+
     if (!resultado)
       throw new Exception("No se pudo crear el registro de inventario");
 
     var registroCreado = await registroInventarioRepository.ObtenerLog(nuevoLog.IDLogInventario);
     return ConvertirDTO(registroCreado)!;
   }
+
+  public async Task<IReadOnlyList<DTOTipoMovimiento>> ObtenerTiposMovimiento()
+  {
+    var registros = await registroInventarioRepository.ObtenerTiposMovimiento();
+    return registros.Select(r => new DTOTipoMovimiento
+    {
+      IDTipoMovimientoInventario = r.IDTipoMovimientoInventario,
+      Descripcion = r.Descripcion,
+      EntradaSalida = r.EntradaSalida
+    }).Where(dto => dto != null).ToList()!;
+  }
+
 }

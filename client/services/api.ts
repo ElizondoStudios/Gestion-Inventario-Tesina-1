@@ -21,6 +21,8 @@ import type { DTOActualizarInventario, DTOCrearInventario, DTOInventario } from 
 import type { DTOUnidad } from "DTOs/Unidades";
 import type { DTOModulo, DTOModulosAcceso, DTONivel, DTORegistrarAccesoModulo } from "DTOs/ModulosAcceso";
 import type { DTOCrearUsuarioSucursal, DTOUsuarioSucursal } from "DTOs/UsuarioSucursal";
+import type { DTOCrearLogInventario, DTOLogInventario, DTOTipoMovimiento } from "DTOs/LogInventario";
+import type { DTOSucursalInventario } from "DTOs/SucursalesInventario";
 
 const API_URL = import.meta.env.VITE_API_URL;
 const apiClient = axios.create({
@@ -711,6 +713,49 @@ export const api = {
           url: `${API_URL}/UsuarioSucursal/HabilitarUsuarioSucursal`,
           method: "put",
           params: { IDSucursalUsuario },
+        })
+        .then((res) => res.data);
+    } catch (error: any) {
+      console.error(error.message);
+      throw error;
+    }
+  },
+  // Log Inventario
+  LogInventarioCrearLogInventario: async (data: DTOCrearLogInventario): Promise<DTOLogInventario> => {
+    try {
+      return apiClient
+        .request({
+          url: `${API_URL}/LogInventario/CrearLogInventario`,
+          method: "post",
+          data: data,
+        })
+        .then((res) => res.data);
+    } catch (error: any) {
+      console.error(error.message);
+      throw error;
+    }
+  },
+  LogInventarioGetTiposMovimiento: async (): Promise<DTOTipoMovimiento[]> => {
+    try {
+      return apiClient
+        .request({
+          url: `${API_URL}/LogInventario/GetTiposMovimiento`,
+          method: "get",
+        })
+        .then((res) => res.data);
+    } catch (error: any) {
+      console.error(error.message);
+      throw error;
+    }
+  },
+  // Sucursales Inventario
+  SucursalesInventarioGetInventarioPorSucursal: async (IDSucursal: number): Promise<DTOSucursalInventario[]> => {
+    try {
+      return apiClient
+        .request({
+          url: `${API_URL}/SucursalesInventario/GetInventarioPorSucursal`,
+          method: "get",
+          params: {IDSucursal}
         })
         .then((res) => res.data);
     } catch (error: any) {

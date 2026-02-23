@@ -19,11 +19,32 @@ import {
   editarInventarioSchema,
   type EditarInventarioFormData,
 } from "~/form schemas/editarInventarioSchema";
+import {
+  generarMovimientoSchema,
+  type GenerarMovimientoFormData,
+} from "~/form schemas/generarMovimientoSchema";
+import type { DTOSucursal } from "DTOs/Sucursales";
+import type { DTOTipoMovimiento } from "DTOs/LogInventario";
+import type { DTOSucursalInventario } from "DTOs/SucursalesInventario";
+import { auth } from "services/auth";
 
 export default function inventario() {
   // State
   const [inventario, setInventario] = useState<DTOInventario[]>([]);
   const [unidades, setUnidades] = useState<DTOUnidad[]>([]);
+  const [sucursales, setSucursales] = useState<DTOSucursal[]>([]);
+  const [sucursalSeleccionada, setSucursalSeleccionada] =
+    useState<DTOSucursal>();
+  const [tiposMovimiento, setTiposMovimiento] = useState<DTOTipoMovimiento[]>(
+    [],
+  );
+  const [tipoMovimientoSeleccionado, setTipoMovimientoSeleccionado] =
+    useState<DTOTipoMovimiento>();
+  const [inventarioSucursal, setInventarioSucursal] = useState<
+    DTOSucursalInventario[]
+  >([]);
+  const [inventarioSucursalSeleccionado, setInventarioSucursalSeleccionado] =
+    useState<DTOSucursalInventario>();
   const [verModalCrear, setVerModalCrear] = useState<boolean>(false);
   const [verModalEditar, setVerModalEditar] = useState<boolean>(false);
   // Redux
@@ -34,6 +55,13 @@ export default function inventario() {
     dispatch(changeCurrentPage("Inventario"));
     GetInventario();
     GetUnidades();
+    GetSucursales();
+    GetTiposMovimiento();
+
+    // Inicializar generar movimiento
+    resetGenerarMovimiento({
+      IDUsuario: parseInt(auth.getUserId() ?? "0")
+    });
   }, []);
 
   // API Calls
@@ -79,7 +107,39 @@ export default function inventario() {
         toast.error("Hubo un error al habilitar el producto");
       });
   };
-
+  const GetLogPorSucursal = () => {};
+  const GetSucursales = () => {
+    api
+      .SucursalesGetSucursales()
+      .then((data) => {
+        setSucursales(data);
+      })
+      .catch((error) => {
+        toast.error("Ocurrió un error al obtener las sucursales");
+      });
+  };
+  const GetTiposMovimiento = () => {
+    api
+      .LogInventarioGetTiposMovimiento()
+      .then((data) => {
+        setTiposMovimiento(data);
+      })
+      .catch((error) => {
+        toast.error("Ocurrió un error al obtener los tipos de movimiento");
+      });
+  };
+  const GetInventarioPorSucursal = (IDSucursal: number) => {
+    api
+      .SucursalesInventarioGetInventarioPorSucursal(
+        IDSucursal,
+      )
+      .then((data) => {
+        setInventarioSucursal(data);
+      })
+      .catch((error) => {
+        toast.error("Ocurrió un error al obtener los tipos de movimiento");
+      });
+  };
   // Actions
   const abrirModalCrear = () => {
     setVerModalCrear(true);
@@ -101,12 +161,36 @@ export default function inventario() {
   const cerrarModalEditar = () => {
     setVerModalEditar(false);
   };
+  const sucursalSeleccionadaChange = (IDSucursal: number) => {
+    setSucursalSeleccionada(
+      sucursales.find((s) => s.IDSucursal === IDSucursal),
+    );
+  };
+  const tipoMovimientoSeleccionadoChange = (
+    IDTipoMovimientoInventario: number,
+  ) => {
+    setTipoMovimientoSeleccionado(
+      tiposMovimiento.find(
+        (tm) => tm.IDTipoMovimientoInventario === IDTipoMovimientoInventario,
+      ),
+    );
+  };
+  const inventarioSucursalSeleccionadoChange = (NoParte: string) => {
+    setInventarioSucursalSeleccionado(
+      inventarioSucursal.find((is) => is.NoParte === NoParte),
+    );
+  };
 
   // Datagrid
   const columns: GridColDef[] = [
     { field: "NoParte", headerName: "No. Parte", width: 120 },
     { field: "NombreProducto", headerName: "Nombre", flex: 1, minWidth: 200 },
-    { field: "DescripcionProducto", headerName: "Descripción", flex: 1, minWidth: 200 },
+    {
+      field: "DescripcionProducto",
+      headerName: "Descripción",
+      flex: 1,
+      minWidth: 200,
+    },
     {
       field: "Precio",
       headerName: "Precio",
@@ -197,11 +281,194 @@ export default function inventario() {
       });
   };
 
+  // Generar Movimiento Form
+  const {
+    register: registerGenerarMovimiento,
+    handleSubmit: handleSubmitGenerarMovimiento,
+    formState: { errors: errorsGenerarMovimiento },
+    reset: resetGenerarMovimiento,
+  } = useForm<GenerarMovimientoFormData>({
+    resolver: zodResolver(generarMovimientoSchema),
+  });
+
+  const onSubmitGenerarMovimiento = (formData: GenerarMovimientoFormData) => {
+    api
+      .LogInventarioCrearLogInventario(formData)
+      .then(() => {
+        toast.success("Se generó el movimiento de inventario");
+        GetLogPorSucursal();
+        resetGenerarMovimiento({
+          IDUsuario: formData.IDUsuario
+        });
+      })
+      .catch(() => {
+        toast.error("Hubo un error al generar el movimiento de inventario");
+      });
+  };
+
   const paginationModel = { page: 0, pageSize: 10 };
   return (
     <>
       {/* Componente principal */}
-      <div className="w-full h-full py-4">
+      <div className="w-full h-full py-4 grid grid-cols-1 gap-4">
+        <div className="card bg-base-100">
+          <div className="card-body">
+            <h1 className="card-title">Generar Movimiento</h1>
+            <form
+              className="w-full grid grid-cols-2 gap-4"
+              onSubmit={handleSubmitGenerarMovimiento(
+                onSubmitGenerarMovimiento,
+              )}
+            >
+              <div className="col-span-2 lg:col-span-1">
+                <label>Sucursal</label>
+                <select
+                  {...registerGenerarMovimiento("IDSucursal", {
+                    valueAsNumber: true,
+                    onChange: (event) => {
+                      const IDSucursal= parseInt(event.target.value)
+                      sucursalSeleccionadaChange(IDSucursal);
+                      GetInventarioPorSucursal(IDSucursal);
+                    },
+                  })}
+                  defaultValue={0}
+                  className="w-full select"
+                >
+                  <option value={0} disabled>
+                    Seleccionar opción...
+                  </option>
+                  {sucursales.map((sucursal) => (
+                    <option
+                      key={sucursal.IDSucursal}
+                      value={sucursal.IDSucursal}
+                    >
+                      {sucursal.Nombre}
+                    </option>
+                  ))}
+                </select>
+                {errorsGenerarMovimiento.IDSucursal && (
+                  <p className="text-sm text-error">
+                    {errorsGenerarMovimiento.IDSucursal.message}
+                  </p>
+                )}
+              </div>
+              <div className="col-span-2 lg:col-span-1">
+                <label>Tipo de Movimiento</label>
+                <select
+                  {...registerGenerarMovimiento("IDTipoMovimiento", {
+                    valueAsNumber: true,
+                    onChange: (event) => {
+                      tipoMovimientoSeleccionadoChange(
+                        parseInt(event.target.value),
+                      );
+                    },
+                  })}
+                  className="w-full select"
+                  defaultValue={0}
+                >
+                  <option value={0} disabled>
+                    Seleccionar opción...
+                  </option>
+                  {tiposMovimiento.map((tipoMovimiento) => (
+                    <option
+                      key={tipoMovimiento.IDTipoMovimientoInventario}
+                      value={tipoMovimiento.IDTipoMovimientoInventario}
+                    >
+                      {tipoMovimiento.Descripcion}
+                    </option>
+                  ))}
+                </select>
+                {errorsGenerarMovimiento.IDTipoMovimiento && (
+                  <p className="text-sm text-error">
+                    {errorsGenerarMovimiento.IDTipoMovimiento.message}
+                  </p>
+                )}
+              </div>
+              <div className="col-span-2 lg:col-span-1">
+                <label>Producto</label>
+                {tipoMovimientoSeleccionado?.EntradaSalida === true ? (
+                  <select
+                    {...registerGenerarMovimiento("NoParte")}
+                    className="w-full select"
+                    disabled={
+                      !sucursalSeleccionada || !tipoMovimientoSeleccionado
+                    }
+                    defaultValue={0}
+                  >
+                    <option value={0} disabled>
+                      Seleccionar opción...
+                    </option>
+                    {inventario.map((producto) => (
+                      <option key={producto.NoParte} value={producto.NoParte}>
+                        {producto.NoParte} | {producto.NombreProducto}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <select
+                    {...registerGenerarMovimiento("NoParte", {
+                      onChange: (event) => {
+                        inventarioSucursalSeleccionadoChange(
+                          event.target.value,
+                        );
+                      },
+                    })}
+                    className="w-full select"
+                    disabled={
+                      !sucursalSeleccionada || !tipoMovimientoSeleccionado
+                    }
+                    defaultValue={0}
+                  >
+                    <option value={0} disabled>
+                      Seleccionar opción...
+                    </option>
+                    {inventarioSucursal.map((producto) => (
+                      <option key={producto.NoParte} value={producto.NoParte}>
+                        {producto.NoParte} | {producto.NombreProducto}
+                      </option>
+                    ))}
+                  </select>
+                )}
+                {errorsGenerarMovimiento.NoParte && (
+                  <p className="text-sm text-error">
+                    {errorsGenerarMovimiento.NoParte.message}
+                  </p>
+                )}
+              </div>
+              <div className="col-span-2 lg:col-span-1">
+                <label>Cantidad</label>
+                {tipoMovimientoSeleccionado?.EntradaSalida === true ? (
+                  <input
+                    {...registerGenerarMovimiento("Cantidad", {
+                      valueAsNumber: true,
+                    })}
+                    type="number"
+                    className=" w-full input"
+                    placeholder="1.11"
+                  />
+                ) : (
+                  <input
+                    {...registerGenerarMovimiento("Cantidad", {
+                      valueAsNumber: true,
+                    })}
+                    type="number"
+                    className=" w-full input"
+                    placeholder="1.11"
+                    max={inventarioSucursalSeleccionado?.Existencia}
+                  />
+                )}
+                {errorsGenerarMovimiento.Cantidad && (
+                  <p className="text-sm text-error">
+                    {errorsGenerarMovimiento.Cantidad.message}
+                  </p>
+                )}
+              </div>
+              <button type="submit" className="btn btn-primary col-span-2">
+                Generar Movimiento
+              </button>
+            </form>
+          </div>
+        </div>
         <div className="card bg-base-100">
           <div className="card-body">
             <h1 className="card-title">Productos Inventario</h1>
@@ -217,6 +484,16 @@ export default function inventario() {
               getRowId={(row: DTOInventario) => row.NoParte}
               sx={{ border: 0 }}
             />
+          </div>
+        </div>
+        <div className="card bg-base-100">
+          <div className="card-body">
+            <h1 className="card-title">Inventario por Sucursal</h1>
+          </div>
+        </div>
+        <div className="card bg-base-100">
+          <div className="card-body">
+            <h1 className="card-title">Log Inventario</h1>
           </div>
         </div>
       </div>
@@ -278,7 +555,9 @@ export default function inventario() {
               <div className="col-span-6 lg:col-span-2">
                 <label>Precio</label>
                 <input
-                  {...registerCrearInventario("Precio", { valueAsNumber: true })}
+                  {...registerCrearInventario("Precio", {
+                    valueAsNumber: true,
+                  })}
                   type="number"
                   step="0.01"
                   className="w-full input"
@@ -308,7 +587,9 @@ export default function inventario() {
               <div className="col-span-6 lg:col-span-2">
                 <label>Unidad</label>
                 <select
-                  {...registerCrearInventario("IDUnidad", { valueAsNumber: true })}
+                  {...registerCrearInventario("IDUnidad", {
+                    valueAsNumber: true,
+                  })}
                   className="w-full select"
                 >
                   {unidades.map((unidad) => (
@@ -388,7 +669,9 @@ export default function inventario() {
               <div className="col-span-6 lg:col-span-2">
                 <label>Precio</label>
                 <input
-                  {...registerEditarInventario("Precio", { valueAsNumber: true })}
+                  {...registerEditarInventario("Precio", {
+                    valueAsNumber: true,
+                  })}
                   type="number"
                   step="0.01"
                   className="w-full input"
@@ -403,7 +686,9 @@ export default function inventario() {
               <div className="col-span-6 lg:col-span-2">
                 <label>Costo</label>
                 <input
-                  {...registerEditarInventario("Costo", { valueAsNumber: true })}
+                  {...registerEditarInventario("Costo", {
+                    valueAsNumber: true,
+                  })}
                   type="number"
                   step="0.01"
                   className="w-full input"
@@ -418,7 +703,9 @@ export default function inventario() {
               <div className="col-span-6 lg:col-span-2">
                 <label>Unidad</label>
                 <select
-                  {...registerEditarInventario("IDUnidad", { valueAsNumber: true })}
+                  {...registerEditarInventario("IDUnidad", {
+                    valueAsNumber: true,
+                  })}
                   className="w-full select"
                 >
                   {unidades.map((unidad) => (

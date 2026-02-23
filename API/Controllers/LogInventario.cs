@@ -55,5 +55,12 @@ namespace API.Controllers
             var res = await logInventarioService.CrearLogInventario(dto);
             return Ok(res);
         }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult<IReadOnlyList<DTOTipoMovimiento>>> GetTiposMovimiento()
+        {
+            var res = await logInventarioService.ObtenerTiposMovimiento();
+            return Ok(res);
+        }
     }
 }
