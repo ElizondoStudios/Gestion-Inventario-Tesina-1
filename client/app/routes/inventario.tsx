@@ -24,7 +24,7 @@ import {
   type GenerarMovimientoFormData,
 } from "~/form schemas/generarMovimientoSchema";
 import type { DTOSucursal } from "DTOs/Sucursales";
-import type { DTOTipoMovimiento } from "DTOs/LogInventario";
+import type { DTOLogInventario, DTOTipoMovimiento } from "DTOs/LogInventario";
 import type { DTOSucursalInventario } from "DTOs/SucursalesInventario";
 import { auth } from "services/auth";
 
@@ -47,6 +47,8 @@ export default function inventario() {
     useState<DTOSucursalInventario>();
   const [verModalCrear, setVerModalCrear] = useState<boolean>(false);
   const [verModalEditar, setVerModalEditar] = useState<boolean>(false);
+  const [logInventarioPorSucursal, setLogInventarioPorSucursal] = useState<DTOLogInventario[]>([]);
+  const [sucursalSeleccionadaLog, setSucursalSeleccionadaLog] = useState<DTOSucursal>();
   // Redux
   const dispatch = useDispatch();
 
@@ -57,6 +59,7 @@ export default function inventario() {
     GetUnidades();
     GetSucursales();
     GetTiposMovimiento();
+    GetLogPorSucursal(0);
 
     // Inicializar generar movimiento
     resetGenerarMovimiento({
@@ -111,7 +114,16 @@ export default function inventario() {
         toast.error("Hubo un error al habilitar el producto");
       });
   };
-  const GetLogPorSucursal = () => {};
+  const GetLogPorSucursal = (IDSucursal: number) => {
+    api
+      .GetLogPorSucursal(IDSucursal)
+      .then((data) => {
+        setLogInventarioPorSucursal(data);
+      })
+      .catch((error) => {
+        toast.error("No se pudo cargar el log por sucursal");
+      })
+  };
   const GetSucursales = () => {
     api
       .SucursalesGetSucursales()
@@ -165,6 +177,11 @@ export default function inventario() {
   };
   const sucursalSeleccionadaChange = (IDSucursal: number) => {
     setSucursalSeleccionada(
+      sucursales.find((s) => s.IDSucursal === IDSucursal),
+    );
+  };
+  const sucursalSeleccionadaLogChange = (IDSucursal: number) => {
+    setSucursalSeleccionadaLog(
       sucursales.find((s) => s.IDSucursal === IDSucursal),
     );
   };
@@ -237,6 +254,15 @@ export default function inventario() {
       ),
     },
   ];
+  
+  const columnsLogSucursal: GridColDef[] = [
+    { field: "IDLogInventario", headerName: "ID", width: 100 },
+    { field: "NoParte", headerName: "No. Parte", width: 120 },
+    { field: "Fecha", headerName: "Fecha", flex: 1, renderCell: (cell) => (`${new Date(cell.row.Fecha).toLocaleDateString()}`) },
+    { field: "Cantidad", headerName: "Cantidad", flex: 1 },    
+    { field: "DescripcionTipoMovimiento", headerName: "Tipo Movimiento", flex: 1 },    
+    { field: "Sucursal", headerName: "Sucursal", flex: 1 },    
+  ];
 
   // Crear Inventario Form
   const {
@@ -298,7 +324,7 @@ export default function inventario() {
       .LogInventarioCrearLogInventario(formData)
       .then(() => {
         toast.success("Se generó el movimiento de inventario");
-        GetLogPorSucursal();
+        GetLogPorSucursal(sucursalSeleccionadaLog?.IDSucursal ?? 0);
         setInventarioSucursalSeleccionado(undefined);
         setSucursalSeleccionada(undefined);
         setTipoMovimientoSeleccionado(undefined);
@@ -510,6 +536,43 @@ export default function inventario() {
         <div className="card bg-base-100">
           <div className="card-body">
             <h1 className="card-title">Log Inventario</h1>
+            <div className="flex justify-end">
+              <div className="w-2/5 min-w-50">
+                <label>Sucursal</label>
+                  <select
+                    onChange={
+                      (event) => {
+                        GetLogPorSucursal(Number(event.target.value));
+                        sucursalSeleccionadaLogChange(Number(event.target.value))
+                      }
+                    }
+                    defaultValue={0}
+                    value={sucursalSeleccionada?.IDSucursal}
+                    className="w-full select"
+                  >
+                    <option value={0}>
+                      Todas
+                    </option>
+                    {sucursales.map((sucursal) => (
+                      <option
+                        key={sucursal.IDSucursal}
+                        value={sucursal.IDSucursal}
+                      >
+                        {sucursal.Nombre}
+                      </option>
+                    ))}
+                  </select>
+              </div>
+            </div>
+            <DataGrid
+              rows={logInventarioPorSucursal}
+              columns={columnsLogSucursal}
+              initialState={{ pagination: { paginationModel } }}
+              pageSizeOptions={[5, 10]}
+              rowSelection={false}
+              getRowId={(row: DTOLogInventario) => row.IDLogInventario}
+              sx={{ border: 0 }}
+            />
           </div>
         </div>
       </div>

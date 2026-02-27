@@ -748,6 +748,20 @@ export const api = {
       throw error;
     }
   },
+  GetLogPorSucursal: async (IDSucursal: number): Promise<DTOLogInventario[]> => {
+    try {
+      return apiClient
+        .request({
+          url: `${API_URL}/LogInventario/GetLogPorSucursal`,
+          method: "get",
+          params: {IDSucursal}
+        })
+        .then((res) => res.data);
+    } catch (error: any) {
+      console.error(error.message);
+      throw error;
+    }
+  },
   // Sucursales Inventario
   SucursalesInventarioGetInventarioPorSucursal: async (IDSucursal: number): Promise<DTOSucursalInventario[]> => {
     try {
