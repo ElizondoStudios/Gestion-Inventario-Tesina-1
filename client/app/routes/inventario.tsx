@@ -49,6 +49,8 @@ export default function inventario() {
   const [verModalEditar, setVerModalEditar] = useState<boolean>(false);
   const [logInventarioPorSucursal, setLogInventarioPorSucursal] = useState<DTOLogInventario[]>([]);
   const [sucursalSeleccionadaLog, setSucursalSeleccionadaLog] = useState<DTOSucursal>();
+  const [inventarioVisualizacionSucursal, setInventarioVisualizacionSucursal] = useState<DTOSucursalInventario[]>([]);
+  const [sucursalSeleccionadaVisualizacion, setSucursalSeleccionadaVisualizacion] = useState<number>(0);
   // Redux
   const dispatch = useDispatch();
 
@@ -60,6 +62,7 @@ export default function inventario() {
     GetSucursales();
     GetTiposMovimiento();
     GetLogPorSucursal(0);
+    GetInventarioVisualizacionPorSucursal(0);
 
     // Inicializar generar movimiento
     resetGenerarMovimiento({
@@ -152,6 +155,19 @@ export default function inventario() {
       })
       .catch((error) => {
         toast.error("Ocurrió un error al obtener los tipos de movimiento");
+      });
+  };
+  const GetInventarioVisualizacionPorSucursal = (IDSucursal: number) => {
+    const request =
+      IDSucursal === 0
+        ? api.SucursalesInventarioGetSucursalesInventario()
+        : api.SucursalesInventarioGetInventarioPorSucursal(IDSucursal);
+    request
+      .then((data) => {
+        setInventarioVisualizacionSucursal(data);
+      })
+      .catch(() => {
+        toast.error("Ocurrió un error al obtener el inventario de la sucursal");
       });
   };
   // Actions
@@ -255,6 +271,34 @@ export default function inventario() {
     },
   ];
   
+  const columnsInventarioSucursal: GridColDef[] = [
+    { field: "NoParte", headerName: "No. Parte", width: 130 },
+    { field: "NombreProducto", headerName: "Nombre", flex: 1, minWidth: 180 },
+    { field: "NombreSucursal", headerName: "Sucursal", flex: 1, minWidth: 150 },
+    { field: "Unidad", headerName: "Unidad", width: 100 },
+    {
+      field: "Existencia",
+      headerName: "Existencia",
+      width: 120,
+      renderCell: (cell) => (
+        <span
+          className={
+            cell.row.Existencia <= cell.row.UmbralExistencia
+              ? "text-error font-semibold"
+              : ""
+          }
+        >
+          {cell.row.Existencia}
+        </span>
+      ),
+    },
+    {
+      field: "UmbralExistencia",
+      headerName: "Umbral",
+      width: 100,
+    },
+  ];
+
   const columnsLogSucursal: GridColDef[] = [
     { field: "IDLogInventario", headerName: "ID", width: 100 },
     { field: "NoParte", headerName: "No. Parte", width: 120 },
@@ -531,6 +575,39 @@ export default function inventario() {
         <div className="card bg-base-100">
           <div className="card-body">
             <h1 className="card-title">Inventario por Sucursal</h1>
+            <div className="flex justify-end">
+              <div className="w-2/5 min-w-50">
+                <label>Sucursal</label>
+                <select
+                  onChange={(event) => {
+                    const id = Number(event.target.value);
+                    setSucursalSeleccionadaVisualizacion(id);
+                    GetInventarioVisualizacionPorSucursal(id);
+                  }}
+                  value={sucursalSeleccionadaVisualizacion}
+                  className="w-full select"
+                >
+                  <option value={0}>Todas</option>
+                  {sucursales.map((sucursal) => (
+                    <option
+                      key={sucursal.IDSucursal}
+                      value={sucursal.IDSucursal}
+                    >
+                      {sucursal.Nombre}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            <DataGrid
+              rows={inventarioVisualizacionSucursal}
+              columns={columnsInventarioSucursal}
+              initialState={{ pagination: { paginationModel } }}
+              pageSizeOptions={[5, 10]}
+              rowSelection={false}
+              getRowId={(row: DTOSucursalInventario) => row.IDSucursalInventario}
+              sx={{ border: 0 }}
+            />
           </div>
         </div>
         <div className="card bg-base-100">

@@ -763,6 +763,19 @@ export const api = {
     }
   },
   // Sucursales Inventario
+  SucursalesInventarioGetSucursalesInventario: async (): Promise<DTOSucursalInventario[]> => {
+    try {
+      return apiClient
+        .request({
+          url: `${API_URL}/SucursalesInventario/GetSucursalesInventario`,
+          method: "get",
+        })
+        .then((res) => res.data);
+    } catch (error: any) {
+      console.error(error.message);
+      throw error;
+    }
+  },
   SucursalesInventarioGetInventarioPorSucursal: async (IDSucursal: number): Promise<DTOSucursalInventario[]> => {
     try {
       return apiClient
