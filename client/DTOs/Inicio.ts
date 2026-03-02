@@ -10,6 +10,7 @@ export interface DTOMovimientosRecientesInicio {
   Cantidad: number;
   DescripcionUnidad: string;
   Fecha: Date;
+  EntradaSalida: boolean;
 }
 
 export interface DTOVentasVsComprasInicio {
