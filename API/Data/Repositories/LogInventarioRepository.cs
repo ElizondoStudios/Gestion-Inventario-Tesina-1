@@ -39,7 +39,7 @@ public class LogInventarioRepository(AppDbContext context) : ILogInventarioRepos
         .ThenInclude(p => p.Unidad)
       .Include(l => l.Sucursal)
       .Include(l => l.TipoMovimiento)
-      .Where(l => l.Sucursal.IDSucursal == IDSucursal)
+      .Where(l => IDSucursal!=0? l.Sucursal.IDSucursal == IDSucursal: true)
       .OrderByDescending(l => l.Fecha)
       .ToListAsync();
   }
@@ -108,5 +108,9 @@ public class LogInventarioRepository(AppDbContext context) : ILogInventarioRepos
       .Where(li => li.IDTipoMovimiento == 1 || li.IDTipoMovimiento == 4) //Venta, Compra
       .Where(li => li.Fecha.Year == DateTime.Now.Year) //Solo del año corriente
       .ToListAsync(); 
+  }
+  public async Task<IReadOnlyList<TiposMovimientosInventario>> ObtenerTiposMovimiento()
+  {
+    return await context.TiposMovimientosInventario.ToListAsync();
   }
 }

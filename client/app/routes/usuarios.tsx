@@ -12,6 +12,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { crearUsuarioSchema, type CrearUsuarioFormData } from "~/form schemas/crearUsuarioSchema";
 import { editarUsuarioSchema, type EditarUsuarioFormData } from "~/form schemas/editarUsuarioSchema";
+import { useDispatch } from "react-redux";
+import { changeCurrentPage } from "services/slices/currentPageSlice";
 
 export default function usuarios() {
   // State
@@ -21,11 +23,15 @@ export default function usuarios() {
   const [verModalCrear, setVerModalCrear] = useState<boolean>(false);
   const [verModalEditar, setVerModalEditar] = useState<boolean>(false);
 
+  // Redux
+  const dispatch = useDispatch();
+
   // Effects
   useEffect(() => {
+    dispatch(changeCurrentPage("Usuarios"))
     setIdUsuario(parseInt(auth.getUserId() ?? "0"));
     GetUsuarios();
-    GetPerfilesPuesto();
+    GetPerfilesPuestoActivos();
   }, []);
 
   // API Calls
@@ -40,9 +46,9 @@ export default function usuarios() {
       });
   };
   
-  const GetPerfilesPuesto = () => {
+  const GetPerfilesPuestoActivos = () => {
     api
-      .PerfilesPuestoGetPerfilesPuesto()
+      .PerfilesPuestoGetPerfilesPuestoActivos()
       .then((data) => {
         setPerfilesPuesto(data);
       })
@@ -97,12 +103,13 @@ export default function usuarios() {
   // Datagrid
   const columns: GridColDef[] = [
     { field: "IDUsuario", headerName: "ID", width: 70 },
-    { field: "Nombre", headerName: "Nombre", flex: 1 },
-    { field: "Correo", headerName: "Correo", flex: 1 },
+    { field: "Nombre", headerName: "Nombre", flex: 1, minWidth: 150 },
+    { field: "Correo", headerName: "Correo", flex: 1, minWidth: 150 },
     {
       field: "Activo",
       headerName: "Activo",
       flex: 1,
+      minWidth: 100,
       renderCell: (cell) => (
         <Switch
           checked={cell.row.Activo}
@@ -119,11 +126,12 @@ export default function usuarios() {
       field: "DescripcionPerfilPuesto",
       headerName: "Perfil de Puesto",
       flex: 1,
+      minWidth: 150,
     },
     {
       field: "acciones",
       headerName: "Acciones",
-      width: 100,
+      width: 110,
       renderCell: (cell) => (
         <ActionButton icon="edit" text="Editar" action={() => {abrirModalEditar(cell.row)}} disabled={!cell.row.Activo} />
       ),
@@ -181,6 +189,7 @@ export default function usuarios() {
       <div className="w-full h-full py-4">
         <div className="card bg-base-100">
           <div className="card-body">
+            <h1 className="card-title">Usuarios</h1>
             <div className="w-full flex justify-end">
               <ActionButton icon="add" text="Crear" action={abrirModalCrear} />
             </div>

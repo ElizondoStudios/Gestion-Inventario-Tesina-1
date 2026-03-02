@@ -15,6 +15,24 @@ public class ModulosAccesoRepository(AppDbContext context) : IModulosAccesoRepos
       .Include(ma => ma.PerfilPuesto)
       .ToListAsync();
   }
+  
+  public async Task<IReadOnlyList<ModulosAcceso>> ObtenerModulosAccesoUsuario(int IDUsuario)
+  {
+    var usuario= await  context.Usuarios.Where(u => u.IDUsuario == IDUsuario).FirstOrDefaultAsync();
+    
+    if(usuario == null)
+      return [];
+    
+    return await context.ModulosAcceso
+      .Include(ma => ma.Modulo)
+        .ThenInclude(m => m.ModuloCategoria)
+      .Include(ma => ma.NivelAcceso)
+      .Include(ma => ma.PerfilPuesto)
+      .Where(ma => ma.PerfilPuesto.IDPerfilPuesto == usuario.IDPerfilPuesto)
+      .OrderBy(ma => ma.Modulo.Nombre)
+      .OrderBy(ma => ma.Modulo.ModuloCategoria.Nombre)
+      .ToListAsync();
+  }
 
   public async Task<ModulosAcceso?> ObtenerModuloAcceso(int IDModuloAcceso)
   {
@@ -45,16 +63,25 @@ public class ModulosAccesoRepository(AppDbContext context) : IModulosAccesoRepos
     return await ObtenerModuloAcceso(modulosAcceso.IDModuloAcceso);
   }
 
-  public async Task<ModulosAcceso?> EliminarAccesoModulo(int IDModuloAcceso)
+  public async Task<bool> EliminarAccesoModulo(int IDModuloAcceso)
   {
     var moduloAcceso = await context.ModulosAcceso.FindAsync(IDModuloAcceso);
     
     if (moduloAcceso == null)
-      return null;
+      return false;
     
     context.ModulosAcceso.Remove(moduloAcceso);
     await context.SaveChangesAsync();
     
-    return moduloAcceso;
+    return true;
+  }
+
+  public async Task<IReadOnlyList<Modulo>> ObtenerModulos()
+  {
+    return await context.Modulos.Where(m => m.Activo).ToListAsync();
+  }
+  public async Task<IReadOnlyList<NivelesAcceso>> ObtenerNiveles()
+  {
+    return await context.NivelesAcceso.ToListAsync();
   }
 }

@@ -10,5 +10,6 @@ public interface IUsuarioSucursalRepository
   Task<UsuarioSucursal?> ObtenerUsuarioSucursal(int IDSucursalUsuario);
   Task<bool> CrearUsuarioSucursal(UsuarioSucursal usuarioSucursal);
   Task<bool> InhabilitarUsuarioSucursal(int IDSucursalUsuario);
+  Task<bool> EliminarUsuarioSucursal(int IDSucursalUsuario);
   Task<bool> HabilitarUsuarioSucursal(int IDSucursalUsuario);
 }

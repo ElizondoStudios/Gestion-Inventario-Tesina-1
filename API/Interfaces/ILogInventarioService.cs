@@ -11,4 +11,5 @@ public interface ILogInventarioService
   Task<IReadOnlyList<DTOLogInventario>> ObtenerLogPorUsuario(int IDUsuario);
   Task<DTOLogInventario?> ObtenerLog(int IDLogInventario);
   Task<DTOLogInventario> CrearLogInventario(DTOCrearLogInventario dto);
+  Task<IReadOnlyList<DTOTipoMovimiento>> ObtenerTiposMovimiento();
 }

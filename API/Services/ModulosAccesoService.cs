@@ -16,10 +16,14 @@ public class ModulosAccesoService(IModulosAccesoRepository modulosAccesoReposito
       IDModuloAcceso = registro.IDModuloAcceso,
       IDModulo = registro.IDModulo,
       NombreModulo = registro.Modulo.Nombre,
+      IconoModulo = registro.Modulo.Icono,
       IDPerfilPuesto = registro.IDPerfilPuesto,
       DescripcionPerfilPuesto = registro.PerfilPuesto.Descripcion,
       NivelAcceso = registro.NivelAcceso.NivelAcceso,
       DescripcionNivelAcceso = registro.NivelAcceso.Descripcion,
+      IDModuloCategoria = registro.Modulo.ModuloCategoria.IDModuloCategoria,
+      NombreModuloCategoria = registro.Modulo.ModuloCategoria.Nombre,
+      IconoModuloCategoria = registro.Modulo.ModuloCategoria.Icono,
     };
   }
 
@@ -27,6 +31,16 @@ public class ModulosAccesoService(IModulosAccesoRepository modulosAccesoReposito
   {
     var registros = await modulosAccesoRepository.ObtenerModulosAcceso();
     return [.. registros.Select(r => ConvertirDTO(r)!)]; 
+  }
+  public async Task<IReadOnlyList<DTOModulosAcceso>> ObtenerModulosAccesoUsuario(int IDUsuario)
+  {
+    var registros = await modulosAccesoRepository.ObtenerModulosAccesoUsuario(IDUsuario);
+    return [.. registros.Select(r => ConvertirDTO(r)!)]; 
+  }
+  public async Task<IReadOnlyList<DTOModulosAcceso>> ObtenerModulosAccesoPerfilPuesto(int IDPerfilPuesto)
+  {
+    var registros = await modulosAccesoRepository.ObtenerModulosAcceso();
+    return [.. registros.Where(pp => pp.IDPerfilPuesto == IDPerfilPuesto).Select(r => ConvertirDTO(r)!)]; 
   }
   public async Task<DTOModulosAcceso?> ValidarAccesoModulo(int IDUsuario, int IDModulo)
   {
@@ -44,9 +58,26 @@ public class ModulosAccesoService(IModulosAccesoRepository modulosAccesoReposito
     var registro = await modulosAccesoRepository.RegistrarAccesoModulo(acceso);
     return ConvertirDTO(registro);
   }
-  public async Task<DTOModulosAcceso?> EliminarAccesoModulo(int IDModuloAcceso)
+  public async Task<bool> EliminarAccesoModulo(int IDModuloAcceso)
   {
-    var registro = await modulosAccesoRepository.EliminarAccesoModulo(IDModuloAcceso);
-    return ConvertirDTO(registro);
+    var exito = await modulosAccesoRepository.EliminarAccesoModulo(IDModuloAcceso);
+    return exito;
+  }
+  public async Task<IReadOnlyList<DTOModulo>> ObtenerModulos()
+  {
+    var registros = await modulosAccesoRepository.ObtenerModulos();
+    return [.. registros.Select(r => new DTOModulo{
+      IDModulo= r.IDModulo,
+      Icono = r.Icono,
+      Nombre = r.Nombre
+    })];
+  }
+  public async Task<IReadOnlyList<DTONivel>> ObtenerNiveles()
+  {
+    var registros = await modulosAccesoRepository.ObtenerNiveles();
+    return [.. registros.Select(r => new DTONivel{
+      Descripcion = r.Descripcion,
+      NivelAcceso = r.NivelAcceso
+    })];
   }
 }

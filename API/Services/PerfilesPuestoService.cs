@@ -24,6 +24,12 @@ public class PerfilesPuestoService(IPerfilesPuestoRepository perfilesPuestoRepos
     var registros = await perfilesPuestoRepository.ObtenerPerfilesPuesto();
     return [.. registros.Select(r => ConvertirDTO(r)!)]; 
   }
+  
+  public async Task<IReadOnlyList<DTOPerfilPuesto>> ObtenerPerfilesPuestoActivos()
+  {
+    var registros = await perfilesPuestoRepository.ObtenerPerfilesPuesto();
+    return [.. registros.Where(pp => pp.Activo).Select(r => ConvertirDTO(r)!)]; 
+  }
 
   public async Task<DTOPerfilPuesto> ObtenerPerfilPuesto(int IDPerfilPuesto)
   {
