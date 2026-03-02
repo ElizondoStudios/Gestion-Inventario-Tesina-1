@@ -60,7 +60,8 @@ public class InicioService(ISucursalesInventarioRepository sucursalesInventarioR
         DescripcionTipoMoviento = log.TipoMovimiento.Descripcion,
         DescripcionUnidad = log.Producto.Unidad.Descripcion,
         Fecha = log.Fecha,
-        NombreProducto = log.Producto.NombreProducto
+        NombreProducto = log.Producto.NombreProducto,
+        EntradaSalida = log.TipoMovimiento.EntradaSalida
       });
     }
     

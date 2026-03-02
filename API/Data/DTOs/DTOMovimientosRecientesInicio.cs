@@ -9,4 +9,5 @@ public class DTOMovimientosRecientesInicio
   public decimal Cantidad { get; set; }
   public required string DescripcionUnidad { get; set; }
   public required DateTime Fecha { get; set; }
+  public bool EntradaSalida { get; set; }
 }
